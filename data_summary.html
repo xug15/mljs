@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ML JavaScript</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="UTF-8">
+    
+    <script src="dataset-iris/dist/ml-dataset-iris.min.js"></script>
+    <script src="ploty/plotly-190419.min.js"></script>
+
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="jquery/jquery.js"></script>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="ml/ml.min.js"></script>
+   
+
+
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Biomarkers</h1>
+          <P>The total number of biomarkers is: <strong>344</strong></P>
+          <h3>Number of types in biomarkers.</h3>
+          <table class="table">
+              <thead>
+                <tr><th>Type</th><th>Number</th></tr>
+              </thead>
+              <tbody>
+                  <tr><th>miRNA</th><th>238</th></tr>
+                  <tr><th>lncRNA</th><th>50</th></tr>
+                  <tr><th>mRNA</th><th>39</th></tr>
+                  <tr><th>circRNA</th><th>12</th></tr>
+                  <tr><th>snoRNA</th><th>4</th></tr>
+                  <tr><th>snRNA</th><th>1</th></tr>
+              </tbody>
+            </table>
+            <div id='pie_biomarker'></div>
+          <h3>The number of markers in different cancers.</h3>
+          <table class="table">
+              <thead>
+                <tr><th>Name</th><th>Chinese name</th><th>Number</th></tr>
+              </thead>
+              <tbody>
+                  <tr><th>HCC</th><th>肝癌</th><th>130</th></tr>
+                  <tr><th>PAAD</th><th>胰腺癌</th><th>90</th></tr>
+                  <tr><th>BRCA</th><th>浸润性乳腺癌</th><th>82</th></tr>
+                  <tr><th>CRC</th><th>结直肠癌</th><th>71</th></tr>
+                  <tr><th>NSCLC</th><th>非小细胞肺癌</th><th>39</th></tr>
+                  <tr><th>PRAD</th><th>前列腺癌</th><th>34</th></tr>
+                  <tr><th>STAD</th><th>胃癌</th><th>34</th></tr>
+                  <tr><th>CESC</th><th>宫颈癌</th><th>21</th></tr>
+                  <tr><th>ESCA</th><th>食道癌</th><th>15</th></tr>
+                  <tr><th>THCA</th><th>甲状腺癌</th><th>11</th></tr>
+                  <tr><th>CHOL</th><th>胆管癌</th><th>11</th></tr>
+                  <tr><th>BLCA</th><th>尿路上皮膀胱癌</th><th>9</th></tr>
+                  <tr><th>TGCT</th><th>睾丸生殖细胞肿瘤</th><th>3</th></tr>
+              </tbody>
+            </table>
+          <div id="biomarker_plot"></div>
+          
+        <hr>
+
+        <h1>Lulab exRNA</h1>
+        <h3>Number of exRNA sequencing data in the Lulab: 46.</h3>
+        <table class="table">
+          <thead>
+            <tr><th>Type</th><th>Cell free</th><th>EV/Exosome</th></tr>
+          </thead>
+          <tbody>
+              <tr><th>Short</th><th>27</th><th>0</th></tr>
+              <tr><th>Long</th><th>19</th><th>0</th></tr>
+          </tbody>
+        </table>
+        <div id='pie_lulab'></div>
+        <h3>exRNA sequencing data for different library construction methods in the Lulab.</h3>
+        <div id='lulab_plot'></div>
+        <hr>
+
+        <h1>Publish exRNA</h1>
+        <h3>The number of different types of published exRNA sequencing data: 1381.</h3>
+        <table class="table">
+            <thead>
+              <tr><th>Type</th><th>Cell free</th><th>EV/Exosome</th></tr>
+            </thead>
+            <tbody>
+                <tr><th>Short</th><th style="color:#2077b4">791</th><th style="color:#fb7f0e">286</th></tr>
+                <tr><th>Long</th><th style="color:#2ca02b">219</th><th style="color:#d62627">85</th></tr>
+            </tbody>
+          </table>
+          <div id='pie_exRNA'></div>
+          <h3>Cell free RNA sequencing and short library: 791.</h3>
+          <div id='cellfree_short'></div>
+
+          <h3>Cell free RNA sequencing and long library: 219.</h3>
+          <div id='cellfree_long'></div>
+
+          <h3>Exosomal RNA sequencing and short library: 286.</h3>
+          <div id='exosomal_short'></div>
+
+          <h3>Exosomal RNA sequencing and long library: 85.</h3>
+          <div id='exosomal_long'></div>          
+
+          <hr>
+          
+          <h1>TCGA</h1>
+
+          <h3>The downloaded TCGA data. RNA-seq: 6720, miRNA-seq: 6740.</h3>
+          <p>Green: Updated to HG38</p>
+          <table class="table">
+              <thead>
+                <tr><th>Name</th><th>Chinese name</th><th>RNA-seq</th><th>miRNA-seq</th></tr>
+              </thead>
+              <tbody>
+                <tr style="background: #8BC34A;"><th>LIHC</th><th>肝细胞肝癌</th><th>424</th><th>425</th></tr>
+                <tr style="background: #8BC34A;"><th>LUAD</th><th>肺腺癌</th><th>595</th><th>567</th></tr>
+                <tr style="background: #8BC34A;"><th>LUSC</th><th>肺鳞癌</th><th>595</th><th>523</th></tr>
+                <tr style="background: #8BC34A;"><th>COAD</th><th>结肠癌</th><th>502</th><th>447</th></tr>
+                <tr style="background: #8BC34A;"><th>READ</th><th>直肠腺癌</th><th>177</th><th>579</th></tr>
+                <tr style="background: #8BC34A;"><th>STAD</th><th>胃癌</th><th>407</th><th>491</th></tr>
+                <tr><th>BLCA</th><th>膀胱尿路上皮癌</th><th>433</th><th>437</th></tr>
+                <tr><th>BRCA</th><th>乳腺浸润癌</th><th>1222</th><th>1207</th></tr>
+                
+                <tr><th>GBM</th><th>多形成性胶质细胞瘤</th><th>174</th><th>5</th></tr>
+                <tr><th>HNSC</th><th>头颈鳞状细胞癌</th><th>566</th><th>569</th></tr>
+                <tr><th>KIRC</th><th>肾透明细胞癌</th><th>611</th><th>616</th></tr>
+                <tr><th>LAML</th><th>急性髓细胞样白血病</th><th>10</th><th>188</th></tr>
+                
+                <tr><th>OV</th><th>卵巢浆液性囊腺癌</th><th>299</th><th>499</th></tr>
+                <tr><th>PAAD</th><th>胰腺癌</th><th>182</th><th>380</th></tr>
+                <tr><th>PRAD</th><th>前列腺癌</th><th>387</th><th>161</th></tr>
+                
+                <tr><th>UCEC</th><th>子宫内膜癌</th><th>587</th><th>80</th></tr>
+                
+                <tr><th>CNTL</th><th>正常</th><th>0</th><th>57</th></tr>
+              </tbody>
+          </table>
+          <div id="tcga_plot"></div>
+          <h3>Undownload TCGA data.</h3>
+          <table class="table">
+            <thead>
+              <tr><th>Name</th><th>Chinese name</th><th>RNA-seq</th><th>miRNA-seq</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>ACC</th><th>肾上腺皮质癌</th><th>79</th><th>312</th></tr>
+              <tr><th>CESC</th><th>宫颈鳞癌和腺癌</th><th>309</th><th>47</th></tr>
+              <tr><th>DLBC</th><th>弥漫性大B细胞淋巴瘤</th><th>48</th><th>200</th></tr>
+              <tr><th>ESCA</th><th>食管癌</th><th>173</th><th>91</th></tr>
+              <tr><th>KICH</th><th>肾嫌色细胞癌</th><th>89</th><th>326</th></tr>
+              <tr><th>KIRP</th><th>肾乳头状细胞癌</th><th>321</th><th>530</th></tr>
+              <tr><th>LGG</th><th>脑低级别胶质瘤</th><th>530</th><th>87</th></tr>
+              <tr><th>MESO</th><th>间皮瘤</th><th>86</th><th>183</th></tr>
+              <tr><th>SARC</th><th>肉瘤</th><th>265</th><th>263</th></tr>
+              <tr><th>SKCM</th><th>皮肤黑色素瘤</th><th>472</th><th>452</th></tr>
+              
+              <tr><th>THCA</th><th>甲状腺癌</th><th>568</th><th>573</th></tr>
+              <tr><th>UCS</th><th>子宫肉瘤</th><th>56</th><th>57</th></tr>
+              <tr><th>CHOL</th><th>胆管癌</th><th>45</th><th>45</th></tr>
+              <tr><th>PCPG</th><th>嗜铬细胞瘤和副神经节瘤</th><th>186</th><th>187</th></tr>
+              <tr><th>TGCT</th><th>睾丸生殖细胞肿瘤</th><th>156</th><th>156</th></tr>
+              <tr><th>THYM</th><th>胸腺瘤</th><th>121</th><th>126</th></tr>
+              <tr><th>UVM</th><th>葡萄膜黑色素瘤</th><th>80</th><th>80</th></tr>
+              </tbody>
+          </table>
+          <hr>
+    </div>
+
+
+<script type="text/javascript">
+function tcga(){
+  var trace1 = {
+  x: ['BLCA','BRCA','COAD','GBM','HNSC','KIRC','LAML','LIHC','LUAD','LUSC','OV','PAAD','PRAD','READ','UCEC','CNTL'], 
+  y: [433,1222,502,174,566,611,10,424,595,551,299,182,387,177,587,0],
+  name: 'RNA-seq',
+  text: [433,1222,502,174,566,611,10,424,595,551,299,182,387,177,587,0],
+  textposition: 'auto',
+  type: 'bar'
+};
+
+var trace2 = {
+  x: ['BLCA','BRCA','COAD','GBM','HNSC','KIRC','LAML','LIHC','LUAD','LUSC','OV','PAAD','PRAD','READ','UCEC','CNTL'],
+  y: [437,1207,447,5,569,616,188,425,567,523,499,380,161,579,80,57],
+  name: 'miRNA-seq',
+  text: [437,1207,447,5,569,616,188,425,567,523,499,380,161,579,80,57],
+  textposition: 'auto',
+  type: 'bar'
+};
+
+var data = [trace1, trace2];
+
+var layout = {barmode: 'stack'};
+
+Plotly.newPlot('tcga_plot', data, layout);
+}
+tcga();
+function lulab(){
+  var trace1 = {
+  x: ['Health','CRC','BRCA','STAD'], 
+  y: [0,9,0,0],
+  //'Health','CRC','BRCA','STAD'
+  name: 'NEB',
+  text: [0,9,0,0],
+  textposition: 'auto',
+  type: 'bar'
+};
+
+var trace2 = {
+  x: ['Health','CRC','BRCA','STAD'], 
+  y: [12,6,3,3],
+  name: 'smart',
+  text: [12,6,3,3],
+  textposition: 'auto',
+  type: 'bar'
+};
+
+var trace3 = {
+  x: ['Health','CRC','BRCA','STAD'], 
+  y: [12,3,2,2],
+  name: 'pico',
+  text: [12,3,2,2],
+  textposition: 'auto',
+  type: 'bar'
+};
+
+var data = [trace1, trace2,trace3];
+
+var layout = {barmode: 'stack'};
+
+Plotly.newPlot('lulab_plot', data, layout);
+}
+lulab();
+function cellfree_short(){
+  var data = [{
+x: ['Healthy','Colon cancer', 'Ulcerative colitis','Cardiovascular Disorder','Heart Failure','HCC','Cirrhosi'],
+y: [678,3,3,20,85,1,1],
+type: 'bar',
+text: [678,3,3,20,85,1,1],
+textposition: 'auto',
+}];
+
+Plotly.newPlot('cellfree_short', data, {}, {showSendToCloud:true});
+}
+cellfree_short();
+
+function cellfree_long(){
+  var data = [{
+x: ['Healthy','Spontaneous preterm birth', 'Healthy pregnant women'],
+y: [7,8,204],
+type: 'bar',
+text: [7,8,204],
+textposition: 'auto',
+marker:{
+  color:'#2ca02b',
+}
+
+}];
+
+Plotly.newPlot('cellfree_long', data, {}, {showSendToCloud:true});
+}
+cellfree_long();
+
+function exosomal_long(){
+  var data = [{
+x: ['Healthy','HCC','CRC','CHD','PAAD'],//'Healthy','HCC','CRC','CHD','PAAD'
+y: [32,21,12,6,14],
+type: 'bar',
+text: [32,21,12,6,14],
+textposition: 'auto',
+marker:{
+  color:'#d62627',
+}
+}];
+
+Plotly.newPlot('exosomal_long', data, {}, {showSendToCloud:true});
+}
+exosomal_long();
+
+function exosomal_short(){
+  var data = [{
+x: ['Healthy','CRC','PRAD','PAAD','control smokers','NSCLC','Castration resistant prostate cancer'],//'Healthy','CRC','PRAD','PAAD','control smokers','NSCLC','Castration resistant prostate cancer'
+y: [95,100,36,6,7,19,23],//95,100,36,6,7,19,23
+type: 'bar',
+text: [95,100,36,6,7,19,23],
+textposition: 'auto',
+marker:{
+  color:'#fb7f0e',
+}
+}];
+
+Plotly.newPlot('exosomal_short', data, {}, {showSendToCloud:true});
+}
+exosomal_short();
+
+function biomarker(){
+  var trace1 = {
+			x: ['TGCT','BLCA','CHOL','THCA','ESCA','CESC','STAD','PRAD','NSCLC','CRC','BRCA','PAAD','HCC'],
+			y: [0,9,11,10,11,19,19,29,17,57,72,67,99],
+			name: 'miRNA',
+      text: [0,9,11,10,11,19,19,29,17,57,72,67,99],
+      textposition: 'auto',
+			type: 'bar'
+			};
+
+			var trace2 = {
+				x: ['TGCT','BLCA','CHOL','THCA','ESCA','CESC','STAD','PRAD','NSCLC','CRC','BRCA','PAAD','HCC'],
+				y: [2,0,0,0,4,1,8,3,15,7,1,2,19],
+				name: 'lncRNA',
+        text: [2,0,0,0,4,1,8,3,15,7,1,2,19],
+        textposition: 'auto',
+				type: 'bar'
+			};
+			var trace3 = {
+				x: ['TGCT','BLCA','CHOL','THCA','ESCA','CESC','STAD','PRAD','NSCLC','CRC','BRCA','PAAD','HCC'],
+				y: [1,0,0,1,0,1,0,2,0,4,8,18,11],
+				name: 'mRNA',
+        text: [1,0,0,1,0,1,0,2,0,4,8,18,11],
+        textposition: 'auto',
+				type: 'bar'
+			};
+			var trace4 = {
+				x: ['TGCT','BLCA','CHOL','THCA','ESCA','CESC','STAD','PRAD','NSCLC','CRC','BRCA','PAAD','HCC'],
+				y: [0,0,0,0,0,0,7,0,2,1,1,1,1],
+				name: 'circRNA',
+        text: [0,0,0,0,0,0,7,0,2,1,1,1,1],
+        textposition: 'auto',
+				type: 'bar'
+			};
+			var trace5 = {
+				x: ['TGCT','BLCA','CHOL','THCA','ESCA','CESC','STAD','PRAD','NSCLC','CRC','BRCA','PAAD','HCC'],
+				y: [0,0,0,0,0,0,0,0,1,2,0,2,0],
+				name: 'snRNA',
+        text: [0,0,0,0,0,0,0,0,1,2,0,2,0],
+        textposition: 'auto',
+				type: 'bar'
+			};
+			var trace6 = {
+				x: ['TGCT','BLCA','CHOL','THCA','ESCA','CESC','STAD','PRAD','NSCLC','CRC','BRCA','PAAD','HCC'],
+				y: [0,0,0,0,0,0,0,0,4,0,0,0,0],
+				name: 'snoRNA',
+        text: [0,0,0,0,0,0,0,0,4,0,0,0,0],
+        textposition: 'auto',
+				type: 'bar'
+			};
+			var data = [trace1, trace2, trace3, trace4, trace5, trace6];
+			var layout = {
+				barmode: 'stack',
+				};
+			Plotly.newPlot('biomarker_plot', data, layout);
+}
+biomarker();
+function pie_biomarker(){
+  var data = [{ 
+	values: [238, 50, 39, 12, 4,1], 
+	labels: ['miRNA', 'lncRNA', 'mRNA','circRNA','snoRNA','snRNA'], 
+  hoverinfo: 'label+percent+name', 
+  hole: .3, 
+	type: 'pie' 
+}]; 
+
+var layout = { 
+	height: 400, 
+	width: 500 
+}; 
+
+Plotly.newPlot('pie_biomarker', data, layout);
+}
+pie_biomarker();
+
+function pie_lulab(){
+  var data = [{ 
+	values: [27,19,0,0], 
+	labels: ['Cell free short','Cell free long','EV short','EV long'], 
+  hoverinfo: 'label+percent+name', 
+  hole: .3, 
+	type: 'pie' 
+}]; 
+
+var layout = { 
+	height: 400, 
+	width: 500 
+}; 
+
+Plotly.newPlot('pie_lulab', data, layout);
+}
+pie_lulab();
+
+function pie_exRNA(){
+  var data = [{ 
+	values: [791,219,286,85], 
+	labels: ['Cell free short', 'Cell free long', 'EV short','EV long'], 
+  hoverinfo: 'label+percent+name', 
+  hole: .3, 
+	type: 'pie' 
+}]; 
+
+var layout = { 
+	height: 400, 
+	width: 500 
+}; 
+
+Plotly.newPlot('pie_exRNA', data, layout);
+}
+pie_exRNA();
+</script>  
+
+
+
+</body>
+</html>
