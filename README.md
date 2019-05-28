@@ -1,7 +1,37 @@
 # mljs
 
 ## Usage
-### **Logistic Regression**  
+### Get data from html
+```js
+function getinforvalue(trainid){
+  //get the html data
+  var decision_data=document.getElementById(trainid).value;
+  //decision_label=document.getElementById("label_decision").value;
+
+  //transforme data formate.
+  var decision_data='['+decision_data+']';
+  var decision_data_a=JSON.parse(decision_data);
+  return decision_data_a;
+
+}
+// getinforvalue('training_decision')
+
+
+function getinforlabel(lableid){
+  //get the html data
+  //decision_data=document.getElementById("training_decision").value;
+  var decision_label=document.getElementById(lableid).value;
+
+  //transforme data formate.
+
+  var decision_label_a=decision_label.split(',').map(function(item) {
+	return parseFloat(item);
+  })
+  return decision_label_a;
+}
+// getinforlabel('label_decision');
+```
+### Logistic Regression
 ```js
 
 
@@ -61,7 +91,7 @@ threedplot(dataset,'3dplot');
 threedplot(predict_result,'3dplotnew');
 ```
 
-### **Decision tree**
+### Decision tree
 ```js
 function train_decision(){
   //get the html data
@@ -103,7 +133,7 @@ function prediction_decision(){
 
 }
 ```
-### ****
+### Random forest 
 ```js
 
 function train_randomforest(){
@@ -151,7 +181,7 @@ function prediction_randomforest()
 }
 ```
 
-#### ** Regression Code example **
+#### Regression Code example
 ```js
 //regression-simple-linear begin
 //
@@ -179,7 +209,45 @@ const loaded = ML.SimpleLinearRegression.load(json);
 loaded.predict(5) // 9
 
 ```
+### Write code 
+```js
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+element.style.display = 'none';
+  document.body.appendChild(element);
+element.click();
+document.body.removeChild(element);
+}
+```
 
+### Upload code
+```js
+function readSingleFile(e) {
+  //console.log(e);
+  file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var contents = e.target.result;
+    // Display file content
+    //displayContents(contents);
+    uploadjson=JSON.parse(contents);
+  };
+  reader.readAsText(file);
+
+}
+
+function displayContents(contents) {
+  var element = document.getElementById('file-content');
+  element.innerHTML = contents;
+}
+ 
+document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+```
 
 
 ## List of included libraries
