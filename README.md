@@ -240,6 +240,25 @@ document.body.removeChild(element);
       </div>
 ```
 ```js
+function loadmodule()
+{
+  if(uploadjson['name'] == 'LogisticRegression')
+  {
+    alert(uploadjson['name']);
+    load_lg=new LG(uploadjson);
+  }
+  if(uploadjson['name'] == 'PCA')
+  {
+    alert(uploadjson['name']);
+    load_pca=ML.PCA.load(uploadjson);
+  }
+  if(uploadjson['name'] == 'DTClassifier')
+  {
+    alert(uploadjson['name']);
+  }
+  
+}
+
 function readSingleFile(e) {
   //console.log(e);
   file = e.target.files[0];
