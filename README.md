@@ -1,7 +1,7 @@
 # mljs
 
 ## Usage
-
+### **Logistic Regression**  
 ```js
 
 
@@ -23,35 +23,6 @@ logreg.train(X,Y);
 // we try to predict the test set
 var finalResults = logreg.predict(Xtest);
 // Now, you can compare finalResults with the Ytest, which is what you wanted to have.
-
-```
-
-** Code example **
-```js
-//regression-simple-linear begin
-//
-const x = [0.5, 1, 1.5, 2, 2.5];
-const y = [0, 1, 2, 3, 4];
-
-const regression = new ML.SimpleLinearRegression(x, y); //load ML function
-new MLDataset.get
-
-regression.slope // 2
-regression.intercept // -1
-regression.coefficients // [-1, 2]
-
-regression.predict(3); // 5
-regression.computeX(3.5); // 2.25
-
-regression.toString(); // 'f(x) = 2 * x - 1'
-
-regression.score(x, y);
-// { r: 1, r2: 1, chi2: 0, rmsd: 0 }
-
-const json = regression.toJSON();
-// { name: 'simpleLinearRegression', slope: 2, intercept: -1 }
-const loaded = ML.SimpleLinearRegression.load(json);
-loaded.predict(5) // 9
 
 ```
 ### PCA analysis
@@ -85,14 +56,130 @@ pca.predict(newPoints)[0]
 pca_load.predict(newPoints)[0]
 // [-2.830722471866897, 0.01139060953209596, 0.0030369648815961603, -0.2817812120420965]
 predict_result=pca.predict(dataset);
-
 //
-
 threedplot(dataset,'3dplot');
 threedplot(predict_result,'3dplotnew');
+```
 
+### **Decision tree**
+```js
+function train_decision(){
+  //get the html data
+  decision_data_a=getinforvalue('training_decision');
+  decision_label_a=getinforlabel('label_decision');
+  
+  //set decision parameter
+  var options = {
+  gainFunction: 'gini',
+  maxDepth: 10,
+  minNumSamples: 3
+  };
+
+  //Generate a decision module.
+  classifier_decision = new ML.DecisionTreeClassifier(options);
+
+  //Training the data
+  classifier_decision.train(decision_data_a, decision_label_a);
+
+  $(".predict_decision").show();
+
+}
+function download_decisiontree(){
+  var text=classifier_decision.toJSON();
+  myJSON = JSON.stringify(text);
+  download("decisiontree_parameters.txt",myJSON);
+
+}
+
+function prediction_decision(){
+  //predict_decision
+    //get the html data
+    predict_data_a=getinforvalue('predict_decision_input');
+
+    //Predict the data
+    var result_decision = classifier_decision.predict(predict_data_a);
+
+    $("#result_dicision").html('<p>Decision Tree Prediction results:'+result_decision+'</p>');
+
+}
+```
+### ****
+```js
+
+function train_randomforest(){
+  //get the html data
+  decision_data_a=getinforvalue('training_decision');
+  decision_label_a=getinforlabel('label_decision');
+  
+  //set decision parameter
+  var options = {
+  seed: 3,
+  maxFeatures: 0.8,
+  replacement: true,
+  nEstimators: 25
+  };
+
+  //Generate a decision module.
+  classifier_randomforest = new ML.DecisionTreeClassifier(options);
+
+  //Training the data
+  classifier_randomforest.train(decision_data_a, decision_label_a);
+
+  $(".predict_randomforest").show();
+
+}
+
+function download_randomforest(){
+  var text=classifier_randomforest.toJSON();
+  myJSON = JSON.stringify(text);
+  download("randomforest_parameters.txt",myJSON);
+
+}
+
+function prediction_randomforest()
+{
+
+  //predict_decision
+  //get the html data
+    predict_data_a=getinforvalue('predict_randomforest_input');
+
+    //Predict the data
+    var result = classifier_randomforest.predict(predict_data_a);
+
+    $("#result_randomforest").html('<p>Random Forest Prediction results:'+result+'</p>');
+
+}
+```
+
+#### ** Regression Code example **
+```js
+//regression-simple-linear begin
+//
+const x = [0.5, 1, 1.5, 2, 2.5];
+const y = [0, 1, 2, 3, 4];
+
+const regression = new ML.SimpleLinearRegression(x, y); //load ML function
+new MLDataset.get
+
+regression.slope // 2
+regression.intercept // -1
+regression.coefficients // [-1, 2]
+
+regression.predict(3); // 5
+regression.computeX(3.5); // 2.25
+
+regression.toString(); // 'f(x) = 2 * x - 1'
+
+regression.score(x, y);
+// { r: 1, r2: 1, chi2: 0, rmsd: 0 }
+
+const json = regression.toJSON();
+// { name: 'simpleLinearRegression', slope: 2, intercept: -1 }
+const loaded = ML.SimpleLinearRegression.load(json);
+loaded.predict(5) // 9
 
 ```
+
 
 
 ## List of included libraries
