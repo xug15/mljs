@@ -210,7 +210,16 @@ loaded.predict(5) // 9
 
 ```
 ### Write code 
+```html
+<button class="btn btn-success" onclick="download_randomforest()">
+```
 ```js
+function download_randomforest(){
+  var text=classifier_randomforest.toJSON();
+  myJSON = JSON.stringify(text);
+  download("randomforest_parameters.txt",myJSON);
+}
+
 function download(filename, text) {
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -223,6 +232,13 @@ document.body.removeChild(element);
 ```
 
 ### Upload code
+```html
+      <div style="margin:10px;">
+        <input type="file" id="file-input" >
+        <div id="file-content"></div>
+        <button class="btn" onclick="loadmodule()">Upload</button>
+      </div>
+```
 ```js
 function readSingleFile(e) {
   //console.log(e);
