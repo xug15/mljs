@@ -244,20 +244,33 @@ function loadmodule()
 {
   if(uploadjson['name'] == 'LogisticRegression')
   {
-    alert(uploadjson['name']);
-    load_lg=new LG(uploadjson);
+    //alert(uploadjson['name']);
+    logreg=LG.load(uploadjson);
+    $(".predict_logistic").show();
   }
   if(uploadjson['name'] == 'PCA')
   {
-    alert(uploadjson['name']);
-    load_pca=ML.PCA.load(uploadjson);
+    //alert(uploadjson['name']);
+    pca=ML.PCA.load(uploadjson);
+      //get the html data
+    pca_data_a=getinforvalue('training_decision');
+    pca_label_a=getinforlabel('label_decision');
+    predict_result=pca.predict(pca_data_a);
+  //
+  $(".predict_pca").show();
+    threedlabelplot(pca_data_a,pca_label_a,'3dplot');
+    threedlabelplot(predict_result,pca_label_a,'3dplotnew');
+    
   }
   if(uploadjson['name'] == 'DTClassifier')
   {
-    alert(uploadjson['name']);
+    //alert(uploadjson['name']);
+    classifier_decision=ML.DecisionTreeClassifier.load(uploadjson);
+    $(".predict_decision").show();
   }
   
 }
+
 
 function readSingleFile(e) {
   //console.log(e);
