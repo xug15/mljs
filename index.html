@@ -3,8 +3,15 @@
 <head>
     <title>ML JavaScript</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	  <meta charset="UTF-8">
-    
+    <meta charset="UTF-8">
+    <!-- Insert this line above script imports  -->
+    <script type="text/javascript">
+      if (typeof module === 'object') {
+        window.module = module; 
+        module = undefined;
+      }
+      </script>
+
     <script src="dataset-iris/dist/ml-dataset-iris.min.js"></script>
     <script src="ploty/plotly-190419.min.js"></script>
 
@@ -27,7 +34,11 @@
 
     <script src="ml/ml.min.js"></script>
     <script src="ml/ml-logistic-regression.min.js"></script>
-    
+    <!-- Insert this line after script imports -->
+<script type="text/javascript">
+  if (window.module)
+     module = window.module;
+  </script>
    
 <style>
   .row{
@@ -189,7 +200,7 @@ margin: 10px 0px;
         </div><!--row-->
         <div class="row" >
             <div class="col-xs-12 col-sm-6" >
-                <textarea id="predict_decision_input" rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
+                <textarea id="predict_decision_input" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
             </div><!--col-xs-12-->
           </div><!--row-->
           <div class="row" >
@@ -218,7 +229,7 @@ margin: 10px 0px;
           </div><!--row-->
           <div class="row" >
               <div class="col-xs-12 col-sm-6" >
-                  <textarea id="predict_decision_input" rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
+                  <textarea id="predict_decision_input" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
               </div><!--col-xs-12-->
             </div><!--row-->
             <div class="row" >
@@ -247,7 +258,7 @@ margin: 10px 0px;
           </div><!--row-->
           <div class="row" >
               <div class="col-xs-12 col-sm-6" >
-                  <textarea id="predict_randomforest_input" rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
+                  <textarea id="predict_randomforest_input" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
               </div><!--col-xs-12-->
             </div><!--row-->
             <div class="row" >
@@ -283,9 +294,9 @@ margin: 10px 0px;
         <fieldset style="display: none;">
           <legend>Exponential regression</legend>
           <label>X value</label>
-          <textarea id="exponentialx" rows="3" placeholder="0, 1, 2, 3, 4">0,1,2,3,4</textarea>
+          <textarea id="exponentialx" class="textarea"  rows="3" placeholder="0, 1, 2, 3, 4">0,1,2,3,4</textarea>
           <label>Y value</label>
-          <textarea id="exponentialy" rows="3" placeholder="1.5, 2.5, 3.5, 5.0, 7.5">1.5,2.5,3.5,5.0,7.5</textarea>
+          <textarea id="exponentialy" class="textarea"  rows="3" placeholder="1.5, 2.5, 3.5, 5.0, 7.5">1.5,2.5,3.5,5.0,7.5</textarea>
 
           <label >
             
