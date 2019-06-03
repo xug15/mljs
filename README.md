@@ -1,5 +1,7 @@
 # mljs
 
+[app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
+
 ## Usage
 ### Get data from html
 ```js
