@@ -31,7 +31,92 @@ function getinforlabel(lableid){
 }
 // getinforlabel('label_decision');
 ```
+### Linear Regression using js-regrssion
+```js
+// var jsregression = require('js-regression');
+
+// === training data generated from y = 2.0 + 5.0 * x + 2.0 * x^2 === //
+var data = [];
+for(var x = 1.0; x < 100.0; x += 1.0) {
+  var y = 2.0 + 5.0 * x + 2.0 * x * x + Math.random() * 1.0;
+  data.push([x, x * x, y]); // Note that the last column should be y the output
+}
+
+// === Create the linear regression === //
+var regression = new LSRE.LinearRegression({
+  alpha: 0.0000001, // 
+  iterations: 1000,
+  lambda: 0.0
+});
+// can also use default configuration: var regression = new jsregression.LinearRegression(); 
+
+// === Train the linear regression === //
+var model = regression.fit(data);
+
+// === Print the trained model === //
+console.log(model);
+
+
+// === Testing the trained linear regression === //
+var testingData = [];
+for(var x = 1.0; x < 100.0; x += 1.0) {
+  var actual_y = 2.0 + 5.0 * x + 2.0 * x * x + Math.random() * 1.0;
+  var predicted_y = regression.transform([x, x * x]);
+  console.log( x +" actual: " + actual_y + " predicted: " + predicted_y); 
+}
+```
+
 ### Logistic Regression
+The sample code below illustrates how to run the logistic regression on the iris datsets to classify whether a data row belong to species Iris-virginica:
+```js
+var jsregression = require('js-regression');
+var iris = require('js-datasets-iris');
+
+// === Create the linear regression === //
+var logistic = new LSRE.LogisticRegression({
+   alpha: 0.000001,
+   iterations: 1000,
+   lambda: 0.0
+});
+// can also use default configuration: var logistic = new jsregression.LogisticRegression(); 
+
+// === Create training data and testing data ===//
+IRIS.shuffle();
+
+var trainingDataSize = Math.round(IRIS.rowCount * 0.8);
+var trainingData = [];
+var testingData = [];
+for(var i=0; i < IRIS.rowCount ; ++i) {
+   var row = [];
+   row.push(IRIS.data[i][0]); // sepalLength;
+   row.push(IRIS.data[i][1]); // sepalWidth;
+   row.push(IRIS.data[i][2]); // petalLength;
+   row.push(IRIS.data[i][3]); // petalWidth;
+   row.push(IRIS.data[i][4] == "Iris-virginica" ? 1.0 : 0.0); // output which is 1 if species is Iris-virginica; 0 otherwise
+   if(i < trainingDataSize) {
+        trainingData.push(row);
+   } else {
+       testingData.push(row);
+   }
+}
+
+
+// === Train the logistic regression === //
+var model = logistic.fit(trainingData);
+
+// === Print the trained model === //
+console.log(model);
+
+// === Testing the trained logistic regression === //
+for(var i=0; i < testingData.length; ++i){
+   var probabilityOfSpeciesBeingIrisVirginica = logistic.transform(testingData[i]);
+   var predicted = logistic.transform(testingData[i]) >= logistic.threshold ? 1 : 0;
+   console.log("actual: " + testingData[i][4] + " probability of being Iris-virginica: " + probabilityOfSpeciesBeingIrisVirginica);
+   console.log("actual: " + testingData[i][4] + " predicted: " + predicted);
+}
+```
+
+### Logistic Regression using mljs
 ```js
 
 
