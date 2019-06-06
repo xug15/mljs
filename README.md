@@ -34,14 +34,14 @@ function getinforlabel(lableid){
 // getinforlabel('label_decision');
 ```
 ### Dynamic learning ratio for train.
-**trainloop(a,b,c)**
-> trainloop(a,b,c) Use set learning ratio, iterations, and report or not.
-**logistic_two()**
+**trainloop(a,b,c)**  
+> trainloop(a,b,c) Use set learning ratio, iterations, and report or not.  
+**logistic_two()**  
 > use get the data, and use learning ratio : [1,0.1,0.01,0.001,0.0001,0.00001,0.000001] use 100 iterations.then pick up the best and learning ratio use 3000 iterations.
-**indexOfMax(arr)**
-> report the max index of array value.
-**merge_matrix(a,b)**
-> merge data into array.
+**indexOfMax(arr)**  
+> report the max index of array value.  
+**merge_matrix(a,b)**  
+> merge data into array.  
 
 ```js
 function cal(x){
