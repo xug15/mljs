@@ -280,15 +280,12 @@ margin: 10px 0px;
                     </div><!--col-xs-12-->
                   </div><!--row-->
     </div>
-
     <div class="row" >
       <div class="col-xs-12 col-sm-6" >
-        
       </div><!--col-xs-12-->
     </div><!--row-->
     <div class="row" >
       <div class="col-xs-12 col-sm-6" >
-        
       </div>
     </div>
     <div class="container">
@@ -298,9 +295,7 @@ margin: 10px 0px;
           <textarea id="exponentialx" class="textarea"  rows="3" placeholder="0, 1, 2, 3, 4">0,1,2,3,4</textarea>
           <label>Y value</label>
           <textarea id="exponentialy" class="textarea"  rows="3" placeholder="1.5, 2.5, 3.5, 5.0, 7.5">1.5,2.5,3.5,5.0,7.5</textarea>
-
           <label >
-            
           </label>
           <button class="btn" onclick="exponential()">Click me</button>
           <hr>
@@ -308,36 +303,214 @@ margin: 10px 0px;
         <div id="info"></div>
         <div id="plot"></div>
         <div id="decision_info"></div>
-        
-     
         <label>
-          
         </label>
         <div>
-          
-          
-          
-          
         </div>
         <div style="margin:10px;">
-          
         </div>
-
-
-
-        
-        
-
       </fieldset>
-      
-      
-
       <div style="margin-bottom: 200px;"></div>
     </div>
 <script src="ml/mljsxg.js"></script>
 
 <script type="text/javascript">
+function merge_matrix(a,b){
+  var c=[];
+for(var i=0;i<a.length;i++){
 
+  a[i].push(b[i]);
+  c.push(a[i]);
+}
+return c;
+}
+function cal(x){
+  var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
+  return y;
+}
+function logistic_two_example(){
+  var logistic = new LSRE.LogisticRegression({
+   alpha: 0.000001,
+   iterations: 1000,
+   lambda: 0.0
+});
+// can also use default configuration: var logistic = new jsregression.LogisticRegression(); 
+
+// === Create training data and testing data ===//
+IRIS.shuffle();
+
+var trainingDataSize = Math.round(IRIS.rowCount * 0.8);
+var trainingData = [];
+var testingData = [];
+for(var i=0; i < IRIS.rowCount ; ++i) {
+   var row = [];
+   row.push(IRIS.data[i][0]); // sepalLength;
+   row.push(IRIS.data[i][1]); // sepalWidth;
+   row.push(IRIS.data[i][2]); // petalLength;
+   row.push(IRIS.data[i][3]); // petalWidth;
+   row.push(IRIS.data[i][4] == "Iris-virginica" ? 1.0 : 0.0); // output which is 1 if species is Iris-virginica; 0 otherwise
+   if(i < trainingDataSize) {
+        trainingData.push(row);
+   } else {
+       testingData.push(row);
+   }
+}
+
+
+// === Train the logistic regression === //
+ model = logistic.fit(trainingData);
+
+// === Print the trained model === //
+console.log(model);
+
+// === Testing the trained logistic regression === //
+for(var i=0; i < testingData.length; ++i){
+   var probabilityOfSpeciesBeingIrisVirginica = logistic.transform(testingData[i]);
+   var predicted = logistic.transform(testingData[i]) >= logistic.threshold ? 1 : 0;
+   var rey=cal(testingData[i]);
+   console.log(" actual: " + testingData[i][4] + " probability of being Iris-virginica: " + probabilityOfSpeciesBeingIrisVirginica);
+   console.log("actual: " + testingData[i][4] + " predicted: " + predicted);
+   //console.log(rey + " \n" + probabilityOfSpeciesBeingIrisVirginica);
+  }
+}
+
+function indexOfMax(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+var max = arr[0];
+    var maxIndex = 0;
+for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            maxIndex = i;
+            max = arr[i];
+        }
+    }
+return maxIndex;
+}
+
+
+
+//logistic_two_example();
+
+function trainloop(a,b,c)
+{
+  //a is leaning ration
+  //b is iterations
+  //c is report other information or not
+  
+  if(b===undefined){
+    b=100;
+  }
+  if(c===undefined){
+    c=false;
+  }else{
+    console.log(a);
+    c=true;
+  }
+  classifier = new LSRE.MultiClassLogistic({
+   alpha: a,
+   iterations: b,
+   lambda: 0.0
+});
+
+result = classifier.fit(merge_array);
+
+if(c){
+  console.log(result);
+  for (var i in result)
+  {
+    console.log("name:"+i+" cost:"+result[i]['cost']+" threshold:"+result[i]['threshold']);
+  }
+}
+
+  var correct=0;
+  var wronge=0;
+  for(var i=0; i < merge_array.length; ++i){
+   var predicted = classifier.transform(merge_array[i]);
+   //console.log(i+merge_array[i]+);
+   if(merge_array[i][4]==predicted){
+    correct++;
+   }else{
+     wronge++;
+   }
+   //console.log(" actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var ratio=correct/(correct+wronge);
+  if(c){
+    console.log("Accuracy: "+ratio);
+  }
+  
+  return ratio;
+}
+
+
+function logistic_two(){
+//get data.
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+//merge_matrix()
+ merge_array=merge_matrix(data,label);
+//set model
+//1. set 7 different learning ratio.
+ var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
+accuracy_array=[];
+for(var i=0;i<alpha_array.length;i++){
+  // train 100 iternate for prepare the best learning ratio.
+  var accurary=trainloop(alpha_array[i],100);
+  //get the accuracy.
+  accuracy_array.push(accurary);
+}
+// get the best learning ratio by accuracy.
+var index_max=indexOfMax(accuracy_array);
+console.log("Pre-Max index: "+index_max+" Pre-Max Accuracy "+accuracy_array[index_max]+" Using learning ratio:"+alpha_array[index_max]);
+//use the best learning ratio, and train 3000 times to get model.
+var accurary=trainloop(alpha_array[index_max],3000,true);
+
+
+}
+logistic_two();
+
+
+
+//
+function logistic_multi(){
+  var classifier = new LSRE.MultiClassLogistic({
+   alpha: 0.000001,
+   iterations: 1000,
+   lambda: 0.0
+});
+
+IRIS.shuffle();
+
+var trainingDataSize = Math.round(IRIS.rowCount * 0.9);
+var trainingData = [];
+var testingData = [];
+for(var i=0; i < IRIS.rowCount ; ++i) {
+   var row = [];
+   row.push(IRIS.data[i][0]); // sepalLength;
+   row.push(IRIS.data[i][1]); // sepalWidth;
+   row.push(IRIS.data[i][2]); // petalLength;
+   row.push(IRIS.data[i][3]); // petalWidth;
+   row.push(IRIS.data[i][4]); // output is species
+   if(i < trainingDataSize){
+        trainingData.push(row);
+   } else {
+       testingData.push(row);
+   }
+}
+
+
+var result = classifier.fit(trainingData);
+
+console.log(result);
+
+for(var i=0; i < testingData.length; ++i){
+   var predicted = classifier.transform(testingData[i]);
+   console.log("actual: " + testingData[i][4] + " predicted: " + predicted);
+  }
+}
+//logistic_multi();
 </script>  
 
 

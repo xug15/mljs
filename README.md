@@ -71,8 +71,6 @@ for(var x = 1.0; x < 100.0; x += 1.0) {
 ### Logistic Regression
 The sample code below illustrates how to run the logistic regression on the iris datsets to classify whether a data row belong to species Iris-virginica:
 ```js
-var jsregression = require('js-regression');
-var iris = require('js-datasets-iris');
 
 // === Create the linear regression === //
 var logistic = new LSRE.LogisticRegression({
