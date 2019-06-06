@@ -33,6 +33,125 @@ function getinforlabel(lableid){
 }
 // getinforlabel('label_decision');
 ```
+### Dynamic learning ratio for train.
+**trainloop(a,b,c)**
+> trainloop(a,b,c) Use set learning ratio, iterations, and report or not.
+**logistic_two()**
+> use get the data, and use learning ratio : [1,0.1,0.01,0.001,0.0001,0.00001,0.000001] use 100 iterations.then pick up the best and learning ratio use 3000 iterations.
+**indexOfMax(arr)**
+> report the max index of array value.
+**merge_matrix(a,b)**
+> merge data into array.
+
+```js
+function cal(x){
+  var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
+  return y;
+}
+
+function merge_matrix(a,b){
+  var c=[];
+for(var i=0;i<a.length;i++){
+
+  a[i].push(b[i]);
+  c.push(a[i]);
+}
+return c;
+}
+function indexOfMax(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+var max = arr[0];
+    var maxIndex = 0;
+for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            maxIndex = i;
+            max = arr[i];
+        }
+    }
+return maxIndex;
+}
+
+function trainloop(a,b,c)
+{
+  //a is learning ration
+  //b is iterations
+  //c is report other information or not
+  
+  if(b===undefined){
+    b=100;
+  }
+  if(c===undefined){
+    c=false;
+  }else{
+    console.log(a);
+    c=true;
+  }
+  classifier = new LSRE.MultiClassLogistic({
+   alpha: a,
+   iterations: b,
+   lambda: 0.0
+});
+
+result = classifier.fit(merge_array);
+
+if(c){
+  console.log(result);
+  for (var i in result)
+  {
+    console.log("name:"+i+" cost:"+result[i]['cost']+" threshold:"+result[i]['threshold']);
+  }
+}
+
+  var correct=0;
+  var wronge=0;
+  for(var i=0; i < merge_array.length; ++i){
+   var predicted = classifier.transform(merge_array[i]);
+   //console.log(i+merge_array[i]+);
+   if(merge_array[i][4]==predicted){
+    correct++;
+   }else{
+     wronge++;
+   }
+   //console.log(" actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var ratio=correct/(correct+wronge);
+  if(c){
+    console.log("Accuracy: "+ratio);
+  }
+  
+  return ratio;
+}
+
+
+function logistic_two(){
+//get data.
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+//merge_matrix()
+ merge_array=merge_matrix(data,label);
+//set model
+//1. set 7 different learning ratio.
+ var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
+accuracy_array=[];
+for(var i=0;i<alpha_array.length;i++){
+  // train 100 iternate for prepare the best learning ratio.
+  var accurary=trainloop(alpha_array[i],100);
+  //get the accuracy.
+  accuracy_array.push(accurary);
+}
+// get the best learning ratio by accuracy.
+var index_max=indexOfMax(accuracy_array);
+console.log("Pre-Max index: "+index_max+" Pre-Max Accuracy "+accuracy_array[index_max]+" Using learning ratio:"+alpha_array[index_max]);
+//use the best learning ratio, and train 3000 times to get model.
+var accurary=trainloop(alpha_array[index_max],3000,true);
+
+
+}
+```
+
+
 ### Linear Regression using js-regrssion
 ```js
 // var jsregression = require('js-regression');
