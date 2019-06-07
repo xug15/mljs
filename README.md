@@ -284,6 +284,7 @@ var label=getinforlabel('label_decision');
 
 //merge_matrix()
  merge_array=merge_matrix(data,label);
+
 //set model
 //1. set 7 different learning ratio.
  var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
@@ -315,13 +316,8 @@ for(var i=0; i < merge_array.length; ++i)
    console.log("actual: " + merge_array[i][4] + " predicted: " + predicted);
   }
   var merge_array2=merge_array;
-var probabilityArray=calpro(parameter_matrix,merge_array2,1);
-for(var i=0; i < merge_array.length; ++i)
-  {
-   var predicted = classifier.transform(merge_array[i]);
-   console.log("actual: " + merge_array[i][4] + " predicted: " + predicted);
-   console.log(i+" "+probabilityArray[0][i]+" "+probabilityArray[1][i]+" "+probabilityArray[2][i]);
-  }
+  var probabilityArray=calpro(parameter_matrix,merge_array2,1);
+
 }
 
 logistic_two();
