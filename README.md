@@ -53,6 +53,16 @@ function getinforlabel(lableid){
 > get the parameters and data, and label or not to caluclate probability.
 
 ```js
+//use array to test best learning ratio.
+var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
+accuracy_array=[];
+for(var i=0;i<alpha_array.length;i++){
+  // train 100 iternate for prepare the best learning ratio.
+  var accurary=trainloop(merge_array,alpha_array[i],100);
+  //get the accuracy.
+  accuracy_array.push(accurary);
+}
+
 function calpro(para2,xarr,label){
 
   var para=JSON.parse(JSON.stringify(para2));
