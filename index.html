@@ -324,16 +324,22 @@ for(var i=0;i<a.length;i++){
 }
 return c;
 }
+
 function cal(x){
   var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
   return y;
 }
+
 function logistic_two_example(){
   var logistic = new LSRE.LogisticRegression({
    alpha: 0.000001,
    iterations: 1000,
    lambda: 0.0
 });
+
+function model_probability(model,data){
+
+}
 // can also use default configuration: var logistic = new jsregression.LogisticRegression(); 
 
 // === Create training data and testing data ===//
@@ -374,6 +380,9 @@ for(var i=0; i < testingData.length; ++i){
   }
 }
 
+
+
+
 function indexOfMax(arr) {
     if (arr.length === 0) {
         return -1;
@@ -393,8 +402,9 @@ return maxIndex;
 
 //logistic_two_example();
 
-function trainloop(a,b,c)
+function trainloop(data,a,b,c)
 {
+  //data is training data.
   //a is leaning ration
   //b is iterations
   //c is report other information or not
@@ -405,7 +415,6 @@ function trainloop(a,b,c)
   if(c===undefined){
     c=false;
   }else{
-    console.log(a);
     c=true;
   }
   classifier = new LSRE.MultiClassLogistic({
@@ -414,10 +423,10 @@ function trainloop(a,b,c)
    lambda: 0.0
 });
 
-result = classifier.fit(merge_array);
+result = classifier.fit(data);
 
 if(c){
-  console.log(result);
+  console.log("Model has ratio:"+a+" iteration:"+b+" model result:"+result);
   for (var i in result)
   {
     console.log("name:"+i+" cost:"+result[i]['cost']+" threshold:"+result[i]['threshold']);
@@ -426,10 +435,10 @@ if(c){
 
   var correct=0;
   var wronge=0;
-  for(var i=0; i < merge_array.length; ++i){
-   var predicted = classifier.transform(merge_array[i]);
-   //console.log(i+merge_array[i]+);
-   if(merge_array[i][4]==predicted){
+  for(var i=0; i < data.length; ++i){
+   var predicted = classifier.transform(data[i]);
+   //console.log(i+[i]+);
+   if(data[i][data[i].length-1]==predicted){
     correct++;
    }else{
      wronge++;
@@ -438,51 +447,75 @@ if(c){
   }
   var ratio=correct/(correct+wronge);
   if(c){
-    console.log("Accuracy: "+ratio);
+    console.log("Select model have Accuracy: "+ratio+"\n");
+    return classifier;
+  }else{
+    return ratio;
   }
   
-  return ratio;
+  
+  
 }
 
+function calpro(para2,xarr,label){
+
+  var para=JSON.parse(JSON.stringify(para2));
+// para is the parameters about logistic regression
+// xarr is the data for calculate the probability of the data.
+// label is true or false.
+if(label===undefined){
+  lable=false;
+}else{
+  lable=true;
+}
+var pro_arr=[];
+  for (var i=0;i<para.length;i++)
+  {// loop for parameter with classifiers.
+    var intercept=para[i][1].pop();
+    var name=para[i][0];
+    var slope=para[i][1];
+
+    pro_arr.push([name]);
+    
+    console.log("name:"+name+" intercept:"+intercept+' slope:'+para[i][1]);
+    for(var j=0;j<xarr.length;j++)
+    {//loop for
+      // loop data array
+      var y1=0;
+      var pro=0;
+      if(label){
+        for(var k=0;k<(xarr[j].length-1);k++)
+        {
+        //var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
+        // so y1 is -0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915
+        y1+=xarr[j][k]*slope[k];
+        }
+
+      }else
+      {
+        for(var k=0;k<xarr[j].length;k++)
+        {
+        //var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
+        // so y1 is -0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915
+        y1+=xarr[j][k]*slope[k];
+        }
+      }
+      
+      pro=Math.exp(y1)/(Math.exp(y1)+1);
+      //console.log(y1+" "+pro);
+      pro_arr[i].push(pro);
+    }
+
+  }
+  //console.log(pro_arr);
+  return pro_arr;
+}
 
 function logistic_two(){
 //get data.
 var data= getinforvalue('training_decision');
 var label=getinforlabel('label_decision');
-//merge_matrix()
- merge_array=merge_matrix(data,label);
-//set model
-//1. set 7 different learning ratio.
- var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
-accuracy_array=[];
-for(var i=0;i<alpha_array.length;i++){
-  // train 100 iternate for prepare the best learning ratio.
-  var accurary=trainloop(alpha_array[i],100);
-  //get the accuracy.
-  accuracy_array.push(accurary);
-}
-// get the best learning ratio by accuracy.
-var index_max=indexOfMax(accuracy_array);
-console.log("Pre-Max index: "+index_max+" Pre-Max Accuracy "+accuracy_array[index_max]+" Using learning ratio:"+alpha_array[index_max]);
-//use the best learning ratio, and train 3000 times to get model.
-var accurary=trainloop(alpha_array[index_max],3000,true);
-
-
-}
-logistic_two();
-
-
-
 //
-function logistic_multi(){
-  var classifier = new LSRE.MultiClassLogistic({
-   alpha: 0.000001,
-   iterations: 1000,
-   lambda: 0.0
-});
-
-IRIS.shuffle();
-
 var trainingDataSize = Math.round(IRIS.rowCount * 0.9);
 var trainingData = [];
 var testingData = [];
@@ -499,18 +532,65 @@ for(var i=0; i < IRIS.rowCount ; ++i) {
        testingData.push(row);
    }
 }
-
-
-var result = classifier.fit(trainingData);
-
-console.log(result);
-
-for(var i=0; i < testingData.length; ++i){
-   var predicted = classifier.transform(testingData[i]);
-   console.log("actual: " + testingData[i][4] + " predicted: " + predicted);
-  }
+//merge_matrix()
+ //merge_array=merge_matrix(data,label);
+ merge_array=trainingData;
+//set model
+//1. set 7 different learning ratio.
+ var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
+accuracy_array=[];
+for(var i=0;i<alpha_array.length;i++){
+  // train 100 iternate for prepare the best learning ratio.
+  var accurary=trainloop(merge_array,alpha_array[i],100);
+  //get the accuracy.
+  accuracy_array.push(accurary);
 }
-//logistic_multi();
+// get the best learning ratio by accuracy.
+var index_max=indexOfMax(accuracy_array);
+//console.log("Pre-Max index: "+index_max+" Pre-Max Accuracy "+accuracy_array[index_max]+" Using learning ratio:"+alpha_array[index_max]);
+//use the best learning ratio, and train 3000 times to get model.
+final_model=trainloop(merge_array,alpha_array[index_max],3000,true);
+
+parameter_matrix=[];
+for(var i in result){
+  //console.log(i+" "+result[i]["theta"])
+  parameter_matrix.push([i,result[i]["theta"]]);
+}
+console.log("display the parameter:"+parameter_matrix);
+
+//
+console.log(classifier);
+for(var i=0; i < merge_array.length; ++i)
+  {
+   var predicted = classifier.transform(merge_array[i]);
+   console.log("actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var merge_array2=merge_array;
+var probabilityArray=calpro(parameter_matrix,merge_array2,1);
+for(var i=0; i < merge_array.length; ++i)
+  {
+   var predicted = classifier.transform(merge_array[i]);
+   console.log("actual: " + merge_array[i][4] + " predicted: " + predicted);
+   console.log(i+" "+probabilityArray[0][i]+" "+probabilityArray[1][i]+" "+probabilityArray[2][i]);
+  }
+
+
+/*
+  for(var i=0;i<probabilityArray[0].length;i++){
+  console.log(i+" "+probabilityArray[0][i]+" "+probabilityArray[1][i]+" "+probabilityArray[2][i]);
+}
+for(var i=0;i<probabilityArray[0].length;i++){
+  console.log(i+" "+probabilityArray[0][i]+" "+probabilityArray[1][i]+" "+probabilityArray[2][i]);
+}
+*/
+//console.log(probabilityArray);
+
+
+
+
+}
+//logistic_two();
+
 </script>  
 
 

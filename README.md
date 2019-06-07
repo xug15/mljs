@@ -46,7 +46,122 @@ function getinforlabel(lableid){
 **merge_matrix(a,b)**  
 > merge data into array.  
 
+**trainloop(data,a,b,c)**
+> use data, learning ratio, and iterations and reporot or not.
+
+**calpro(para2,xarr,label)**
+> get the parameters and data, and label or not to caluclate probability.
+
 ```js
+function calpro(para2,xarr,label){
+
+  var para=JSON.parse(JSON.stringify(para2));
+// para is the parameters about logistic regression
+// xarr is the data for calculate the probability of the data.
+// label is true or false.
+if(label===undefined){
+  lable=false;
+}else{
+  lable=true;
+}
+var pro_arr=[];
+  for (var i=0;i<para.length;i++)
+  {// loop for parameter with classifiers.
+    var intercept=para[i][1].pop();
+    var name=para[i][0];
+    var slope=para[i][1];
+
+    pro_arr.push([name]);
+    
+    console.log("name:"+name+" intercept:"+intercept+' slope:'+para[i][1]);
+    for(var j=0;j<xarr.length;j++)
+    {//loop for
+      // loop data array
+      var y1=0;
+      var pro=0;
+      if(label){
+        for(var k=0;k<(xarr[j].length-1);k++)
+        {
+        //var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
+        // so y1 is -0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915
+        y1+=xarr[j][k]*slope[k];
+        }
+
+      }else
+      {
+        for(var k=0;k<xarr[j].length;k++)
+        {
+        //var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
+        // so y1 is -0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915
+        y1+=xarr[j][k]*slope[k];
+        }
+      }
+      
+      pro=Math.exp(y1)/(Math.exp(y1)+1);
+      //console.log(y1+" "+pro);
+      pro_arr[i].push(pro);
+    }
+
+  }
+  //console.log(pro_arr);
+  return pro_arr;
+}
+
+
+function trainloop(data,a,b,c)
+{
+  //data is training data.
+  //a is leaning ration
+  //b is iterations
+  //c is report other information or not
+  
+  if(b===undefined){
+    b=100;
+  }
+  if(c===undefined){
+    c=false;
+  }else{
+    c=true;
+  }
+  classifier = new LSRE.MultiClassLogistic({
+   alpha: a,
+   iterations: b,
+   lambda: 0.0
+});
+
+result = classifier.fit(data);
+
+if(c){
+  console.log("Model has ratio:"+a+" iteration:"+b+" model result:"+result);
+  for (var i in result)
+  {
+    console.log("name:"+i+" cost:"+result[i]['cost']+" threshold:"+result[i]['threshold']);
+  }
+}
+
+  var correct=0;
+  var wronge=0;
+  for(var i=0; i < data.length; ++i){
+   var predicted = classifier.transform(data[i]);
+   //console.log(i+[i]+);
+   if(data[i][data[i].length-1]==predicted){
+    correct++;
+   }else{
+     wronge++;
+   }
+   //console.log(" actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var ratio=correct/(correct+wronge);
+  if(c){
+    console.log("Select model have Accuracy: "+ratio+"\n");
+    return classifier;
+  }else{
+    return ratio;
+  }
+  
+}
+
+
 function cal(x){
   var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
   return y;
