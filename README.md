@@ -274,9 +274,59 @@ var index_max=indexOfMax(accuracy_array);
 console.log("Pre-Max index: "+index_max+" Pre-Max Accuracy "+accuracy_array[index_max]+" Using learning ratio:"+alpha_array[index_max]);
 //use the best learning ratio, and train 3000 times to get model.
 var accurary=trainloop(alpha_array[index_max],3000,true);
-
-
 }
+
+function logistic_two(){
+//get data.
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+//
+
+//merge_matrix()
+ merge_array=merge_matrix(data,label);
+//set model
+//1. set 7 different learning ratio.
+ var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
+accuracy_array=[];
+for(var i=0;i<alpha_array.length;i++){
+  // train 100 iternate for prepare the best learning ratio.
+  var accurary=trainloop(merge_array,alpha_array[i],100);
+  //get the accuracy.
+  accuracy_array.push(accurary);
+}
+// get the best learning ratio by accuracy.
+var index_max=indexOfMax(accuracy_array);
+//console.log("Pre-Max index: "+index_max+" Pre-Max Accuracy "+accuracy_array[index_max]+" Using learning ratio:"+alpha_array[index_max]);
+//use the best learning ratio, and train 3000 times to get model.
+final_model=trainloop(merge_array,alpha_array[index_max],3000,true);
+
+parameter_matrix=[];
+for(var i in result){
+  //console.log(i+" "+result[i]["theta"])
+  parameter_matrix.push([i,result[i]["theta"]]);
+}
+console.log("display the parameter:"+parameter_matrix);
+
+//
+console.log(classifier);
+for(var i=0; i < merge_array.length; ++i)
+  {
+   var predicted = classifier.transform(merge_array[i]);
+   console.log("actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var merge_array2=merge_array;
+var probabilityArray=calpro(parameter_matrix,merge_array2,1);
+for(var i=0; i < merge_array.length; ++i)
+  {
+   var predicted = classifier.transform(merge_array[i]);
+   console.log("actual: " + merge_array[i][4] + " predicted: " + predicted);
+   console.log(i+" "+probabilityArray[0][i]+" "+probabilityArray[1][i]+" "+probabilityArray[2][i]);
+  }
+}
+
+logistic_two();
+
+
 ```
 
 

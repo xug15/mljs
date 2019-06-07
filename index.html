@@ -516,25 +516,10 @@ function logistic_two(){
 var data= getinforvalue('training_decision');
 var label=getinforlabel('label_decision');
 //
-var trainingDataSize = Math.round(IRIS.rowCount * 0.9);
-var trainingData = [];
-var testingData = [];
-for(var i=0; i < IRIS.rowCount ; ++i) {
-   var row = [];
-   row.push(IRIS.data[i][0]); // sepalLength;
-   row.push(IRIS.data[i][1]); // sepalWidth;
-   row.push(IRIS.data[i][2]); // petalLength;
-   row.push(IRIS.data[i][3]); // petalWidth;
-   row.push(IRIS.data[i][4]); // output is species
-   if(i < trainingDataSize){
-        trainingData.push(row);
-   } else {
-       testingData.push(row);
-   }
-}
+
 //merge_matrix()
- //merge_array=merge_matrix(data,label);
- merge_array=trainingData;
+ merge_array=merge_matrix(data,label);
+
 //set model
 //1. set 7 different learning ratio.
  var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
@@ -573,26 +558,10 @@ for(var i=0; i < merge_array.length; ++i)
    console.log("actual: " + merge_array[i][4] + " predicted: " + predicted);
    console.log(i+" "+probabilityArray[0][i]+" "+probabilityArray[1][i]+" "+probabilityArray[2][i]);
   }
-
-
-/*
-  for(var i=0;i<probabilityArray[0].length;i++){
-  console.log(i+" "+probabilityArray[0][i]+" "+probabilityArray[1][i]+" "+probabilityArray[2][i]);
 }
-for(var i=0;i<probabilityArray[0].length;i++){
-  console.log(i+" "+probabilityArray[0][i]+" "+probabilityArray[1][i]+" "+probabilityArray[2][i]);
-}
-*/
-//console.log(probabilityArray);
 
+logistic_two();
 
-
-
-}
-//logistic_two();
-logistic_test(){
-  
-}
 
 </script>  
 
