@@ -34,6 +34,9 @@ function getinforlabel(lableid){
 // getinforlabel('label_decision');
 ```
 ### Dynamic learning ratio for train.
+**cutoff(arr)**
+> Give it a probability and return the cutoff values.
+
 **trainloop(a,b,c)**  
 > trainloop(a,b,c) Use set learning ratio, iterations, and report or not.  
 
@@ -53,6 +56,24 @@ function getinforlabel(lableid){
 > get the parameters and data, and label or not to caluclate probability.
 
 ```js
+//get a array of probability and return the sort cutoff.
+function cutoff(arr) {
+  if (arr.length === 0) return arr;
+  arr = arr.sort(function (a, b) { return a*1 - b*1; });
+  var ret = [arr[0]];
+  for (var i = 1; i < arr.length; i++) { //Start loop at 1: arr[0] can never be a duplicate
+    if (arr[i-1] !== arr[i]) {
+      ret.push(arr[i]);
+    }
+  }
+  var cutoff=[];
+  cutoff.push(ret[0]-1);
+  for(var i=1;i<ret.length;i++){
+    cutoff.push((ret[i-1]+ret[i])/2);
+  }
+  cutoff.push(ret[ret.length-1]+1);
+  return cutoff;
+}
 //use array to test best learning ratio.
 var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
 accuracy_array=[];
@@ -201,11 +222,12 @@ for (var i = 1; i < arr.length; i++) {
 return maxIndex;
 }
 
-function trainloop(a,b,c)
+function trainloop(a,b,c,data)
 {
   //a is learning ration
   //b is iterations
   //c is report other information or not
+
   
   if(b===undefined){
     b=100;
@@ -222,7 +244,7 @@ function trainloop(a,b,c)
    lambda: 0.0
 });
 
-result = classifier.fit(merge_array);
+result = classifier.fit(data);
 
 if(c){
   console.log(result);
@@ -251,7 +273,82 @@ if(c){
   
   return ratio;
 }
+//
 
+function trainlogistic(a,b,c,data)
+{
+  //a is learning ration
+  //b is iterations
+  //c is report other information or not
+  //data is train data.
+
+  
+  if(b===undefined){
+    b=100;
+  }
+  if(c===undefined){
+    c=false;
+  }else if(c==0)
+  {
+    c=false;
+  }
+  else{
+    console.log(a);
+    c=true;
+  }
+  classifier = new LSRE.LogisticRegression({
+   alpha: a,
+   iterations: b,
+   lambda: 0.0
+});
+
+result = classifier.fit(data);
+
+if(c){
+  console.log("result:"+result);
+}
+
+  var correct=0;
+  var wronge=0;
+  for(var i=0; i < data.length; ++i){
+   var predicted_probability = classifier.transform(data[i]);
+   var predicted = classifier.transform(data[i]) >= classifier.threshold ? 1 : 0;
+   if(c){
+    console.log("probability:"+predicted_probability+" predict:"+predicted+" label:"+data[i][data[i].length-1]);
+   }
+   
+
+
+   if(data[i][data[i].length-1]==predicted){
+    correct++;
+   }else{
+     wronge++;
+   }
+   //console.log(" actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var ratio=correct/(correct+wronge);
+  if(c){
+    console.log("Accuracy: "+ratio);
+  }
+  console.log("Accuracy: "+ratio);
+  return ratio;
+}
+//
+
+function loop_learning(a,b,c){
+  //a is learning ratio array.
+  //b is iteration
+  //c is data.
+  //d is function.
+  var acca=[];
+  for (var i=0;i<a.length;i++){
+    var acc=trainlogistic(a[i],b,0,c);
+    acca.push(acc);
+  }
+  return acca;
+}
+
+//
 
 function logistic_two(){
 //get data.
