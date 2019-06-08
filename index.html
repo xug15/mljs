@@ -634,7 +634,8 @@ function sort_unique(arr) {
   return ret;
 }
 //get a array of probability and return the sort cutoff.
-function cutoff(arr) {
+function cutoff(arr2) {
+  arr=JSON.parse(JSON.stringify(arr2));
   if (arr.length === 0) return arr;
   arr = arr.sort(function (a, b) { return a*1 - b*1; });
   var ret = [arr[0]];
@@ -651,8 +652,30 @@ function cutoff(arr) {
   cutoff.push(ret[ret.length-1]+1);
   return cutoff;
 }
-
+function mljs_determin_label(a,b){
+  //a is probability array
+  //b is cutoff array
+  label_array=[];
+  for(var i=0;i<b.length;i++){
+    //get each cutoff valule is b[i]
+    label_array.push([]);
+    for(var j=0;j<a.length;j++){
+      //get the each probability a[j]
+      if(a[j]> b[i]){
+        label_array[i].push(1);
+      }else{
+        label_array[i].push(0);
+      }
+    }
+  }
+return label_array;
+}
 //
+function mljs_label_cross(){
+  
+}
+
+
 function loop_learning(a,b,c){
   //a is learning ratio array.
   //b is iteration
@@ -702,9 +725,11 @@ for(var i=0;i<iteration_array.length;i++){
 var best_iteration=iteration_array[indexOfMax(acca_iteration)];
 console.log("Best iteration:"+best_iteration+" Best ratio:"+best_ratio);
 probability=trainlogistic(learn_ratio,best_iteration,2,trainingData);
+var cutoffarray=cutoff(probability);
 console.log(probability);
-
-
+console.log(cutoffarray);
+roc_array_label=mljs_determin_label(probability,cutoffarray)
+console.log(roc_array_label);
 }
 logistic_test();
 

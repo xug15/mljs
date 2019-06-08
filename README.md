@@ -34,6 +34,9 @@ function getinforlabel(lableid){
 // getinforlabel('label_decision');
 ```
 ### Dynamic learning ratio for train.
+**mljs_determin_label(a,b)**
+> give the probability and the cutoff, the function will return the label with each cutoff. 
+ 
 **cutoff(arr)**
 > Give it a probability and return the cutoff values.
 
@@ -56,6 +59,24 @@ function getinforlabel(lableid){
 > get the parameters and data, and label or not to caluclate probability.
 
 ```js
+function mljs_determin_label(a,b){
+  //a is probability array
+  //b is cutoff array
+  label_array=[];
+  for(var i=0;i<b.length;i++){
+    //get each cutoff valule is b[i]
+    label_array.push([]);
+    for(var j=0;j<a.length;j++){
+      //get the each probability a[j]
+      if(a[j]> b[i]){
+        label_array[i].push(1);
+      }else{
+        label_array[i].push(0);
+      }
+    }
+  }
+return label_array;
+}
 //get a array of probability and return the sort cutoff.
 function cutoff(arr) {
   if (arr.length === 0) return arr;
