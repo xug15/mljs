@@ -443,6 +443,48 @@ logistic_two();
 
 ```
 
+### Performance: AUC and ROC
+**mljs_label_cross(a,b)**  a is the label of the fact, b is the array of use probability to predict label.
+> Give the two label and return [tp,tf,fp,fn,fpr,tpr].
+
+
+```js
+function mljs_label_cross(a,b){
+  //a is the label of fact.
+  //b is the array of use probability to predict label.
+  var pro=[];
+  for(var i=0;i<b.length;i++){
+    // each cut off label is b[i]
+    var tp=0;
+    var tf=0;
+    var fp=0;
+    var fn=0;
+    var tpr=0;
+    var fpr=0;
+    for(var j=0;j<b[i].length;j++){
+      if(b[i][j]==1 & a[j]==1){
+        tp++;
+      }
+      if(b[i][j]==0 & a[j]==0){
+        tf++;
+      }
+      if(b[i][j]==0 & a[j]==1){
+        fn++;
+      }
+      if(b[i][j]==1 & a[j]==0){
+        fp++;
+      }
+    }
+    tpr=tp/(tp+fn);
+    tpr.toFixed(3);
+    fpr=fp/(tf+fp);
+    fpr.toFixed(3);
+    pro.push([tp,tf,fp,fn,fpr,tpr]);
+  }
+  return pro;
+}
+```
+
 
 ### Linear Regression using js-regrssion
 ```js

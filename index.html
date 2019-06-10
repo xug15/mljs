@@ -671,8 +671,39 @@ function mljs_determin_label(a,b){
 return label_array;
 }
 //
-function mljs_label_cross(){
-  
+function mljs_label_cross(a,b){
+  //a is the label of fact.
+  //b is the array of use probability to predict label.
+  var pro=[];
+  for(var i=0;i<b.length;i++){
+    // each cut off label is b[i]
+    var tp=0;
+    var tf=0;
+    var fp=0;
+    var fn=0;
+    var tpr=0;
+    var fpr=0;
+    for(var j=0;j<b[i].length;j++){
+      if(b[i][j]==1 & a[j]==1){
+        tp++;
+      }
+      if(b[i][j]==0 & a[j]==0){
+        tf++;
+      }
+      if(b[i][j]==0 & a[j]==1){
+        fn++;
+      }
+      if(b[i][j]==1 & a[j]==0){
+        fp++;
+      }
+    }
+    tpr=tp/(tp+fn);
+    tpr.toFixed(3);
+    fpr=fp/(tf+fp);
+    fpr.toFixed(3);
+    pro.push([tp,tf,fp,fn,fpr,tpr]);
+  }
+  return pro;
 }
 
 
@@ -700,6 +731,7 @@ var train_data=[];
 merge_array=merge_matrix(data,label);
 
 var trainingData=[];
+var trainingLabel=[];
 for(var i=0; i < merge_array.length; ++i) {
    var row = [];
    row.push(merge_array[i][0]); // sepalLength;
@@ -708,6 +740,7 @@ for(var i=0; i < merge_array.length; ++i) {
    row.push(merge_array[i][3]); // petalWidth;
    row.push(merge_array[i][4] == 2 ? 1.0 : 0.0); // output which is 1 if species is Iris-virginica; 0 otherwise
    trainingData.push(row);
+   trainingLabel.push(merge_array[i][merge_array[i].length-1] == 2 ? 1.0 : 0.0);
 }
 var learning_ratio=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001,0.0000001,0.00000001];
 var iteration_array=[100,500,1000,1500,2000,2500,3000,3500];
@@ -729,7 +762,12 @@ var cutoffarray=cutoff(probability);
 console.log(probability);
 console.log(cutoffarray);
 roc_array_label=mljs_determin_label(probability,cutoffarray)
+//console.log(roc_array_label);
+roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
 console.log(roc_array_label);
+console.log(roc_tp4);
+console.log(trainingLabel);
+
 }
 logistic_test();
 
