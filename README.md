@@ -368,73 +368,126 @@ function loop_learning(a,b,c){
   }
   return acca;
 }
-
 //
-
-function logistic_two(){
-//get data.
+function plot_roc(data,id){
+  //data is [[[name][condition][fpr][tpr]],[...]]
+		var data_dir=[];
+		var color_plot=['#ffa502','#2ed573','#1e90ff','#ba154d','#8aa77e','#f9cd0f','#028d2f','#006958','#551956','	#8c163e','#ee7f1d','#fbc0c0','#cadb74'];
+		for (var i=0;i<data.length;i++)
+		{
+			data_dir[i]={
+				x:data[i][2],
+				y:data[i][3],
+				mode: 'lines',
+				name:data[i][0]+' AUC '+data[i][1],
+				line: 
+						{
+    					dash: 'solid',
+							width: 2,
+							color:color_plot[i], 
+  					}
+			};
+		}
+		data_dir[i]={
+				x:[0, 1],
+				y: [0, 1],
+				mode: 'lines',
+				name:'dot',
+				showlegend: false,
+				line: 
+						{
+    					dash: 'dot',
+							width: 2,
+							color:'#828282',
+  					}
+			};
+			var layout = {
+				legend: {
+				x: 0.6,
+				y: 0.1,
+				bgcolor: '#ffffff',
+    		bordercolor: '#dadada',
+    		borderwidth: 1
+				},
+				title: {
+				text:' Receiver operating characteristic',
+				},
+				xaxis: 
+				{
+    		title: {
+      		text: 'False Positive Rate',
+					}
+				},
+				yaxis: {
+    			title: {
+      		text: 'True Positive Rate',
+						}
+					},
+				autosize: false,
+				width: 550,
+				height: 600,
+				margin: {
+					l: 50,
+					r: 50,
+					b: 100,
+					t: 100,
+					pad: 4
+				}
+				
+			};
+			Plotly.newPlot(id, data_dir, layout, {showSendToCloud: true});
+		}
+ 
+//
+//logistic_two();
+function logistic_test()
+{
+//get data;
 var data= getinforvalue('training_decision');
 var label=getinforlabel('label_decision');
 //merge_matrix()
- merge_array=merge_matrix(data,label);
-//set model
-//1. set 7 different learning ratio.
- var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
-accuracy_array=[];
-for(var i=0;i<alpha_array.length;i++){
-  // train 100 iternate for prepare the best learning ratio.
-  var accurary=trainloop(alpha_array[i],100);
-  //get the accuracy.
-  accuracy_array.push(accurary);
+var train_data=[];
+merge_array=merge_matrix(data,label);
+
+var trainingData=[];
+var trainingLabel=[];
+for(var i=0; i < merge_array.length; ++i) {
+   var row = [];
+   row.push(merge_array[i][0]); // sepalLength;
+   row.push(merge_array[i][1]); // sepalWidth;
+   row.push(merge_array[i][2]); // petalLength;
+   row.push(merge_array[i][3]); // petalWidth;
+   row.push(merge_array[i][4] == 2 ? 1.0 : 0.0); // output which is 1 if species is Iris-virginica; 0 otherwise
+   trainingData.push(row);
+   trainingLabel.push(merge_array[i][merge_array[i].length-1] == 2 ? 1.0 : 0.0);
 }
-// get the best learning ratio by accuracy.
-var index_max=indexOfMax(accuracy_array);
-console.log("Pre-Max index: "+index_max+" Pre-Max Accuracy "+accuracy_array[index_max]+" Using learning ratio:"+alpha_array[index_max]);
-//use the best learning ratio, and train 3000 times to get model.
-var accurary=trainloop(alpha_array[index_max],3000,true);
+var learning_ratio=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001,0.0000001,0.00000001];
+var iteration_array=[100,500,1000,1500,2000,2500,3000,3500];
+var acca=loop_learning(learning_ratio,3000,trainingData);
+console.log(acca);
+var learn_ratio=learning_ratio[indexOfMax(acca)];
+var best_ratio=learn_ratio;
+console.log("index of max "+indexOfMax(acca)+" best learning ratio:"+learning_ratio[indexOfMax(acca)]+"\n\n");
+var acca_iteration=[];
+for(var i=0;i<iteration_array.length;i++){
+  console.log(iteration_array[i]);
+  var a=trainlogistic(learn_ratio,iteration_array[i],0,trainingData);
+  acca_iteration.push(a);
 }
-
-function logistic_two(){
-//get data.
-var data= getinforvalue('training_decision');
-var label=getinforlabel('label_decision');
-//
-
-//merge_matrix()
- merge_array=merge_matrix(data,label);
-
-//set model
-//1. set 7 different learning ratio.
- var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
-accuracy_array=[];
-for(var i=0;i<alpha_array.length;i++){
-  // train 100 iternate for prepare the best learning ratio.
-  var accurary=trainloop(merge_array,alpha_array[i],100);
-  //get the accuracy.
-  accuracy_array.push(accurary);
-}
-// get the best learning ratio by accuracy.
-var index_max=indexOfMax(accuracy_array);
-//console.log("Pre-Max index: "+index_max+" Pre-Max Accuracy "+accuracy_array[index_max]+" Using learning ratio:"+alpha_array[index_max]);
-//use the best learning ratio, and train 3000 times to get model.
-final_model=trainloop(merge_array,alpha_array[index_max],3000,true);
-
-parameter_matrix=[];
-for(var i in result){
-  //console.log(i+" "+result[i]["theta"])
-  parameter_matrix.push([i,result[i]["theta"]]);
-}
-console.log("display the parameter:"+parameter_matrix);
-
-//
-console.log(classifier);
-for(var i=0; i < merge_array.length; ++i)
-  {
-   var predicted = classifier.transform(merge_array[i]);
-   console.log("actual: " + merge_array[i][4] + " predicted: " + predicted);
-  }
-  var merge_array2=merge_array;
-  var probabilityArray=calpro(parameter_matrix,merge_array2,1);
+var best_iteration=iteration_array[indexOfMax(acca_iteration)];
+console.log("Best iteration:"+best_iteration+" Best ratio:"+best_ratio);
+probability=trainlogistic(learn_ratio,best_iteration,2,trainingData);
+var cutoffarray=cutoff(probability);
+console.log(probability);
+console.log(cutoffarray);
+roc_array_label=mljs_determin_label(probability,cutoffarray)
+//console.log(roc_array_label);
+roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
+//console.log(roc_array_label);
+console.log(roc_tp4);
+//console.log(trainingLabel);
+var data=[['gene',roc_tp4[3],roc_tp4[1],roc_tp4[2]]];
+    plot_roc(data,'roc_plot');
 
 }
 
@@ -483,6 +536,77 @@ function mljs_label_cross(a,b){
   }
   return pro;
 }
+//
+//
+function plot_roc(data,id){
+  //data is [[[name][condition][fpr][tpr]],[...]]
+		var data_dir=[];
+		var color_plot=['#ffa502','#2ed573','#1e90ff','#ba154d','#8aa77e','#f9cd0f','#028d2f','#006958','#551956','	#8c163e','#ee7f1d','#fbc0c0','#cadb74'];
+		for (var i=0;i<data.length;i++)
+		{
+			data_dir[i]={
+				x:data[i][2],
+				y:data[i][3],
+				mode: 'lines',
+				name:data[i][0]+' AUC '+data[i][1],
+				line: 
+						{
+    					dash: 'solid',
+							width: 2,
+							color:color_plot[i], 
+  					}
+			};
+		}
+		data_dir[i]={
+				x:[0, 1],
+				y: [0, 1],
+				mode: 'lines',
+				name:'dot',
+				showlegend: false,
+				line: 
+						{
+    					dash: 'dot',
+							width: 2,
+							color:'#828282',
+  					}
+			};
+			var layout = {
+				legend: {
+				x: 0.6,
+				y: 0.1,
+				bgcolor: '#ffffff',
+    		bordercolor: '#dadada',
+    		borderwidth: 1
+				},
+				title: {
+				text:' Receiver operating characteristic',
+				},
+				xaxis: 
+				{
+    		title: {
+      		text: 'False Positive Rate',
+					}
+				},
+				yaxis: {
+    			title: {
+      		text: 'True Positive Rate',
+						}
+					},
+				autosize: false,
+				width: 550,
+				height: 600,
+				margin: {
+					l: 50,
+					r: 50,
+					b: 100,
+					t: 100,
+					pad: 4
+				}
+				
+			};
+			Plotly.newPlot(id, data_dir, layout, {showSendToCloud: true});
+		}
+ 
 ```
 
 

@@ -124,6 +124,7 @@ margin: 10px 0px;
         <button class="btn btn-primary button" onclick="train_decision()"><span class="glyphicon glyphicon-play"></span>Decision Tree Training</button>
       </div>
     </div>
+    <div id="roc_plot">roc</div>
     <div class="row" >
       <div class="col-xs-12 col-sm-6" >
         <button class="btn btn-primary button" onclick="train_randomforest()"><span class="glyphicon glyphicon-play"></span>Random Forest Training</button>
@@ -671,10 +672,82 @@ function mljs_determin_label(a,b){
 return label_array;
 }
 //
+function plot_roc(data,id){
+  //data is [[[name][condition][fpr][tpr]],[...]]
+		var data_dir=[];
+		var color_plot=['#ffa502','#2ed573','#1e90ff','#ba154d','#8aa77e','#f9cd0f','#028d2f','#006958','#551956','	#8c163e','#ee7f1d','#fbc0c0','#cadb74'];
+		for (var i=0;i<data.length;i++)
+		{
+			data_dir[i]={
+				x:data[i][2],
+				y:data[i][3],
+				mode: 'lines',
+				name:data[i][0]+' AUC '+data[i][1],
+				line: 
+						{
+    					dash: 'solid',
+							width: 2,
+							color:color_plot[i], 
+  					}
+			};
+		}
+		data_dir[i]={
+				x:[0, 1],
+				y: [0, 1],
+				mode: 'lines',
+				name:'dot',
+				showlegend: false,
+				line: 
+						{
+    					dash: 'dot',
+							width: 2,
+							color:'#828282',
+  					}
+			};
+			var layout = {
+				legend: {
+				x: 0.6,
+				y: 0.1,
+				bgcolor: '#ffffff',
+    		bordercolor: '#dadada',
+    		borderwidth: 1
+				},
+				title: {
+				text:' Receiver operating characteristic',
+				},
+				xaxis: 
+				{
+    		title: {
+      		text: 'False Positive Rate',
+					}
+				},
+				yaxis: {
+    			title: {
+      		text: 'True Positive Rate',
+						}
+					},
+				autosize: false,
+				width: 550,
+				height: 600,
+				margin: {
+					l: 50,
+					r: 50,
+					b: 100,
+					t: 100,
+					pad: 4
+				}
+				
+			};
+			Plotly.newPlot(id, data_dir, layout, {showSendToCloud: true});
+		}
+    
+//
 function mljs_label_cross(a,b){
   //a is the label of fact.
   //b is the array of use probability to predict label.
   var pro=[];
+  var tprarr=[];
+  var fprarr=[];
   for(var i=0;i<b.length;i++){
     // each cut off label is b[i]
     var tp=0;
@@ -701,9 +774,17 @@ function mljs_label_cross(a,b){
     tpr.toFixed(3);
     fpr=fp/(tf+fp);
     fpr.toFixed(3);
-    pro.push([tp,tf,fp,fn,fpr,tpr]);
+
+    pro.push([tp,tf,fp,fn]);
+    fprarr.push(fpr);
+    tprarr.push(tpr);
   }
-  return pro;
+  var auc=0;
+  for(var i=1;i<fprarr.length;i++){
+    auc+=(tprarr[i]+tprarr[i-1])*(fprarr[i]-fprarr[i-1])/2;
+  }
+  auc=Math.abs(auc).toFixed(3);
+  return [pro,fprarr,tprarr,auc];
 }
 
 
@@ -764,9 +845,11 @@ console.log(cutoffarray);
 roc_array_label=mljs_determin_label(probability,cutoffarray)
 //console.log(roc_array_label);
 roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
-console.log(roc_array_label);
+//console.log(roc_array_label);
 console.log(roc_tp4);
-console.log(trainingLabel);
+//console.log(trainingLabel);
+var data=[['gene',roc_tp4[3],roc_tp4[1],roc_tp4[2]]];
+    plot_roc(data,'roc_plot');
 
 }
 logistic_test();
