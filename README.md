@@ -170,10 +170,10 @@ return [trainingData,trainingLabel];
 
 **1. use serial learning ratio with 100 iteration to test the best learning ratio.**  
 **train_model(trainingData[0][1]);**
-> use the function train_model(trainingData[0][1]) to train the best model.
-> this function use other functions.
-> loop_learning(learning_ratio,3000,trainingData);
-> trainlogistic(learn_ratio,best_iteration,3,trainingData);
+> use the function train_model(trainingData[0][1]) to train the best model.  
+> this function use other functions.  
+> loop_learning(learning_ratio,3000,trainingData);  
+> trainlogistic(learn_ratio,best_iteration,3,trainingData);  
 
 ```js
 // train and return model.
