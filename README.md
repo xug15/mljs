@@ -10,7 +10,12 @@
 > 3. Merge data and label to one matrix. 
 > 4. Shuffle array to generate random array.
 > 5. Set train and validate range. like train 0-0.8, validate: 0.8-1
-> 6. Use the partion of the set and generate train and validate. 
+> 6. Use the partion of the set and generate train and validate.
+
+
+**1. First get data from html. **
+**getinforvalue(trainid)**
+> Use the div id get the data.
 ```js
 function getinforvalue(trainid){
   //get the html data
@@ -24,8 +29,10 @@ function getinforvalue(trainid){
 
 }
 // getinforvalue('training_decision')
-
-
+```
+**getinforlabel(lableid)**
+> Use the div id get the label data.
+```js
 function getinforlabel(lableid){
   //get the html data
   //decision_data=document.getElementById("training_decision").value;
