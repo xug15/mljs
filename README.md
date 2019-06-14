@@ -13,7 +13,7 @@
 > 6. Use the partion of the set and generate train and validate.
 
 
-**1. First get data from html.**  
+> **1. First get data from html.**  
 **getinforvalue(trainid)**
 > Use the div id get the data.
 ```js
@@ -47,6 +47,8 @@ function getinforlabel(lableid){
 }
 // getinforlabel('label_decision');
 ```
+> **2. Then use function sort label information.**
+
 ### Dynamic learning ratio for train.
 **trainlogistic(a,b,c,data)**
 > use this function to train logistic regression model. a is the learning ratio, b is iteration, c is report other information or not c default is false,c=0 report accurarcy; c=2 is, report predict probability,  c=3,report classifier, data is the train data.
