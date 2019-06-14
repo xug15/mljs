@@ -168,7 +168,7 @@ return [trainingData,trainingLabel];
 > 2. use the best learning ratio use serial iterations to select best iterations.
 > 3. use the best learning ratio and iteration to generate the model.
 
-**1. use serial learning ratio with 100 iteration to test the best learning ratio.**  
+
 **train_model(trainingData[0][1]);**
 > use the function train_model(trainingData[0][1]) to train the best model.  
 > this function use other functions.  
@@ -197,8 +197,9 @@ for(var i=0;i<iteration_array.length;i++){
   return modelbest;
 }
 ```
-**loop_learning(learning_ratio,3000,trainingData);**  
 
+**1. use serial learning ratio with 100 iteration to test the best learning ratio.**   
+**loop_learning(learning_ratio,3000,trainingData);**  
 > This function use the learning ratio array. use the each learning ratio and return the accuracy.
 ```js
 
@@ -214,14 +215,24 @@ function loop_learning(a,b,c){
   }
   return acca;
 }
+  var acca=loop_learning(learning_ratio,3000,trainingData);
+  console.log(acca);
+  var learn_ratio=learning_ratio[indexOfMax(acca)];
+  var best_ratio=learn_ratio;
+  console.log("index of max "+indexOfMax(acca)+" best learning ratio:"+learning_ratio[indexOfMax(acca)]+"\n\n");
 ```
-****  
-****
-> 
+**2. use the best learning ratio use serial iterations to select best iterations.**  
+> use the different iteration and select highest iterations.
 ```js
-
+  var acca_iteration=[];
+for(var i=0;i<iteration_array.length;i++){
+  console.log(iteration_array[i]);
+  var a=trainlogistic(learn_ratio,iteration_array[i],0,trainingData);
+  acca_iteration.push(a);
+}
+  var best_iteration=iteration_array[indexOfMax(acca_iteration)];
 ```
-****  
+**3. use the best learning ratio and iteration to generate the model.**  
 ****
 > 
 ```js
