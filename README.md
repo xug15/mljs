@@ -197,11 +197,23 @@ for(var i=0;i<iteration_array.length;i++){
   return modelbest;
 }
 ```
-****  
-****
-> 
+**loop_learning(learning_ratio,3000,trainingData);**  
+
+> This function use the learning ratio array. use the each learning ratio and return the accuracy.
 ```js
 
+function loop_learning(a,b,c){
+  //a is learning ratio array.
+  //b is iteration
+  //c is data.
+  //d is function.
+  var acca=[];
+  for (var i=0;i<a.length;i++){
+    var acc=trainlogistic(a[i],b,0,c);
+    acca.push(acc);
+  }
+  return acca;
+}
 ```
 ****  
 ****
