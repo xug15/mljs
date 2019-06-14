@@ -48,6 +48,92 @@ function getinforlabel(lableid){
 // getinforlabel('label_decision');
 ```
 **2. Then use function sort label information.**
+**sort_unique(arr)**
+> sort and unique the array, and return the unique array.
+```js
+var label_unique=sort_unique(label);
+function sort_unique(arr) {
+  if (arr.length === 0) return arr;
+  arr = arr.sort(function (a, b) { return a*1 - b*1; });
+  var ret = [arr[0]];
+  for (var i = 1; i < arr.length; i++) { //Start loop at 1: arr[0] can never be a duplicate
+    if (arr[i-1] !== arr[i]) {
+      ret.push(arr[i]);
+    }
+  }
+  return ret;
+}
+```
+
+**3. Merge data and label to one matrix.**
+**merge_matrix(data,label)**
+> Make two array to one array.
+```js
+merge_matrix(data,label);
+function merge_matrix(a,b){
+  var c=[];
+for(var i=0;i<a.length;i++){
+
+  a[i].push(b[i]);
+  c.push(a[i]);
+}
+return c;
+}
+
+```
+
+**4. Shuffle array to generate random array.**
+**shufflearray(merge_array)**
+> shuffle array and return the shuffled array.
+```js
+merge_array=shufflearray(merge_array);
+function shufflearray(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+```
+****
+****
+> 
+```js
+
+```
+****
+****
+> 
+```js
+
+```
+****
+****
+> 
+```js
+
+```
+****
+****
+> 
+```js
+
+```
+****
+****
+> 
+```js
+
+```
+****
+****
+> 
+```js
+
+```
 
 ### Dynamic learning ratio for train.
 **trainlogistic(a,b,c,data)**
