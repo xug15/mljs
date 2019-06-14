@@ -13,7 +13,7 @@
 > 6. Use the partion of the set and generate train and validate.
 
 
-> **1. First get data from html.**  
+**1. First get data from html.**  
 **getinforvalue(trainid)**
 > Use the div id get the data.
 ```js
@@ -47,7 +47,7 @@ function getinforlabel(lableid){
 }
 // getinforlabel('label_decision');
 ```
-> **2. Then use function sort label information.**
+**2. Then use function sort label information.**
 
 ### Dynamic learning ratio for train.
 **trainlogistic(a,b,c,data)**
