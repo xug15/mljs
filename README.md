@@ -47,7 +47,7 @@ function getinforlabel(lableid){
 }
 // getinforlabel('label_decision');
 ```
-**2. Then use function sort label information.**
+**2. Then use function sort label information.**  
 **sort_unique(arr)**
 > sort and unique the array, and return the unique array.
 ```js
@@ -65,7 +65,7 @@ function sort_unique(arr) {
 }
 ```
 
-**3. Merge data and label to one matrix.**
+**3. Merge data and label to one matrix.**  
 **merge_matrix(data,label)**
 > Make two array to one array.
 ```js
@@ -82,7 +82,7 @@ return c;
 
 ```
 
-**4. Shuffle array to generate random array.**
+**4. Shuffle array to generate random array.**  
 **shufflearray(merge_array)**
 > shuffle array and return the shuffled array.
 ```js
@@ -98,37 +98,37 @@ function shufflearray(a) {
     return a;
 }
 ```
-****
-****
-> 
-```js
-
-```
-****
+****  
 ****
 > 
 ```js
 
 ```
-****
-****
-> 
-```js
-
-```
-****
+****  
 ****
 > 
 ```js
 
 ```
-****
+****  
 ****
 > 
 ```js
 
 ```
+****  
 ****
+> 
+```js
+
+```
+****  
+****
+> 
+```js
+
+```
+****  
 ****
 > 
 ```js
