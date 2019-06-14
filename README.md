@@ -13,7 +13,7 @@
 > 6. Use the partion of the set and generate train and validate.
 
 
-**1. First get data from html. **
+**1. First get data from html.**  
 **getinforvalue(trainid)**
 > Use the div id get the data.
 ```js
@@ -30,7 +30,7 @@ function getinforvalue(trainid){
 }
 // getinforvalue('training_decision')
 ```
-**getinforlabel(lableid)**
+**getinforlabel(lableid)**  
 > Use the div id get the label data.
 ```js
 function getinforlabel(lableid){
