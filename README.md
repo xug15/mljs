@@ -35,31 +35,89 @@ function getinforlabel(lableid){
 // getinforlabel('label_decision');
 ```
 ### Dynamic learning ratio for train.
-**mljs_determin_label(a,b)**
-> give the probability and the cutoff, the function will return the label with each cutoff. 
- 
-**cutoff(arr)**
-> Give it a probability and return the cutoff values.
-
-**trainloop(a,b,c)**  
-> trainloop(a,b,c) Use set learning ratio, iterations, and report or not.  
-
-**logistic_two()**  
-> use get the data, and use learning ratio : [1,0.1,0.01,0.001,0.0001,0.00001,0.000001] use 100 iterations.then pick up the best and learning ratio use 3000 iterations.
-
-**indexOfMax(arr)**  
-> report the max index of array value.  
-
-**merge_matrix(a,b)**  
-> merge data into array.  
-
-**trainloop(data,a,b,c)**
-> use data, learning ratio, and iterations and reporot or not.
-
-**calpro(para2,xarr,label)**
-> get the parameters and data, and label or not to caluclate probability.
+**trainlogistic(a,b,c,data)**
+> use this function to train logistic regression model. a is the learning ratio, b is iteration, c is report other information or not c default is false,c=0 report accurarcy; c=2 is, report predict probability,  c=3,report classifier, data is the train data.
 
 ```js
+function trainlogistic(a,b,c,data)
+{
+  //a is learning ration
+  //b is iterations
+  //c is report other information or not c default is false,c=0 report accurarcy; c=2 is, report predict probability,  c=3,report classifier, 
+  // data is the train data.
+
+  
+  if(b===undefined){
+    b=100;
+  }
+  if(c===undefined){
+    c=false;
+    d=false;
+  }else if(c==0)
+  {
+    c=false;
+    d=false;
+  }else if(c==2){
+    c=true;
+    d=true;
+  }else if(c==3){
+    c=false;
+    d=3;
+  }
+  else{
+    console.log(a);
+    c=true;
+    d=false;
+  }
+  classifier = new LSRE.LogisticRegression({
+   alpha: a,
+   iterations: b,
+   lambda: 0.0
+});
+
+result = classifier.fit(data);
+
+if(c){
+  console.log(result);
+}
+  var probability=[];
+  var correct=0;
+  var wronge=0;
+  for(var i=0; i < data.length; ++i){
+   var predicted_probability = classifier.transform(data[i]);
+   var predicted = classifier.transform(data[i]) >= classifier.threshold ? 1 : 0;
+   /*
+   if(c){
+    console.log("probability:"+predicted_probability+" predict:"+predicted+" label:"+data[i][data[i].length-1]);
+   }
+   */
+  probability.push(predicted_probability);
+
+
+   if(data[i][data[i].length-1]==predicted){
+    correct++;
+   }else{
+     wronge++;
+   }
+   //console.log(" actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var ratio=correct/(correct+wronge);
+
+  console.log("Accuracy: "+ratio);
+  if(d==3){
+    return classifier;
+  }else if(d){
+    return probability;
+  }else{
+    return ratio;
+  }
+  
+}
+```
+
+**mljs_determin_label(a,b)**
+> give the probability and the cutoff, the function will return the label with each cutoff. 
+ ```js
 function mljs_determin_label(a,b){
   //a is probability array
   //b is cutoff array
@@ -78,7 +136,12 @@ function mljs_determin_label(a,b){
   }
 return label_array;
 }
-//get a array of probability and return the sort cutoff.
+ ```
+
+**cutoff(arr)**
+> Give it a probability and return the cutoff values.
+```js
+ //get a array of probability and return the sort cutoff.
 function cutoff(arr) {
   if (arr.length === 0) return arr;
   arr = arr.sort(function (a, b) { return a*1 - b*1; });
@@ -105,63 +168,12 @@ for(var i=0;i<alpha_array.length;i++){
   //get the accuracy.
   accuracy_array.push(accurary);
 }
+ ```
 
-function calpro(para2,xarr,label){
-
-  var para=JSON.parse(JSON.stringify(para2));
-// para is the parameters about logistic regression
-// xarr is the data for calculate the probability of the data.
-// label is true or false.
-if(label===undefined){
-  lable=false;
-}else{
-  lable=true;
-}
-var pro_arr=[];
-  for (var i=0;i<para.length;i++)
-  {// loop for parameter with classifiers.
-    var intercept=para[i][1].pop();
-    var name=para[i][0];
-    var slope=para[i][1];
-
-    pro_arr.push([name]);
-    
-    console.log("name:"+name+" intercept:"+intercept+' slope:'+para[i][1]);
-    for(var j=0;j<xarr.length;j++)
-    {//loop for
-      // loop data array
-      var y1=0;
-      var pro=0;
-      if(label){
-        for(var k=0;k<(xarr[j].length-1);k++)
-        {
-        //var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
-        // so y1 is -0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915
-        y1+=xarr[j][k]*slope[k];
-        }
-
-      }else
-      {
-        for(var k=0;k<xarr[j].length;k++)
-        {
-        //var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
-        // so y1 is -0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915
-        y1+=xarr[j][k]*slope[k];
-        }
-      }
-      
-      pro=Math.exp(y1)/(Math.exp(y1)+1);
-      //console.log(y1+" "+pro);
-      pro_arr[i].push(pro);
-    }
-
-  }
-  //console.log(pro_arr);
-  return pro_arr;
-}
-
-
-function trainloop(data,a,b,c)
+**trainloop(a,b,c)**  
+> trainloop(a,b,c) Use set learning ratio, iterations, and report or not.  
+```js
+ function trainloop(data,a,b,c)
 {
   //data is training data.
   //a is leaning ration
@@ -213,23 +225,18 @@ if(c){
   }
   
 }
+ ```
 
+**logistic_two()**  
+> use get the data, and use learning ratio : [1,0.1,0.01,0.001,0.0001,0.00001,0.000001] use 100 iterations.then pick up the best and learning ratio use 3000 iterations.
+```js
+ 
+ ```
 
-function cal(x){
-  var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
-  return y;
-}
-
-function merge_matrix(a,b){
-  var c=[];
-for(var i=0;i<a.length;i++){
-
-  a[i].push(b[i]);
-  c.push(a[i]);
-}
-return c;
-}
-function indexOfMax(arr) {
+**indexOfMax(arr)**  
+> report the max index of array value.  
+```js
+ function indexOfMax(arr) {
     if (arr.length === 0) {
         return -1;
     }
@@ -243,59 +250,35 @@ for (var i = 1; i < arr.length; i++) {
     }
 return maxIndex;
 }
+ ```
 
-function trainloop(a,b,c,data)
-{
-  //a is learning ration
-  //b is iterations
-  //c is report other information or not
+**merge_matrix(a,b)**  
+> merge data into array.  
+```js
+ function merge_matrix(a,b){
+  var c=[];
+for(var i=0;i<a.length;i++){
 
-  
-  if(b===undefined){
-    b=100;
-  }
-  if(c===undefined){
-    c=false;
-  }else{
-    console.log(a);
-    c=true;
-  }
-  classifier = new LSRE.MultiClassLogistic({
-   alpha: a,
-   iterations: b,
-   lambda: 0.0
-});
-
-result = classifier.fit(data);
-
-if(c){
-  console.log(result);
-  for (var i in result)
-  {
-    console.log("name:"+i+" cost:"+result[i]['cost']+" threshold:"+result[i]['threshold']);
-  }
+  a[i].push(b[i]);
+  c.push(a[i]);
 }
-
-  var correct=0;
-  var wronge=0;
-  for(var i=0; i < merge_array.length; ++i){
-   var predicted = classifier.transform(merge_array[i]);
-   //console.log(i+merge_array[i]+);
-   if(merge_array[i][4]==predicted){
-    correct++;
-   }else{
-     wronge++;
-   }
-   //console.log(" actual: " + merge_array[i][4] + " predicted: " + predicted);
-  }
-  var ratio=correct/(correct+wronge);
-  if(c){
-    console.log("Accuracy: "+ratio);
-  }
-  
-  return ratio;
+return c;
 }
-//
+ ```
+
+**trainloop(data,a,b,c)**
+> use data, learning ratio, and iterations and reporot or not.
+```js
+ 
+ ```
+
+**calpro(para2,xarr,label)**
+> get the parameters and data, and label or not to caluclate probability.
+```js
+ 
+ ```
+
+```js
 
 function trainlogistic(a,b,c,data)
 {
