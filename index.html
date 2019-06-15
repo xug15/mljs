@@ -858,7 +858,7 @@ function mljs_validate(probability,trainingLabel){
   var cutoffarray=cutoff(probability);
 console.log(probability);
 console.log(cutoffarray);
-roc_array_label=mljs_determin_label(probability,cutoffarray)
+roc_array_label=mljs_determin_label(probability,cutoffarray);
 //console.log(roc_array_label);
 roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
 //console.log(roc_array_label);
@@ -999,7 +999,7 @@ var validateLabel=valide[1];
 
 model=train_model(trainingData[0][1]);
 proarr=model_data_probability(model,validateData[0][1]);
-rocarray=mljs_validate(proarr,validateLabel[0][1])
+rocarray=mljs_validate(proarr,validateLabel[0][1]);
 console.log(rocarray);
 
 }

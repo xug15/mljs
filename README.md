@@ -346,10 +346,109 @@ for(var i =0;i<b.length;i++)
 
 
 ## 4. mljs validate
-> 1. According to the probability and sort and unique the data.
-> 2. Caculate the between the value threshold.
-> 3. determine the label by the thresthold.
-> 4. according to label in fact and the label predict.
+> 1. According to the probability and sort and unique the data. Caculate the between the value threshold.
+> 2. determine the label by the thresthold.
+> 3. according to label in fact and the label predict.
+
+```js
+rocarray=mljs_validate(proarr,validateLabel[0][1]);
+```
+
+**1. According to the probability and sort and unique the data. Caculate the between the value threshold.**  
+**cutoff(probability);**
+```js
+var cutoffarray=cutoff(probability);
+function cutoff(arr2) {
+  arr=JSON.parse(JSON.stringify(arr2));
+  if (arr.length === 0) return arr;
+  arr = arr.sort(function (a, b) { return a*1 - b*1; });
+  var ret = [arr[0]];
+  for (var i = 1; i < arr.length; i++) { //Start loop at 1: arr[0] can never be a duplicate
+    if (arr[i-1] !== arr[i]) {
+      ret.push(arr[i]);
+    }
+  }
+  var cutoff=[];
+  cutoff.push(ret[0]-1);
+  for(var i=1;i<ret.length;i++){
+    cutoff.push((ret[i-1]+ret[i])/2);
+  }
+  cutoff.push(ret[ret.length-1]+1);
+  return cutoff;
+}
+```
+**2. determine the label by the thresthold.**  
+**mljs_determin_label(probability,cutoffarray)**
+```js
+roc_array_label=mljs_determin_label(probability,cutoffarray);
+function mljs_determin_label(a,b){
+  //a is probability array
+  //b is cutoff array
+  label_array=[];
+  for(var i=0;i<b.length;i++){
+    //get each cutoff valule is b[i]
+    label_array.push([]);
+    for(var j=0;j<a.length;j++){
+      //get the each probability a[j]
+      if(a[j]> b[i]){
+        label_array[i].push(1);
+      }else{
+        label_array[i].push(0);
+      }
+    }
+  }
+return label_array;
+}
+```
+**3. according to label in fact and the label predict.**  
+**mljs_label_cross(trainingLabel,roc_array_label);**
+```js
+roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
+function mljs_label_cross(a,b){
+  //a is the label of fact.
+  //b is the array of use probability to predict label.
+  var pro=[];
+  var tprarr=[];
+  var fprarr=[];
+  for(var i=0;i<b.length;i++){
+    // each cut off label is b[i]
+    var tp=0;
+    var tf=0;
+    var fp=0;
+    var fn=0;
+    var tpr=0;
+    var fpr=0;
+    for(var j=0;j<b[i].length;j++){
+      if(b[i][j]==1 & a[j]==1){
+        tp++;
+      }
+      if(b[i][j]==0 & a[j]==0){
+        tf++;
+      }
+      if(b[i][j]==0 & a[j]==1){
+        fn++;
+      }
+      if(b[i][j]==1 & a[j]==0){
+        fp++;
+      }
+    }
+    tpr=tp/(tp+fn);
+    tpr.toFixed(3);
+    fpr=fp/(tf+fp);
+    fpr.toFixed(3);
+
+    pro.push([tp,tf,fp,fn]);
+    fprarr.push(fpr);
+    tprarr.push(tpr);
+  }
+  var auc=0;
+  for(var i=1;i<fprarr.length;i++){
+    auc+=(tprarr[i]+tprarr[i-1])*(fprarr[i]-fprarr[i-1])/2;
+  }
+  auc=Math.abs(auc).toFixed(3);
+  return [pro,fprarr,tprarr,auc];
+}
+```
 ### Dynamic learning ratio for train.
 
 
