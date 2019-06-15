@@ -4,7 +4,7 @@
 
 ![](image/outline1.png)
 ## Usage
-### data select class
+## 1. data select class
 > 1. First get data from html. 
 > 2. Then use function sort label information.
 > 3. Merge data and label to one matrix. 
@@ -163,7 +163,7 @@ if(label_unique.length>1)
 return [trainingData,trainingLabel];
 }
 ```
-### train model
+## 2. train model
 > 1. use serial learning ratio with 100 iteration to test the best learning ratio.
 > 2. use the best learning ratio use serial iterations to select best iterations.
 > 3. use the best learning ratio and iteration to generate the model.
@@ -321,7 +321,7 @@ for(var i=0;i<iteration_array.length;i++){
   var modelbest=trainlogistic(learn_ratio,best_iteration,3,trainingData);
   return modelbest;
 ```
-## model data probability.
+## 3. model data probability.
 > loop the validate data use classifier to predict the probability.
 > 1. use the best model, and validate data, and for each validate and calculate the probability.
 
@@ -345,7 +345,7 @@ for(var i =0;i<b.length;i++)
 ```
 
 
-## mljs validate
+## 4. mljs validate
 > 1. According to the probability and sort and unique the data.
 > 2. Caculate the between the value threshold.
 > 3. determine the label by the thresthold.
