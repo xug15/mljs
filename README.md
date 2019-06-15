@@ -352,10 +352,23 @@ for(var i =0;i<b.length;i++)
 
 ```js
 rocarray=mljs_validate(proarr,validateLabel[0][1]);
+function mljs_validate(probability,trainingLabel){
+  var cutoffarray=cutoff(probability);
+console.log(probability);
+console.log(cutoffarray);
+roc_array_label=mljs_determin_label(probability,cutoffarray);
+roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
+return roc_tp4;
+}
 ```
 
 **1. According to the probability and sort and unique the data. Caculate the between the value threshold.**  
-**cutoff(probability);**
+**cutoff(probability);**  
+> 1. Deep copy probability array.
+> 2. sort the probability from small to big.
+> 3. Unique the probability.
+> 4. Calculate the therthold the first one is the smallest -1, other is the (data[i]+data[i+1])/2
+
 ```js
 var cutoffarray=cutoff(probability);
 function cutoff(arr2) {
