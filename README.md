@@ -316,13 +316,19 @@ for(var i=0;i<iteration_array.length;i++){
   var best_iteration=iteration_array[indexOfMax(acca_iteration)];
 ```
 **3. use the best learning ratio and iteration to generate the model.**  
-****
-> 
+
 ```js
   var modelbest=trainlogistic(learn_ratio,best_iteration,3,trainingData);
   return modelbest;
 ```
+## model data probability.
+> 1.loop the validate data use classifier to predict the probability.
 
+## mljs validate
+> 1. According to the probability and sort and unique the data.
+> 2. Caculate the between the value threshold.
+> 3. determine the label by the thresthold.
+> 4. according to label in fact and the label predict.
 ### Dynamic learning ratio for train.
 
 
