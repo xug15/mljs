@@ -96,7 +96,15 @@ margin: 10px 0px;
     </div>
     <div class="row" >
       <div class="col-xs-12 col-sm-6" >
-        <textarea id="training_decision" class="textarea" rows="3" placeholder="[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[4.7,3.2,1.3,0.2]"></textarea>
+        <textarea id="training_decision" style="margin:4px;" class="textarea" rows="3" placeholder="[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[4.7,3.2,1.3,0.2]"></textarea>
+      </div>
+    </div>
+    <div class="row" style="margin-top:5px;">
+      <div class="col-xs-12 col-sm-2" >
+        <span>Upload your data:</span>
+      </div>
+      <div class="col-xs-12 col-sm-6" >
+        <input type="file" id="data_input" >
       </div>
     </div>
     <div class="row" >
@@ -106,11 +114,22 @@ margin: 10px 0px;
     </div>
     <div class="row" >
       <div class="col-xs-12 col-sm-6" >
-        <textarea id="label_decision" class="textarea" rows="3" placeholder="0,0,0"></textarea>
+        <textarea id="label_decision" style="margin:4px;" class="textarea" rows="3" placeholder="0,0,0"></textarea>
+      </div>
+    </div>
+    <div class="row" style="margin-top:5px;">
+      <div class="col-xs-12 col-sm-2" >
+        Upload the label of data:
+      </div>
+      <div class="col-xs-12 col-sm-6" >
+        <input type="file" id="label_input" >
       </div>
     </div>
     <div class="row" >
-      <div class="col-xs-12 col-sm-6" >
+        <div class="col-xs-12 col-sm-2" >
+            <button class="btn" style="border-color: #d1d1d1;margin:5px;" onclick="demo_data()">Update data</button>
+          </div>
+      <div class="col-xs-12 col-sm-2" >
         <button class="btn" style="border-color: #d1d1d1;margin:5px;" onclick="demo_data()">Demo data</button>
       </div>
     </div>
@@ -142,7 +161,7 @@ margin: 10px 0px;
     </div>
     <div class="row" >
       <div class="col-xs-12 col-sm-6" >
-        <button class="btn btn-success maringtop color2" onclick="loadmodule()">Upload</button>
+        <button class="btn btn-success maringtop color2" onclick="loadmodule()">Upload module</button>
       </div>
     </div>
     <div class="predict_pca" style="display:none;">
@@ -208,7 +227,7 @@ margin: 10px 0px;
         <div id="roc_plot"></div>
         <div class="row" >
             <div class="col-xs-12 col-sm-6" >
-                <textarea id="predict_decision_input" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
+                <textarea id="predict_decision_input" style="margin:4px;" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
             </div><!--col-xs-12-->
           </div><!--row-->
           <div class="row" >
@@ -237,7 +256,7 @@ margin: 10px 0px;
           </div><!--row-->
           <div class="row" >
               <div class="col-xs-12 col-sm-6" >
-                  <textarea id="predict_decision_input" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
+                  <textarea id="predict_decision_input" style="margin:4px;" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
               </div><!--col-xs-12-->
             </div><!--row-->
             <div class="row" >
@@ -266,7 +285,7 @@ margin: 10px 0px;
           </div><!--row-->
           <div class="row" >
               <div class="col-xs-12 col-sm-6" >
-                  <textarea id="predict_randomforest_input" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
+                  <textarea id="predict_randomforest_input" style="margin:4px;" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
               </div><!--col-xs-12-->
             </div><!--row-->
             <div class="row" >
@@ -299,9 +318,9 @@ margin: 10px 0px;
         <fieldset style="display: none;">
           <legend>Exponential regression</legend>
           <label>X value</label>
-          <textarea id="exponentialx" class="textarea"  rows="3" placeholder="0, 1, 2, 3, 4">0,1,2,3,4</textarea>
+          <textarea id="exponentialx" class="textarea" style="margin:4px;"  rows="3" placeholder="0, 1, 2, 3, 4">0,1,2,3,4</textarea>
           <label>Y value</label>
-          <textarea id="exponentialy" class="textarea"  rows="3" placeholder="1.5, 2.5, 3.5, 5.0, 7.5">1.5,2.5,3.5,5.0,7.5</textarea>
+          <textarea id="exponentialy" class="textarea" style="margin:4px;"  rows="3" placeholder="1.5, 2.5, 3.5, 5.0, 7.5">1.5,2.5,3.5,5.0,7.5</textarea>
           <label >
           </label>
           <button class="btn" onclick="exponential()">Click me</button>
