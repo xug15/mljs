@@ -124,7 +124,7 @@ margin: 10px 0px;
         <button class="btn btn-primary button" onclick="train_decision()"><span class="glyphicon glyphicon-play"></span>Decision Tree Training</button>
       </div>
     </div>
-    <div id="roc_plot">roc</div>
+    
     <div class="row" >
       <div class="col-xs-12 col-sm-6" >
         <button class="btn btn-primary button" onclick="train_randomforest()"><span class="glyphicon glyphicon-play"></span>Random Forest Training</button>
@@ -200,6 +200,7 @@ margin: 10px 0px;
               <label>Logistic Regression Prediction data</label>
           </div><!--col-xs-12-->
         </div><!--row-->
+        <div id="roc_plot"></div>
         <div class="row" >
             <div class="col-xs-12 col-sm-6" >
                 <textarea id="predict_decision_input" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
@@ -678,8 +679,8 @@ function mljs_determin_label(a,b){
 return label_array;
 }
 //
-function plot_roc(data,id){
-  //data is [[[name][condition][fpr][tpr]],[...]]
+function plot_roc(data,id){ //data is [[[name][auc][fpr][tpr]],[...]], id is the div id.
+  //data is [[[name][auc][fpr][tpr]],[...]], id is the div id.
 		var data_dir=[];
 		var color_plot=['#ffa502','#2ed573','#1e90ff','#ba154d','#8aa77e','#f9cd0f','#028d2f','#006958','#551956','	#8c163e','#ee7f1d','#fbc0c0','#cadb74'];
 		for (var i=0;i<data.length;i++)
@@ -976,8 +977,8 @@ merge_array=merge_matrix(data,label);
 merge_array=shufflearray(merge_array);
 //console.log(merge_array);
 //
-var train_range_ratio=[0,0.8];
-var validate_range_ratio=[0.8,1];
+var train_range_ratio=[0,1];
+var validate_range_ratio=[0,1];
 var train_range=[];
 var validate_range=[];
 var number=parseInt(train_range_ratio[1]*(data.length)) ;
@@ -991,21 +992,39 @@ validate_range.push(parseInt(validate_range_ratio[1]*(data.length)));
 
 //
 var train=generate_train_validate_data(label_unique,train_range,merge_array);
-var trainingData =train[0];
-var trainingLabel=train[1];
+trainingData =train[0];
+trainingLabel=train[1];
 var valide=generate_train_validate_data(label_unique,validate_range,merge_array);
-var validateData=valide[0];
-var validateLabel=valide[1];
+validateData=valide[0];
+validateLabel=valide[1];
 
+/*
 model=train_model(trainingData[0][1]);
 proarr=model_data_probability(model,validateData[0][1]);
 rocarray=mljs_validate(proarr,validateLabel[0][1]);
 console.log(rocarray);
+*/
+var data=[];
+for(var i=0;i<trainingData.length;i++)
+  {
+    var row=[];
+    row.push(trainingData[i][0]);
+    model=train_model(trainingData[i][1]);
+    proarr=model_data_probability(model,validateData[i][1]);
+    rocarray=mljs_validate(proarr,validateLabel[i][1]);
+    row.push(rocarray[3]);
+    row.push(rocarray[1]);
+    row.push(rocarray[2]);
+    //console.log(row);
+    data.push(row);
+  }
+  console.log(data);
+  plot_roc(data,'roc_plot');
 
 }
 
 //
-select_data_from_id();
+
 </script>  
 
 

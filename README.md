@@ -392,6 +392,9 @@ function cutoff(arr2) {
 ```
 **2. determine the label by the thresthold.**  
 **mljs_determin_label(probability,cutoffarray)**
+> 
+> 
+> 
 ```js
 roc_array_label=mljs_determin_label(probability,cutoffarray);
 function mljs_determin_label(a,b){
@@ -462,6 +465,70 @@ function mljs_label_cross(a,b){
   return [pro,fprarr,tprarr,auc];
 }
 ```
+## select_data_from_id()
+```js
+function select_data_from_id()
+{
+//get data;
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+var label_unique=sort_unique(label);
+//console.log(label_unique);
+//merge_matrix()
+
+
+merge_array=merge_matrix(data,label);
+//console.log(merge_array);
+merge_array=shufflearray(merge_array);
+//console.log(merge_array);
+//
+var train_range_ratio=[0,1];
+var validate_range_ratio=[0,1];
+var train_range=[];
+var validate_range=[];
+var number=parseInt(train_range_ratio[1]*(data.length)) ;
+
+//train_range_ratio[1]*(data.length);
+train_range.push(parseInt(train_range_ratio[0]*(data.length)));
+train_range.push(parseInt(train_range_ratio[1]*(data.length)));
+//
+validate_range.push(parseInt(validate_range_ratio[0]*(data.length)));
+validate_range.push(parseInt(validate_range_ratio[1]*(data.length)));
+
+//
+var train=generate_train_validate_data(label_unique,train_range,merge_array);
+trainingData =train[0];
+trainingLabel=train[1];
+var valide=generate_train_validate_data(label_unique,validate_range,merge_array);
+validateData=valide[0];
+validateLabel=valide[1];
+
+/*
+model=train_model(trainingData[0][1]);
+proarr=model_data_probability(model,validateData[0][1]);
+rocarray=mljs_validate(proarr,validateLabel[0][1]);
+console.log(rocarray);
+*/
+var data=[];
+for(var i=0;i<trainingData.length;i++)
+  {
+    var row=[];
+    row.push(trainingData[i][0]);
+    model=train_model(trainingData[i][1]);
+    proarr=model_data_probability(model,validateData[i][1]);
+    rocarray=mljs_validate(proarr,validateLabel[i][1]);
+    row.push(rocarray[3]);
+    row.push(rocarray[1]);
+    row.push(rocarray[2]);
+    //console.log(row);
+    data.push(row);
+  }
+  console.log(data);
+  plot_roc(data,'roc_plot');
+
+}
+```
+
 ### Dynamic learning ratio for train.
 
 
