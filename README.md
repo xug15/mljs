@@ -18,14 +18,31 @@
 > Use the div id get the data.
 ```js
 function getinforvalue(trainid){
+  //var trainid='training_decision';
   //get the html data
-  var decision_data=document.getElementById(trainid).value;
+  if(typeof datacontents==="undefined"){
+    var decision_data=document.getElementById(trainid).value;
+  }else if(datacontents.length>0){
+    var decision_data=datacontents;
+  }else{
+    var decision_data=document.getElementById(trainid).value;
+  }
+  
   //decision_label=document.getElementById("label_decision").value;
 
   //transforme data formate.
-  var decision_data='['+decision_data+']';
-  var decision_data_a=JSON.parse(decision_data);
-  return decision_data_a;
+  var data=decision_data.split('\n');
+  var dataarr=[];
+  for(var i=0;i<data.length;i++){
+    var row=[];
+    row=data[i].split(',').map(function(item) {
+	return parseFloat(item);
+  });
+    dataarr.push(row);
+  }
+  //console.log(dataarr);
+
+  return dataarr;
 
 }
 // getinforvalue('training_decision')
@@ -33,16 +50,26 @@ function getinforvalue(trainid){
 **getinforlabel(lableid)**  
 > Use the div id get the label data.
 ```js
-function getinforlabel(lableid){
+function getinforlabel(){
   //get the html data
   //decision_data=document.getElementById("training_decision").value;
-  var decision_label=document.getElementById(lableid).value;
+  var lableid='label_decision';
+  if(typeof labelcontents==="undefined"){
+    var decision_label=document.getElementById(lableid).value;
+  }
+  else if(labelcontents.length>0){
+    var decision_label=labelcontents;
+  }else{
+    var decision_label=document.getElementById(lableid).value;
+  }
+
 
   //transforme data formate.
 
-  var decision_label_a=decision_label.split(',').map(function(item) {
+  var decision_label_a=decision_label.split('\n').map(function(item) {
 	return parseFloat(item);
   })
+  //console.log(decision_label_a);
   return decision_label_a;
 }
 // getinforlabel('label_decision');
