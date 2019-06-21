@@ -557,7 +557,153 @@ for(var i=0;i<trainingData.length;i++)
 ```
 
 ### Dynamic learning ratio for train.
+****
+>
+```js
+function lg(){
+  this.weight=[];
+  this.intercept=1;
+  this.loss=[];
+  this.ratio=0.001;
 
+  function exploss(data,weight,intercept)
+  {
+    var lossv=0;
+    var lossarray=[];
+    var epowersumarray=[];
+    var exp2_exp3=0;
+    var exp1_exp2=0;
+    var derivativearray=[];
+    for(var j=0;j<data[0].length;j++)
+    {
+      derivativearray.push(0);
+    }
+    for(var i=0;i<data.length;i++)
+    {
+      var ybx=0;
+      var lnx=0;
+      var losssinge=0;
+      epowersum=0;
+      var y_ebx_1ebx=0;
+      for(var j=0;j<data[i].length-1;j++)
+      {
+        epowersum+=data[i][j]*weight[j];
+      }
+      epowersum+=intercept;
+      ybx=data[i][data[i].length-1]*(-1)*epowersum;
+      lnx=Math.log(1+Math.exp(epowersum));
+      //calculate the loss value.
+      lossv+=ybx+lnx;
+      //calculate the step -y(i)+exp(Bx)/1+exp(Bx) 
+      y_ebx_1ebx=data[i][data[i].length-1]*(-1)+Math.exp(epowersum)/(1+Math.exp(epowersum));
+      for(var j=0;j<data[i].length-1;j++)
+      {
+        
+        derivativearray[j]+=y_ebx_1ebx*data[i][j];
+        //console.log(j+" "+derivativearray[j]);
+      }
+      derivativearray[data[i].length-1]+=y_ebx_1ebx;
+      /*
+      console.log("data:"+data[i]);
+      console.log("sum:"+epowersum);
+      console.log("ybx:"+ybx);
+      console.log("lnx:"+lnx);
+      console.log("y_ebx_1ebx:"+y_ebx_1ebx);
+      console.log("derivativearray:"+derivativearray);
+      */
+    }
+    //console.log(derivativearray);
+    return [lossv,derivativearray];
+    //return derivativearray;
+  }
+
+  function gradient(array,weight,intercept,ratio){
+    //console.log("gradient:"+array+typeof(array)+" weight:"+weight+typeof(weight)+" intercept:"+intercept);
+
+    weight_new=[];
+    intercept_new=[];
+    for(var i in weight){
+      //console.log(i+" weight:"+weight[i]+" change:"+array[i]+" ratio:"+ratio);
+      //console.log(weight[i]-array[i]*ratio);
+      weight_new.push(weight[i]-array[i]*ratio);
+    }
+    
+    intercept_new=intercept-array[array.length-1]*ratio;
+    //console.log("weight new:"+weight_new+" intercept new:"+intercept_new);
+    return [weight_new,intercept_new];
+  }
+
+
+  this.fit=function(data){
+    this.data=data;
+    this.variable_number=data[0].length-1;
+    this.labelindex=this.variable_number;
+    for(var i=0;i<this.variable_number;i++)
+    {
+      this.weight.push(0.001);
+    }
+    var lossold=0;
+    loss2=[];
+    for(var i=0;i<100;i++)
+    {
+      loss2=exploss(this.data,this.weight,this.intercept);
+      console.log("loss:"+loss2[0]);
+      if(i==0){
+        lossold=loss2[0];
+      }else if(lossold < loss2[0]){
+        lossold=loss2[0];
+        console.log("old:"+this.ratio);
+        this.ratio=this.ratio/2;
+        console.log("new:"+this.ratio);
+      }
+
+      
+      //console.log("loss:"+loss2);
+      //loss:5.013181080259558,350.11244813072597,261.25064586751654,-40.19391008773626,-83.79892057248217,1.9225163586737573
+      // the loss[0] is the loss, after is the each weight change. the last is intercept.
+      step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
+      //console.log(step);
+      //step [[-0.03828452297499156, -0.0291004519228603, 0.01633929005176458, 0.02297597564545642], 0.9998719208969803]
+      this.weight=step[0];
+      this.intercept=step[1];
+      
+    }
+    
+  }
+  this.predict=function (array)
+  {
+    var powersum=0;
+    for(var i=0;i<array.length-1;i++)
+      {
+        powersum+=this.weight[i]*array[i];
+      }
+      powersum+=this.intercept;
+      var pro=Math.exp(powersum)/(Math.exp(powersum)+1);
+      return pro;
+  }
+  this.transform=function (array)
+  {
+    var powersum=0;
+    for(var i=0;i<array.length-1;i++)
+      {
+        powersum+=this.weight[i]*array[i];
+      }
+      powersum+=this.intercept;
+      var pro=Math.exp(powersum)/(Math.exp(powersum)+1);
+      return pro;
+  }
+}
+/*
+a=[[1,2,113,124,1],[1,2,113,314,1],[116,112,3,4,0],[216,112,1,1,0],[116,112,5,1,0]]
+lg1=new lg();
+lg1.fit(a)
+lg1.loss
+lg1.weight
+lg1.intercept
+lg1.predict([1,2,113,124,1])
+lg1.predict([116,112,3,4,0])
+*/
+```
 
 **mljs_determin_label(a,b)**
 > give the probability and the cutoff, the function will return the label with each cutoff. 
