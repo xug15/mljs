@@ -564,7 +564,7 @@ function lg(){
   this.weight=[];
   this.intercept=1;
   this.loss=[];
-  this.ratio=0.001;
+  this.ratio=1;
 
   function exploss(data,weight,intercept)
   {
@@ -611,6 +611,7 @@ function lg(){
       console.log("y_ebx_1ebx:"+y_ebx_1ebx);
       console.log("derivativearray:"+derivativearray);
       */
+
     }
     //console.log(derivativearray);
     return [lossv,derivativearray];
@@ -640,32 +641,139 @@ function lg(){
     this.labelindex=this.variable_number;
     for(var i=0;i<this.variable_number;i++)
     {
-      this.weight.push(0.001);
+      this.weight.push(0);
     }
+    for(var j=0;j<this.data.length;j++)
+    {
+      for(var i=0;i<this.variable_number;i++)
+      {
+        this.weight[i]+=data[j][i];
+      }
+    }
+    for(var i=0;i<this.variable_number;i++)
+    {
+      this.weight[i]=1/this.weight[i];
+    }
+    console.log(this.weight);
+    
     var lossold=0;
     loss2=[];
-    for(var i=0;i<100;i++)
+    var flate_count=0;
+    var big_count=0;
+    for(var i=0;i<1000;i++)
     {
       loss2=exploss(this.data,this.weight,this.intercept);
-      console.log("loss:"+loss2[0]);
+      console.log("loss:"+loss2[0]+" learning ratio:"+this.ratio);
+
       if(i==0){
         lossold=loss2[0];
-      }else if(lossold < loss2[0]){
-        lossold=loss2[0];
-        console.log("old:"+this.ratio);
-        this.ratio=this.ratio/2;
-        console.log("new:"+this.ratio);
-      }
+        //
+        test_step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
+        console.log("test_step:"+test_step);
+        test_loss=exploss(this.data,test_step[0],test_step[1]);
+        console.log("test_loss:"+test_loss);
+        var breaknum=0;
+        while(test_loss[0] > lossold){
+          breaknum++;
+          this.ratio=this.ratio/1.5;
+          if(this.ratio==0){break;}
+          test_step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
+          //console.log("test_step:"+test_step);
+          test_loss=exploss(this.data,test_step[0],test_step[1]);
+          //console.log("test_loss:"+test_loss);
+          if(test_loss[0] == lossold)
+          {
+            break;
+          }
+          if(breaknum>1000){
+            break;
+          }
+        }
+        //
+        console.log("The begin ratio is"+this.ratio);
+        step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
+        this.weight=step[0];
+        this.intercept=step[1];
+        //
+        
+      }else if(lossold < loss2[0] )
+      {
+        big_count++;
 
-      
-      //console.log("loss:"+loss2);
-      //loss:5.013181080259558,350.11244813072597,261.25064586751654,-40.19391008773626,-83.79892057248217,1.9225163586737573
-      // the loss[0] is the loss, after is the each weight change. the last is intercept.
-      step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
-      //console.log(step);
-      //step [[-0.03828452297499156, -0.0291004519228603, 0.01633929005176458, 0.02297597564545642], 0.9998719208969803]
-      this.weight=step[0];
-      this.intercept=step[1];
+        
+        //
+        test_loss=loss2;
+        while(test_loss[0] > lossold){
+          breaknum++;
+          this.ratio=this.ratio/1.5;
+          
+          test_step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
+          //console.log("test_step:"+test_step);
+          test_loss=exploss(this.data,test_step[0],test_step[1]);
+          //console.log("test_loss:"+test_loss);
+          if(test_loss[0] == lossold)
+          {
+            break;
+          }
+          if(this.ratio == 0)
+          {
+            break;
+          }
+        }
+        //
+        console.log("The refine ratio is"+this.ratio);
+        step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
+        this.weight=step[0];
+        this.intercept=step[1];
+        //
+
+        if(big_count>300){
+          break;
+        }
+
+      }else if(lossold == loss2[0])
+      {
+        flate_count++;
+        //
+        test_loss=loss2;
+        while(test_loss[0] > lossold){
+          breaknum++;
+          this.ratio=this.ratio/1.5;
+          
+          test_step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
+          //console.log("test_step:"+test_step);
+          test_loss=exploss(this.data,test_step[0],test_step[1]);
+          //console.log("test_loss:"+test_loss);
+          if(test_loss[0] == lossold)
+          {
+            break;
+          }
+          if(this.ratio == 0)
+          {
+            break;
+          }
+        }
+        //
+        console.log("The refine ratio is"+this.ratio);
+        step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
+        this.weight=step[0];
+        this.intercept=step[1];
+        //
+        if(flate_count>4)
+        {
+          break;
+        }
+
+      }else{
+        lossold=loss2[0];
+        step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
+        this.weight=step[0];
+        this.intercept=step[1];
+        this.ratio=this.ratio*1.1;
+      }
+      if(loss2[0]<Math.pow(10,-7)){
+        break;
+      }
       
     }
     
