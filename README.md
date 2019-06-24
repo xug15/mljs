@@ -563,7 +563,7 @@ for(var i=0;i<trainingData.length;i++)
 ```js
 function lg(){
   this.weight=[];
-  this.intercept=1;
+  this.intercept=Math.random();
   this.loss=[];
   this.ratio=1;
 
@@ -654,6 +654,7 @@ function lg(){
     for(var i=0;i<this.variable_number;i++)
     {
       this.weight[i]=1/this.weight[i];
+      //this.weight[i]=Math.random();
     }
     console.log(this.weight);
     
@@ -661,10 +662,10 @@ function lg(){
     loss2=[];
     var flate_count=0;
     var big_count=0;
-    for(var i=0;i<1000;i++)
+    for(var i=0;i<10000;i++)
     {
       loss2=exploss(this.data,this.weight,this.intercept);
-      console.log("loss:"+loss2[0]+" learning ratio:"+this.ratio);
+      //console.log("loss:"+loss2[0]+" learning ratio:"+this.ratio);
 
       if(i==0){
         lossold=loss2[0];
@@ -700,35 +701,48 @@ function lg(){
       }else if(lossold < loss2[0] )
       {
         big_count++;
-
-        
         //
         test_loss=loss2;
-        while(test_loss[0] > lossold){
+        while(test_loss[0] > lossold)
+        {
           breaknum++;
-          this.ratio=this.ratio/1.5;
-          
+          this.ratio=this.ratio/1.2;
+          if(this.ratio === 0)
+          {
+            console.log("1ratio is 0");
+            break;
+          }
           test_step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
           //console.log("test_step:"+test_step);
           test_loss=exploss(this.data,test_step[0],test_step[1]);
-          //console.log("test_loss:"+test_loss);
-          if(test_loss[0] == lossold)
+          if(this.ratio < Math.pow(10,-10))
           {
+            console.log("2ratio is 0");
+            console.log("bigger number :"+big_count+" test_loss:"+test_loss);
+            break;
+          }else{
+            console.log("bigger number :"+big_count+" test_loss:"+test_loss);
+          }
+          
+          if(test_loss[0] === lossold)
+          {
+            console.log("equal");
             break;
           }
-          if(this.ratio == 0)
+          if(this.ratio < Math.pow(10,-10))
           {
+            console.log("3ratio is 0");
             break;
           }
         }
         //
-        console.log("The refine ratio is"+this.ratio);
+        console.log("Bigger The refine ratio is"+this.ratio);
         step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
         this.weight=step[0];
         this.intercept=step[1];
         //
-
-        if(big_count>300){
+        if(big_count>1000){
+          console.log("big counter 1000");
           break;
         }
 
@@ -739,7 +753,7 @@ function lg(){
         test_loss=loss2;
         while(test_loss[0] > lossold){
           breaknum++;
-          this.ratio=this.ratio/1.5;
+          this.ratio=this.ratio/2;
           
           test_step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
           //console.log("test_step:"+test_step);
@@ -755,13 +769,14 @@ function lg(){
           }
         }
         //
-        console.log("The refine ratio is"+this.ratio);
+        console.log("Equal The refine ratio is"+this.ratio);
         step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
         this.weight=step[0];
         this.intercept=step[1];
         //
         if(flate_count>4)
         {
+          console.log("flate count 4");
           break;
         }
 
@@ -770,13 +785,15 @@ function lg(){
         step=gradient(loss2[1],this.weight,this.intercept,this.ratio);
         this.weight=step[0];
         this.intercept=step[1];
-        this.ratio=this.ratio*1.1;
+        this.ratio=this.ratio*1.007;
       }
       if(loss2[0]<Math.pow(10,-7)){
+        console.log("loss small 10^-7");
         break;
       }
       
     }
+    console.log("loss:"+loss2[0]+" ratio"+this.ratio+" step"+i+" big counter:"+big_count);
     
   }
   this.predict=function (array)
@@ -788,7 +805,7 @@ function lg(){
       }
       powersum+=this.intercept;
       var pro=Math.exp(powersum)/(Math.exp(powersum)+1);
-      return pro;
+      return [powersum,pro];
   }
   this.transform=function (array)
   {
