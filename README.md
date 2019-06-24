@@ -49,7 +49,7 @@ function getinforvalue(trainid){
 ```
 **getinforlabel(lableid)**  
 > Use the div id get the label data.
-```js
+```js  
 function getinforlabel(){
   //get the html data
   //decision_data=document.getElementById("training_decision").value;
@@ -69,17 +69,17 @@ function getinforlabel(){
   var decision_label_a=decision_label.split('\n').map(function(item) {
 	return parseFloat(item);
   })
-  //console.log(decision_label_a);
+  console.log(decision_label_a);
   return decision_label_a;
 }
-// getinforlabel('label_decision');
 ```
 **2. Then use function sort label information.**  
 **sort_unique(arr)**
 > sort and unique the array, and return the unique array.
 ```js
 var label_unique=sort_unique(label);
-function sort_unique(arr) {
+function sort_unique(arr2) {
+  var arr=JSON.parse(JSON.stringify(arr2));
   if (arr.length === 0) return arr;
   arr = arr.sort(function (a, b) { return a*1 - b*1; });
   var ret = [arr[0]];
@@ -96,8 +96,9 @@ function sort_unique(arr) {
 **merge_matrix(data,label)**
 > Make two array to one array.
 ```js
-merge_matrix(data,label);
-function merge_matrix(a,b){
+function merge_matrix(a2,b2){
+  a=JSON.parse(JSON.stringify(a2));
+  b=JSON.parse(JSON.stringify(b2));
   var c=[];
 for(var i=0;i<a.length;i++){
 
@@ -106,7 +107,6 @@ for(var i=0;i<a.length;i++){
 }
 return c;
 }
-
 ```
 
 **4. Shuffle array to generate random array.**  
@@ -114,7 +114,8 @@ return c;
 > shuffle array and return the shuffled array.
 ```js
 merge_array=shufflearray(merge_array);
-function shufflearray(a) {
+function shufflearray(a2) {
+  var a=JSON.parse(JSON.stringify(a2));
     var j, x, i;
     for (i = a.length - 1; i > 0; i--) {
         j = Math.floor(Math.random() * (i + 1));
