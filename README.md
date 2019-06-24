@@ -556,7 +556,7 @@ for(var i=0;i<trainingData.length;i++)
 
 }
 ```
-
+## Gradient descent method 
 ### Dynamic learning ratio for train.
 ****
 >
