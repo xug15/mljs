@@ -558,6 +558,8 @@ for(var i=0;i<trainingData.length;i++)
 ```
 ## Newton method
 ### 
+![](image/newton.png)
+
 ```js
 function newtonlg(){
   this.weight=[];
