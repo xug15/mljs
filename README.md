@@ -1,7 +1,10 @@
 # mljs
 + [AUC](AUC.md)  
 + [Entropy and Gini index](entropy.md)  
++ [Linear regression](linear.md)  
++ [Logistic Regression](logistic.md)  
 + [Newton method](newton.md)  
+
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
 
