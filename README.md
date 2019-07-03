@@ -1,4 +1,5 @@
 # mljs
+[AUC](AUC.md)
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
 
