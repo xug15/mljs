@@ -1,6 +1,6 @@
 # mljs
-[AUC](AUC.md)
-[Entropy and Gini index](entropy.md)
++ [AUC](AUC.md)  
++ [Entropy and Gini index](entropy.md)  
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
 
