@@ -1,3 +1,3 @@
 # Linear Regression
-![](image/linear.png)
-![](image/linear2.png)
+![](../image/linear.png)
+![](../image/linear2.png)
