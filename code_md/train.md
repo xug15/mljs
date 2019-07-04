@@ -26,24 +26,7 @@ for(var i=0;i<trainingData.length;i++)
   plot_roc(data,'roc_plot');
 ```
 
-**indexOfMax(arr)**  
-> report the max index of array value.  
-```js
- function indexOfMax(arr) {
-    if (arr.length === 0) {
-        return -1;
-    }
-var max = arr[0];
-    var maxIndex = 0;
-for (var i = 1; i < arr.length; i++) {
-        if (arr[i] > max) {
-            maxIndex = i;
-            max = arr[i];
-        }
-    }
-return maxIndex;
-}
- ```
+
 
 **train_model(trainingData[0][1]);**
 > use the function train_model(trainingData[0][1]) to train the best model.  
@@ -58,6 +41,97 @@ function train_model_new(trainingdata){
   return lg1;
 }
 ```
+## newton method
+
+```js
+function newtonlg(){
+  this.weight=[];
+  this.intercept=Math.random();
+  this.loss=[];
+  this.ratio=1;
+
+  function exploss(data,weight,intercept)
+  {
+    var lossv=0;
+    var lossarray=[];
+    var epowersumarray=[];
+    var exp2_exp3=0;
+    var exp1_exp2=0;
+    var derivativearray=[];
+    var derivativeone=[];
+    var hessematrix=[];
+    var old_beta=JSON.parse(JSON.stringify(weight));
+    old_beta.push(intercept);
+    //initialize the derivative array and hessematrix.
+    for(var j=0;j<data[0].length;j++)
+    {
+      derivativearray.push(0);
+      derivativeone.push(0);
+      var row=[];
+      for(var i=0;i<data[0].length;i++){
+        row.push(0);
+      }
+      hessematrix.push(row);
+    }
+    //console.log(derivativearray);
+    //console.log(hessematrix);
+    for(var i=0;i<data.length;i++)
+    {
+      var ybx=0;
+      var lnx=0;
+      var losssinge=0;
+      epowersum=0;
+      var y_ebx_1ebx=0;
+      for(var j=0;j<data[i].length-1;j++)
+      {
+        epowersum+=data[i][j]*weight[j];
+      }
+      epowersum+=intercept;
+      //caculate p1 and p0
+      var p1=Math.exp(epowersum)/(1+Math.exp(epowersum));
+      var p0=1/(1+Math.exp(epowersum));
+      //ybx=-y(i)beta*x
+      ybx=data[i][data[i].length-1]*(-1)*epowersum;
+      //lnx=ln(1+e^beta*x)
+      lnx=Math.log(1+Math.exp(epowersum));
+      //calculate the loss value. loss value=foreach[-y(i)beatax+ln(1+e^betax)]
+      lossv+=ybx+lnx;
+      //calculate the step -y(i)+exp(Bx)/1+exp(Bx) 
+      y_ebx_1ebx=data[i][data[i].length-1]*(-1)+Math.exp(epowersum)/(1+Math.exp(epowersum));
+      for(var j=0;j<data[i].length-1;j++)
+      {
+        //
+        derivativearray[j]+=y_ebx_1ebx*data[i][j];
+        //console.log(j+" "+derivativearray[j]);
+      }
+      derivativearray[data[i].length-1]+=y_ebx_1ebx;
+      
+      for(var j=0;j<data[i].length-1;j++)
+      {
+        //console.log(j);
+        for(var k=0;k<data[i].length-1;k++)
+        {
+          var sum=data[i][j]*data[i][k]*p1*p0;
+          //console.log("order:"+i+" data:"+data[i]+" ij:"+data[i][j]+" ik:"+data[i][k]+" "+sum);
+          hessematrix[j][k]+=sum;
+          
+        }
+        var sum=data[i][j]*p1*p0;
+        hessematrix[j][k]+=sum;
+      }
+      for(var k=0;k<data[i].length-1;k++)
+        {
+          var sum=data[i][k]*p1*p0;
+          //console.log("order:"+i+" data:"+data[i]+" ij:"+data[i][j]+" ik:"+data[i][k]+" "+sum);
+          hessematrix[j][k]+=sum;
+          
+        }
+        var sum=p1*p0;
+        hessematrix[j][k]+=sum;
+      //console.log(hessematrix);
+    }
+```
+
 + old version 
 ```js
 // train and return model.
@@ -262,5 +336,24 @@ if(c){
     return ratio;
   }
   
+}
+ ```
+
+ **indexOfMax(arr)**  
+> report the max index of array value.  
+```js
+ function indexOfMax(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+var max = arr[0];
+    var maxIndex = 0;
+for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            maxIndex = i;
+            max = arr[i];
+        }
+    }
+return maxIndex;
 }
  ```
