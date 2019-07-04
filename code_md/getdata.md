@@ -1,5 +1,41 @@
 # 1. First get data from html.
 
+```js
+//get data;
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+var label_unique=sort_unique(label);
+//console.log(label_unique);
+//merge_matrix()
+
+
+merge_array=merge_matrix(data,label);
+//console.log(merge_array);
+merge_array=shufflearray(merge_array);
+//console.log(merge_array);
+//
+var train_range_ratio=[0,1];
+var validate_range_ratio=[0,1];
+var train_range=[];
+var validate_range=[];
+var number=parseInt(train_range_ratio[1]*(data.length)) ;
+
+//train_range_ratio[1]*(data.length);
+train_range.push(parseInt(train_range_ratio[0]*(data.length)));
+train_range.push(parseInt(train_range_ratio[1]*(data.length)));
+//
+validate_range.push(parseInt(validate_range_ratio[0]*(data.length)));
+validate_range.push(parseInt(validate_range_ratio[1]*(data.length)));
+
+//
+var train=generate_train_validate_data(label_unique,train_range,merge_array);
+trainingData =train[0];
+trainingLabel=train[1];
+var valide=generate_train_validate_data(label_unique,validate_range,merge_array);
+validateData=valide[0];
+validateLabel=valide[1];
+```
+
 **getinforvalue(trainid)**
 > Use the div id get the data.
 ```js
