@@ -12,10 +12,10 @@
 * [1. First get data from html.](code_md/getdata.md) 
 * [2. train model.](code_md/train.md) 
 * [3. model and probability.](code_md/probability.md) 
-* [4. mljs validate](code_md/validate.md) 
+* [4. mljs validate and Performance: AUC and ROC](code_md/validate.md) 
 * [5. Newton method code](code_md/newtoncode.md) 
 * [6. Gradient descent method code](code_md/gradientcode.md) 
-* [7. Performance: AUC and ROC](code_md/auc_roc_code.md) 
+* [7. plot](code_md/plot.md) 
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
 
