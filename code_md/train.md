@@ -52,6 +52,14 @@ return maxIndex;
 > trainlogistic(learn_ratio,best_iteration,3,trainingData);  
 
 ```js
+function train_model_new(trainingdata){
+  lg1=new newtonlg();
+  lg1.fit(trainingdata);
+  return lg1;
+}
+```
++ old version 
+```js
 // train and return model.
 function train_model(trainingData){
   var learning_ratio=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001,0.0000001,0.00000001];
