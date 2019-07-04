@@ -1,11 +1,11 @@
 # mljs
 ## Basic knowledge.
 
-* [AUC](AUC.md)  
-* [Entropy and Gini index](entropy.md)  
-* [Linear regression](linear.md)  
-* [Logistic Regression](logistic.md)  
-* [Newton method](newton.md)  
+* [AUC](knowledge/AUC.md)  
+* [Entropy and Gini index](knowledge/entropy.md)  
+* [Linear regression](knowledge/linear.md)  
+* [Logistic Regression](knowledge/logistic.md)  
+* [Newton method](knowledge/newton.md)  
 
 ## Code
 * [Outline](code_md/outline.md) 
