@@ -148,6 +148,12 @@ function mljs_label_cross(a,b){
   return [pro,fprarr,tprarr,auc];
 }
 ```
+
+
+-----
+## old version 
+
+
 ## select_data_from_id()
 ```js
 function select_data_from_id()
@@ -212,8 +218,6 @@ for(var i=0;i<trainingData.length;i++)
 }
 ```
 
------
-## old version 
 
 ```js
 rocarray=mljs_validate(proarr,validateLabel[0][1]);
