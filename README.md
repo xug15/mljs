@@ -19,7 +19,12 @@
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
 
+## HTML function
+* [Write code](htmlmd/write.md)
+* [Upload code](htmlmd/upload.md)
+
 ## LSRE 
+> Using jsregression.min.js
 * [Linear Regression using js-regrssion](lsre/linear.md) 
 * [Logistic Regression](lsre/logistic.md) 
 * [Multi-Class Classification using One-vs-All Logistic Regression](lsre/multi_logistic.md) 
@@ -39,15 +44,14 @@ The codes in the following html files illustrates how to use them in html pages:
 
 ===
 ## ML
+> Using ML library.
 * [Logistic Regression using mljs](mlmd/logistic.md)
 * [PCA analysis](mlmd/pca.md)
 * [Decision tree](mlmd/decision.md)
 * [Random forest](mlmd/random_forest.md)
 * [Regression Code example](mlmd/regression.md)
 
-## HTML function
-* [Write code](htmlmd/write.md)
-* [Upload code](htmlmd/upload.md)
+
 
 ## List of included libraries
 
