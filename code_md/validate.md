@@ -4,16 +4,29 @@
 > 3. according to label in fact and the label predict.
 
 ```js
-rocarray=mljs_validate(proarr,validateLabel[0][1]);
-function mljs_validate(probability,trainingLabel){
-  var cutoffarray=cutoff(probability);
-console.log(probability);
-console.log(cutoffarray);
-roc_array_label=mljs_determin_label(probability,cutoffarray);
-roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
-return roc_tp4;
-}
+var config_model='';
+var data=[];
+for(var i=0;i<trainingData.length;i++)
+  {
+    var row=[];
+    row.push(trainingData[i][0]);
+    var name='model'+i;
+    window[name]=train_model_new(trainingData[i][1]);
+    //model=
+    config_model+='<p>'+trainingData[i][0]+" "+window[name].weight+" intercept"+window[name].intercept+'</p>';
+    proarr=model_data_probability(window[name],validateData[i][1]);
+    rocarray=mljs_validate(proarr,validateLabel[i][1]);
+    row.push(rocarray[3]);
+    row.push(rocarray[1]);
+    row.push(rocarray[2]);
+    //console.log(row);
+    data.push(row);
+  }
+  //console.log(data);
+  plot_roc(data,'roc_plot');
 ```
+
+
 
 **1. According to the probability and sort and unique the data. Caculate the between the value threshold.**  
 **cutoff(probability);**  
@@ -179,5 +192,20 @@ for(var i=0;i<trainingData.length;i++)
   console.log(data);
   plot_roc(data,'roc_plot');
 
+}
+```
+
+-----
+## old version 
+
+```js
+rocarray=mljs_validate(proarr,validateLabel[0][1]);
+function mljs_validate(probability,trainingLabel){
+  var cutoffarray=cutoff(probability);
+console.log(probability);
+console.log(cutoffarray);
+roc_array_label=mljs_determin_label(probability,cutoffarray);
+roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
+return roc_tp4;
 }
 ```
