@@ -3,6 +3,24 @@
 > 2. use the best learning ratio use serial iterations to select best iterations.
 > 3. use the best learning ratio and iteration to generate the model.
 
+**indexOfMax(arr)**  
+> report the max index of array value.  
+```js
+ function indexOfMax(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+var max = arr[0];
+    var maxIndex = 0;
+for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            maxIndex = i;
+            max = arr[i];
+        }
+    }
+return maxIndex;
+}
+ ```
 
 **train_model(trainingData[0][1]);**
 > use the function train_model(trainingData[0][1]) to train the best model.  
@@ -156,3 +174,62 @@ for(var i=0;i<iteration_array.length;i++){
   var modelbest=trainlogistic(learn_ratio,best_iteration,3,trainingData);
   return modelbest;
 ```
+
+
+
+**trainloop(a,b,c)**  
+> trainloop(a,b,c) Use set learning ratio, iterations, and report or not.  
+```js
+ function trainloop(data,a,b,c)
+{
+  //data is training data.
+  //a is leaning ration
+  //b is iterations
+  //c is report other information or not
+  
+  if(b===undefined){
+    b=100;
+  }
+  if(c===undefined){
+    c=false;
+  }else{
+    c=true;
+  }
+  classifier = new LSRE.MultiClassLogistic({
+   alpha: a,
+   iterations: b,
+   lambda: 0.0
+});
+
+result = classifier.fit(data);
+
+if(c){
+  console.log("Model has ratio:"+a+" iteration:"+b+" model result:"+result);
+  for (var i in result)
+  {
+    console.log("name:"+i+" cost:"+result[i]['cost']+" threshold:"+result[i]['threshold']);
+  }
+}
+
+  var correct=0;
+  var wronge=0;
+  for(var i=0; i < data.length; ++i){
+   var predicted = classifier.transform(data[i]);
+   //console.log(i+[i]+);
+   if(data[i][data[i].length-1]==predicted){
+    correct++;
+   }else{
+     wronge++;
+   }
+   //console.log(" actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var ratio=correct/(correct+wronge);
+  if(c){
+    console.log("Select model have Accuracy: "+ratio+"\n");
+    return classifier;
+  }else{
+    return ratio;
+  }
+  
+}
+ ```

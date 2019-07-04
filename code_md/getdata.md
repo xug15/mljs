@@ -178,3 +178,16 @@ return [trainingData,trainingLabel];
 }
 ```
 
+**merge_matrix(a,b)**  
+> merge data into array.  
+```js
+ function merge_matrix(a,b){
+  var c=[];
+for(var i=0;i<a.length;i++){
+
+  a[i].push(b[i]);
+  c.push(a[i]);
+}
+return c;
+}
+ ```
