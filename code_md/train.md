@@ -132,7 +132,10 @@ function newtonlg(){
     }
 ```
 
-+ old version 
+## old version 
+
+----------
+
 ```js
 // train and return model.
 function train_model(trainingData){
