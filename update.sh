@@ -4,7 +4,7 @@
 time=`date`
 echo $time
 
-git add *
+git add -u .
 git commit -m '$time'
 git push origin master
 
