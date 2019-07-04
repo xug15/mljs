@@ -26,6 +26,23 @@ for(var i=0;i<trainingData.length;i++)
   plot_roc(data,'roc_plot');
 ```
 
+## mljs_validate
+```js
+function mljs_validate(probability,trainingLabel){
+  var cutoffarray=cutoff(probability);
+//console.log(probability);
+//console.log(cutoffarray);
+roc_array_label=mljs_determin_label(probability,cutoffarray);
+//console.log(roc_array_label);
+roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
+//console.log(roc_array_label);
+return roc_tp4;
+//console.log(trainingLabel);
+// var data=[['gene',roc_tp4[3],roc_tp4[1],roc_tp4[2]]];
+//    plot_roc(data,'roc_plot');
+
+}
+```
 
 
 **1. According to the probability and sort and unique the data. Caculate the between the value threshold.**  
