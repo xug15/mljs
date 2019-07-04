@@ -181,7 +181,9 @@ return [trainingData,trainingLabel];
 **merge_matrix(a,b)**  
 > merge data into array.  
 ```js
- function merge_matrix(a,b){
+function merge_matrix(a2,b2){
+  a=JSON.parse(JSON.stringify(a2));
+  b=JSON.parse(JSON.stringify(b2));
   var c=[];
 for(var i=0;i<a.length;i++){
 
