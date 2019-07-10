@@ -399,7 +399,7 @@ function entropy(arr2){
   {
     var a=arr[i]/sum;
     var b=a*log2(a);
-    entropy_value+=b;
+    entropy_value+=b*(-1);
     array.push(b);
   }
   return [sum,entropy_value,array];
