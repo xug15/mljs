@@ -4,10 +4,19 @@
 **List**  
 * log2(a): return log2(x)
 * sort_count(arr2): sort and unique and count array. 
-
+* entropy(x): return array of entropy.
+* feature_evalue(): start the calculate entropy function.
 ---
 ### log2 function
 > log2(a) return the log2(x)
+```js
+log2(2);
+//1
+log2(4);
+//2
+log2(6);
+//2.584962500721156
+```
  
 ```js
  //function log2
@@ -23,6 +32,7 @@ function log2(a){
 //Input like :  
 a=[1,1,1,2,2,3,4,5,5,5,6,6,6,7,7,8,8];  
 //Output like:  
+b=sort_count(a);
 [[1, 2, 3, 4, 5, 6, 7, 8],[3, 2, 1, 1, 3, 3, 2, 2]]
 [1, 2, 3, 4, 5, 6, 7, 8]  
 [3, 2, 1, 1, 3, 3, 2, 2]  
@@ -54,3 +64,62 @@ function sort_count(arr2){
   return [ret,out];
 }
 ```
+### entropy
+> Return array of entropy.
+```js
+a=[1,1,1,2,2,3,4,5,5,5,6,6,6,7,7,8,8];
+b=sort_count(a)
+console.log(b);
+// [1, 2, 3, 4, 5, 6, 7, 8],
+// [3, 2, 1, 1, 3, 3, 2, 2]
+
+console.log(entropy(b[1]));
+```
+
+```js
+function entropy(arr2){
+  arr=JSON.parse(JSON.stringify(arr2));
+  var sum=0;
+  for(var i=0;i<arr.length;i++)
+  {
+    sum+=arr[i];
+  }
+  var entropy_value=0;
+  var array=[];
+  for(var i=0;i<arr.length;i++)
+  {
+    var a=arr[i]/sum;
+    var b=a*log2(a);
+    entropy_value+=b;
+    array.push(b);
+  }
+  return [sum,entropy_value,array];
+
+}
+```
+### feature_evalue()
+> get data from input.
+
+```js
+function feature_evalue()
+{
+//get data;
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+var label_unique=sort_unique(label);
+//
+var out=sort_count(label);
+console.log(out);
+entropy(out[1]);
+
+/*
+merge_array=merge_matrix(data,label);
+//console.log(merge_array);
+merge_array=shufflearray(merge_array);
+//console.log(merge_array);
+*/
+
+}
+```
+
+
