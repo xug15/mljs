@@ -156,6 +156,13 @@ margin: 10px 0px;
         <button class="btn btn-primary button" onclick="train_randomforest()"><span class="glyphicon glyphicon-play"></span>Random Forest Training</button>
       </div>
     </div>
+
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <button class="btn btn-primary button" onclick="feature_evalue()"><span class="glyphicon glyphicon-play"></span>Feature Evalue</button>
+      </div>
+    </div>
+
     <div class="row" style="margin-top:5px;">
       <div class="col-xs-12 col-sm-6" >
         <input type="file" id="file-input" >
@@ -348,9 +355,88 @@ margin: 10px 0px;
 <script src="ml/mljsxg.js"></script>
 
 <script type="text/javascript">
+//function log2
+function log2(a){
+  var b=Math.log(a)/Math.log(2);
+  return b;
+}
+// Use array to generate two unique array, and each count.
+function sort_count(arr2){
+  arr=JSON.parse(JSON.stringify(arr2));
+  if (arr.length === 0) return arr;
+  arr = arr.sort(function (a, b) { return a*1 - b*1; });
+  var ret = [arr[0]];
+  for (var i = 1; i < arr.length; i++) { //Start loop at 1: arr[0] can never be a duplicate
+    if (arr[i-1] !== arr[i]) {
+      ret.push(arr[i]);
+    }
+  }
+  var out=[];
+  for(var j=0;j<ret.length;j++)
+  {
+    var count = 0;
+    for(let i=0; i<arr.length; i++)
+    {
+      if (arr[i]==ret[j]){
+        count++;
+      }   
+    }
+    out.push(count);
+  }
+  return [ret,out];
+}
+// Use the calculate the entropy.
+function entropy(arr2){
+  arr=JSON.parse(JSON.stringify(arr2));
+  var sum=0;
+  for(var i=0;i<arr.length;i++)
+  {
+    sum+=arr[i];
+  }
+  var entropy_value=0;
+  var array=[];
+  for(var i=0;i<arr.length;i++)
+  {
+    var a=arr[i]/sum;
+    var b=a*log2(a);
+    array.push(b);
+  }
+  return [sum,entropy_value,array];
+
+}
+
+
+console.log(log2(2));
+console.log(log2(4));
+console.log(log2(8));
+function feature_evalue()
+{
+//get data;
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+var label_unique=sort_unique(label);
+//
+var out=sort_count(label);
+console.log(out);
+entropy(out[1]);
+
+/*
+merge_array=merge_matrix(data,label);
+//console.log(merge_array);
+merge_array=shufflearray(merge_array);
+//console.log(merge_array);
+*/
+
+}
 
 //
 
+
+a=[1,1,1,2,2,3,4,5,5,5,6,6,6,7,7,8,8];
+console.log(a);
+b=sort_count(a)
+console.log(b);
+console.log(entropy(b[1]));
 </script>  
 
 
