@@ -20,10 +20,10 @@ function log2(a){
 ### sort_count
 > Input is array. Return sort and unique array and the count of each elements.
 > Input like :  
-> a=[1,1,1,2,2,3,4,5,5,5,6,6,6,7,7,8,8];  
-> Output like:  
-> [1, 2, 3, 4, 5, 6, 7, 8]  
-> [3, 2, 1, 1, 3, 3, 2, 2]  
+a=[1,1,1,2,2,3,4,5,5,5,6,6,6,7,7,8,8];  
+Output like:  
+[1, 2, 3, 4, 5, 6, 7, 8]  
+[3, 2, 1, 1, 3, 3, 2, 2]  
 
 ```js
 // Use array to generate two unique array, and each count.
