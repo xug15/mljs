@@ -355,6 +355,29 @@ margin: 10px 0px;
 <script src="ml/mljsxg.js"></script>
 
 <script type="text/javascript">
+//
+c=[[1,2,3,4],[1,2,3,4],[1,2,3,4]];
+function transforme_array(a2)
+{
+  //Deep copy array.
+  a=JSON.parse(JSON.stringify(a2));
+  //Create by feature array
+  var b=[];
+  for(var j=0;j<a[0].length;j++)
+    {
+      b.push([]);
+    }
+    // put feature into each array.
+  for(var i=0;i<a.length;i++)
+  {
+    for(var j=0;j<a[i].length;j++)
+    {
+      b[j].push(a[i][j]);
+    }
+  }
+  return b;
+}
+
 //function log2
 function log2(a){
   var b=Math.log(a)/Math.log(2);
@@ -413,20 +436,17 @@ console.log(log2(8));
 function feature_evalue()
 {
 //get data;
-var data= getinforvalue('training_decision');
+data= getinforvalue('training_decision');
 var label=getinforlabel('label_decision');
 var label_unique=sort_unique(label);
 //
 var out=sort_count(label);
 console.log(out);
-entropy(out[1]);
+console.log(entropy(out[1]));
+var feature_array=[];
 
-/*
-merge_array=merge_matrix(data,label);
-//console.log(merge_array);
-merge_array=shufflearray(merge_array);
-//console.log(merge_array);
-*/
+
+
 
 }
 

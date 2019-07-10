@@ -64,6 +64,48 @@ function sort_count(arr2){
   return [ret,out];
 }
 ```
+### Transforme array.
+
+```js
+c
+(3) [Array(4), Array(4), Array(4)]
+0: (4) [1, 2, 3, 4]
+1: (4) [1, 2, 3, 4]
+2: (4) [1, 2, 3, 4]
+
+d=transforme_array(c);
+[Array(3), Array(3), Array(3), Array(3)]
+0: (3) [1, 1, 1]
+1: (3) [2, 2, 2]
+2: (3) [3, 3, 3]
+3: (3) [4, 4, 4]
+
+```
+
+```js
+c=[[1,2,3,4],[1,2,3,4],[1,2,3,4]];
+function transforme_array(a2)
+{
+  //Deep copy array.
+  a=JSON.parse(JSON.stringify(a2));
+  //Create by feature array
+  var b=[];
+  for(var j=0;j<a[0].length;j++)
+    {
+      b.push([]);
+    }
+    // put feature into each array.
+  for(var i=0;i<a.length;i++)
+  {
+    for(var j=0;j<a[i].length;j++)
+    {
+      b[j].push(a[i][j]);
+    }
+  }
+  return b;
+}
+```
+
 ### entropy
 > Return array of entropy.
 ```js
