@@ -164,4 +164,76 @@ merge_array=shufflearray(merge_array);
 }
 ```
 
+### mljs_label_entropy
+* input is the a is the label of fact.
+* b is the array of use probability to predict label.
+
+```js
+function mljs_label_entropy(a,b)
+{
+  //a is the label of fact.
+  //b is the array of use probability to predict label.
+
+  var pro=[];
+  var tprarr=[];
+  var fprarr=[];
+  var entropy_array=[];
+  var entropy_change=[];
+  var information_gain=[];
+  var other=[];
+  for(var i=0;i<b.length;i++){
+    // each cut off label is b[i]
+    var tp=0;
+    var tn=0;
+    var fp=0;
+    var fn=0;
+    for(var j=0;j<b[i].length;j++){
+      if(b[i][j]==1 & a[j]==1){
+        tp++;
+      }
+      if(b[i][j]==0 & a[j]==0){
+        tn++;
+      }
+      if(b[i][j]==0 & a[j]==1){
+        fn++;
+      }
+      if(b[i][j]==1 & a[j]==0){
+        fp++;
+      }
+    }
+    //the total number;
+    var all=tp+tn+fp+fn;
+    // the actual number;
+    var postive=tp+fn;
+    var negative=tn+fp;
+    //the above the throeshold. and below the thoreshold.
+    var above=tp+fp;
+    var below=tn+fn;
+    // the actuall positive portion of the total number.
+    var pos_ratio=postive/all;
+    var neg_ratio=negative/all;
+
+    var tp_above=tp/above;
+    var fp_above=fp/above;
+    var tn_below=tn/below;
+    var fn_below=fn/below;
+
+    var entropy=(-1)*(pos_ratio*log2(pos_ratio)+neg_ratio*log2(neg_ratio));
+    entropy_array.push(entropy);
+    var change=(-1)*(above/all)*(tp_above*log2(tp_above)+fp_above*log2(fp_above))+(-1)*(below/all)*(tn_below*log2(tn_below)+fn_below*log2(fn_below));
+    entropy_change.push(change);
+    // is the change is NaN then gain of information is 0.
+    if(isNaN(entropy-change)){
+        information_gain.push(0);
+      }else{
+        information_gain.push(entropy-change);
+      }
+    
+    other.push([tp,fp,tn,fn,tp_above,fp_above,tn_below,fn_below]);
+  }
+  
+  //auc=Math.abs(auc).toFixed(3);
+  return Math.max(...information_gain);
+}
+```
 
