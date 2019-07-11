@@ -173,7 +173,7 @@ function mljs_label_entropy(a,b)
 {
   //a is the label of fact.
   //b is the array of use probability to predict label.
-
+  //c is the begin entropy.
   var pro=[];
   var tprarr=[];
   var fprarr=[];
@@ -201,6 +201,15 @@ function mljs_label_entropy(a,b)
         fp++;
       }
     }
+    //
+    tpr=tp/(tp+fn);
+
+    fpr=fp/(tn+fp);
+
+    //
+    fprarr.push(fpr);
+    tprarr.push(tpr);
+
     //the total number;
     var all=tp+tn+fp+fn;
     // the actual number;
@@ -231,9 +240,20 @@ function mljs_label_entropy(a,b)
     
     other.push([tp,fp,tn,fn,tp_above,fp_above,tn_below,fn_below]);
   }
-  
+  var auc=0;
+  for(var i=1;i<fprarr.length;i++){
+    auc+=(tprarr[i]+tprarr[i-1])*(fprarr[i]-fprarr[i-1])/2;
+  }
+  //auc=auc.toFixed(3);
   //auc=Math.abs(auc).toFixed(3);
-  return Math.max(...information_gain);
+  auc=Math.abs(auc);
+  if(auc<0.5)
+  {
+    auc=1-auc;
+  }
+  auc=auc.toFixed(3)*1;
+  var information_gain_value=Math.max(...information_gain);
+  return [auc,information_gain_value];
 }
 ```
 
