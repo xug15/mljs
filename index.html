@@ -371,6 +371,9 @@ function mljs_label_entropy(a,b)
   var entropy_change=[];
   var information_gain=[];
   var other=[];
+  var gain_ratio_array=[];
+  var iv_array=[];
+  var gini_index_array=[];
   for(var i=0;i<b.length;i++){
     // each cut off label is b[i]
     var tp=0;
@@ -416,19 +419,38 @@ function mljs_label_entropy(a,b)
     var fp_above=fp/above;
     var tn_below=tn/below;
     var fn_below=fn/below;
+    //gini index begin
+    var gini_index=(1-Math.pow((tp/above),2)-Math.pow((fp/above),2))*(above/all)+(1-Math.pow((tn/below),2)-Math.pow((fn/below),2))*(below/all);
+    if(isNaN(gini_index)){
+      gini_index=10;
+    }
+    gini_index_array.push(gini_index);
+    //gini index end
 
+    //iv
+    var iv=(-1)*(above/all)*log2(above/all)+(-1)*(below/all)*log2(below/all);
+    //entropy
     var entropy=(-1)*(pos_ratio*log2(pos_ratio)+neg_ratio*log2(neg_ratio));
     entropy_array.push(entropy);
+    //the entropy of classification.
     var change=(-1)*(above/all)*(tp_above*log2(tp_above)+fp_above*log2(fp_above))+(-1)*(below/all)*(tn_below*log2(tn_below)+fn_below*log2(fn_below));
     entropy_change.push(change);
     // is the change is NaN then gain of information is 0.
+    var information=0;
     if(isNaN(entropy-change)){
-        information_gain.push(0);
+        information=0;
       }else{
-        information_gain.push(entropy-change);
+        information=entropy-change;
       }
-    
-    other.push([tp,fp,tn,fn,tp_above,fp_above,tn_below,fn_below]);
+      information_gain.push(information);
+      if(isNaN(iv)){
+        iv=1;
+      }
+      //
+      iv_array.push(iv);
+      var gain_ratio=information/iv;
+      gain_ratio_array.push(gain_ratio);
+      other.push(iv);
   }
   var auc=0;
   for(var i=1;i<fprarr.length;i++){
@@ -441,9 +463,11 @@ function mljs_label_entropy(a,b)
   {
     auc=1-auc;
   }
-  auc=auc.toFixed(3)*1;
-  var information_gain_value=Math.max(...information_gain);
-  return [auc,information_gain_value];
+  auc=auc.toFixed(4)*1;
+  var information_gain_value=Math.max(...information_gain).toFixed(4)*1;
+  var gain=Math.max(...gain_ratio_array).toFixed(4)*1;
+  var gini_index_min=Math.min(...gini_index_array).toFixed(4)*1;
+  return [auc,information_gain_value,gain,gini_index_min];
 }
 
 //
