@@ -13,7 +13,7 @@
 * [2. train model.](code_md/train.md) 
 * [3. model and probability.](code_md/probability.md) 
 * [4. mljs validate and Performance: AUC and ROC](code_md/validate.md) 
-* [5. Performance: Entropy](code_md/entropy_code.md) 
+* [5. Performance: AUC,  information gain (Entropy), gain ratio Gini index ](code_md/entropy_code.md) 
 * [6. Performance: Gini index](code_md/giniindex_code.md) 
 ---
 * [7. Newton method code](code_md/newtoncode.md) 

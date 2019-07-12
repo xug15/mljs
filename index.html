@@ -20,8 +20,13 @@
     <script src="jquery/jquery.js"></script>
     <link  href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
   -->
-   
+
     <script src="jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="datatable/jquery.dataTables.js"></script>
+    <link  href="datatable/jquery.dataTables.css" rel="stylesheet">
+   
+
     <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <link  href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
    
@@ -184,6 +189,11 @@ margin: 10px 0px;
       </div>
     </div>
     <div class="predict_pca" style="display:none;">
+      <div class="row" >
+        <div class="col-xs-12 col-sm-10" >
+          <h2 style="text-align: center">PCA result:</h2>
+        </div>
+      </div>
     <div class="row" >
       <div class="col-xs-12 col-sm-6" >
               <button class="btn btn-info maringtop" onclick="download_pca()"><span class="glyphicon glyphicon-download-alt"></span>
@@ -238,6 +248,12 @@ margin: 10px 0px;
 
   </div><!--predict_pca-->
   <div class="predict_logistic" style="display:none;">
+    <div class="row" >
+      <div class="col-xs-12 col-sm-10" >
+        <h2 style="text-align: center">Logistic Regression result</h2>
+      </div><!--col-xs-12-->
+    </div><!--row-->
+
       <div class="row" >
           <div class="col-xs-12 col-sm-6" >
               <label>Logistic Regression Prediction data</label>
@@ -336,7 +352,9 @@ margin: 10px 0px;
     </div><!--row-->
 
     <div class="row" >
-      <div class="col-xs-12 col-sm-6" id="feature_performance">
+      <div class="col-xs-12 col-sm-10" style="margin:5px;  display:none;padding:10px;" id="feature_performance">
+        <h2 style="text-align: center;">Feature evaluation result</h2>
+        <div id="feature_performance_table" style="border:1px solid #d1d1d1; margin:5px; padding:10px;"></div>
       </div><!--col-xs-12-->
     </div><!--row-->
 
@@ -666,7 +684,7 @@ for(var i=0;i<feature_array.length;i++)
     feature_entropy[i]=mljs_label_entropy(label,feature_label[i])
   }
 console.log(feature_entropy);
-table_html='<table class="table"> \
+table_html='<table class="table"  id="feature_evalue_table"> \
   <thead> \
     <tr> \
       <th scope="col">Number</th> \
@@ -688,7 +706,9 @@ for(var i=0;i<feature_entropy.length;i++)
     </tr>';
   }
   table_html+='</tbody></table>';
-  document.getElementById("feature_performance").innerHTML = table_html;
+  document.getElementById("feature_performance").style.display = "block";
+  document.getElementById("feature_performance_table").innerHTML = table_html;
+  $('#feature_evalue_table').DataTable();
   
 }
 

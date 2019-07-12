@@ -1,4 +1,4 @@
-# 5. Performance: Entropy
+# 5. Performance: AUC,  information gain (Entropy), gain ratio Gini index 
 
 ## Function
 **List**  
@@ -146,21 +146,62 @@ function entropy(arr2){
 function feature_evalue()
 {
 //get data;
-var data= getinforvalue('training_decision');
+data= getinforvalue('training_decision');
 var label=getinforlabel('label_decision');
 var label_unique=sort_unique(label);
 //
 var out=sort_count(label);
 console.log(out);
-entropy(out[1]);
-
-/*
-merge_array=merge_matrix(data,label);
-//console.log(merge_array);
-merge_array=shufflearray(merge_array);
-//console.log(merge_array);
-*/
-
+console.log(entropy(out[1]));
+feature_array=transforme_array(data);
+feature_cutoff_array=[];
+for(var i=0;i<feature_array.length;i++)
+{
+  feature_cutoff_array.push([]);
+  feature_cutoff_array[i]=cutoff(feature_array[i]);
+}
+feature_label=[];
+for(var i=0;i<feature_array.length;i++)
+{
+  feature_label.push([]);
+  feature_label[i]=mljs_determin_label(feature_array[i],feature_cutoff_array[i]);
+}
+feature_auc=[];
+feature_entropy=[];
+for(var i=0;i<feature_array.length;i++)
+  {
+    feature_auc.push([]);
+    feature_entropy.push([]);
+    feature_auc[i]=mljs_label_cross(label,feature_label[i]);
+    feature_entropy[i]=mljs_label_entropy(label,feature_label[i])
+  }
+console.log(feature_entropy);
+table_html='<table class="table"  id="feature_evalue_table"> \
+  <thead> \
+    <tr> \
+      <th scope="col">Number</th> \
+      <th scope="col">AUC</th> \
+      <th scope="col">Information Gain</th> \
+      <th scope="col">Gain ratio</th> \
+      <th scope="col">Gini index</th> \
+    </tr> \
+  </thead> \
+  <tbody>';
+for(var i=0;i<feature_entropy.length;i++)
+  {
+    table_html+='<tr> \
+      <th scope="row">'+feature_name_array[i]+'</th> \
+      <td>'+ feature_entropy[i][0]+'</td> \
+      <td>'+ feature_entropy[i][1]+'</td> \
+      <td>'+ feature_entropy[i][2]+'</td> \
+      <td>'+ feature_entropy[i][3]+'</td> \
+    </tr>';
+  }
+  table_html+='</tbody></table>';
+  document.getElementById("feature_performance").style.display = "block";
+  document.getElementById("feature_performance_table").innerHTML = table_html;
+  $('#feature_evalue_table').DataTable();
+  
 }
 ```
 
