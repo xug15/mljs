@@ -92,7 +92,6 @@ function getinforvalue(trainid){
   The header will be given to the feature name array.
   Other data will be put into the dataarr.
   */
- 
     if(i==0 & test_feature_name)
     {
       feature_name_array=row;
