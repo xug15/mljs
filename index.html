@@ -374,6 +374,10 @@ margin: 10px 0px;
 function getinforvalue(trainid){
   //var trainid='training_decision';
   //get the html data
+  /*
+  1. datacontents is test the data from box or upload file. If the upload file was found, it would be first used.
+  2. if the file is empty, we will use the box value.
+  */ 
   if(typeof datacontents==="undefined"){
     var decision_data=document.getElementById(trainid).value;
   }else if(datacontents.length>0){
@@ -390,6 +394,10 @@ function getinforvalue(trainid){
   var dataarr=[];
   var dataarr2=[];
   feature_name_array=[];
+  /*
+  If the upload file was not cantained the name of features.
+  We will use the number to represent the each of features. 
+  */
   if(!test_feature_name){
     for(var i=0;i<data[0].length;i++)
     {
@@ -399,6 +407,10 @@ function getinforvalue(trainid){
 
   for(var i=0;i<data.length;i++){
     var row=[];
+    /*
+    If the name of header is provided, and the first line will be treated like name array.
+    Other will betreat like the numbers.
+    */
    if(i==0 & test_feature_name)
    {
     row=data[i].split(',').map(function(item) 
@@ -414,9 +426,11 @@ function getinforvalue(trainid){
     
     
 
-  //row=row.concat(row2);
-    
-    //dataarr2.push(row2);
+  /*
+  The header will be given to the feature name array.
+  Other data will be put into the dataarr.
+  */
+ 
     if(i==0 & test_feature_name)
     {
       feature_name_array=row;
@@ -429,10 +443,7 @@ function getinforvalue(trainid){
     
   }
   //console.log(dataarr);
-  //console.log(dataarr2);
-
   return dataarr;
-
 }
 // getinforvalue('training_decision')
 // a like

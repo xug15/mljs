@@ -42,6 +42,10 @@ validateLabel=valide[1];
 function getinforvalue(trainid){
   //var trainid='training_decision';
   //get the html data
+  /*
+  1. datacontents is test the data from box or upload file. If the upload file was found, it would be first used.
+  2. if the file is empty, we will use the box value.
+  */ 
   if(typeof datacontents==="undefined"){
     var decision_data=document.getElementById(trainid).value;
   }else if(datacontents.length>0){
@@ -50,23 +54,28 @@ function getinforvalue(trainid){
     var decision_data=document.getElementById(trainid).value;
   }
   var test_feature_name=document.getElementById('feature_name').checked;
-  
   //decision_label=document.getElementById("label_decision").value;
-
   //transforme data formate.
   var data=decision_data.split('\n');
   var dataarr=[];
   var dataarr2=[];
   feature_name_array=[];
+  /*
+  If the upload file was not cantained the name of features.
+  We will use the number to represent the each of features. 
+  */
   if(!test_feature_name){
     for(var i=0;i<data[0].length;i++)
     {
       feature_name_array.push(i);
     }
   }
-
   for(var i=0;i<data.length;i++){
     var row=[];
+    /*
+    If the name of header is provided, and the first line will be treated like name array.
+    Other will betreat like the numbers.
+    */
    if(i==0 & test_feature_name)
    {
     row=data[i].split(',').map(function(item) 
@@ -79,26 +88,28 @@ function getinforvalue(trainid){
       return parseFloat(item);
       });
    }
-    
-  //row=row.concat(row2);
-    
-    //dataarr2.push(row2);
+  /*
+  The header will be given to the feature name array.
+  Other data will be put into the dataarr.
+  */
+ 
     if(i==0 & test_feature_name)
     {
       feature_name_array=row;
     }else
     {
       dataarr.push(row);
+      //
     }
-  
-    
   }
   //console.log(dataarr);
-  //console.log(dataarr2);
-
   return dataarr;
-
 }
+// getinforvalue('training_decision')
+// a like
+// [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+// b (3) [Array(800), Array(800), Array(800)]
+// [[1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],...]
 ```
 **getinforlabel(lableid)**  
 > Use the div id get the label data.
