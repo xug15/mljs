@@ -26,8 +26,6 @@ for(var i=0;i<trainingData.length;i++)
   plot_roc(data,'roc_plot');
 ```
 
-
-
 **train_model(trainingData[0][1]);**
 > use the function train_model(trainingData[0][1]) to train the best model.  
 > this function use other functions.  
