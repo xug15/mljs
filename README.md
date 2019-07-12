@@ -11,7 +11,7 @@
 * [Outline](code_md/outline.md) 
 * [1. First get data from html.](code_md/getdata.md) 
 * [2. train model.](code_md/train.md) 
-* [3. model and probability.](code_md/probability.md) 
+* [3. model and probability, table .](code_md/probability.md) 
 * [4. mljs validate and Performance: AUC and ROC](code_md/validate.md) 
 * [5. Performance: AUC,  information gain (Entropy), gain ratio Gini index ](code_md/entropy_code.md) 
 * [6. Performance: Gini index](code_md/giniindex_code.md) 

@@ -7,6 +7,49 @@
 > a is the model
 > b is the validate data, were used to predict the probability.
 ```js
+function select_data_from_id()
+{
+
+//get data;
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+var label_unique=sort_unique(label);
+//console.log(label_unique);
+//merge_matrix()
+
+
+merge_array=merge_matrix(data,label);
+//console.log(merge_array);
+merge_array=shufflearray(merge_array);
+//console.log(merge_array);
+//
+var train_range_ratio=[0,1];
+var validate_range_ratio=[0,1];
+var train_range=[];
+var validate_range=[];
+var number=parseInt(train_range_ratio[1]*(data.length)) ;
+
+//train_range_ratio[1]*(data.length);
+train_range.push(parseInt(train_range_ratio[0]*(data.length)));
+train_range.push(parseInt(train_range_ratio[1]*(data.length)));
+//
+validate_range.push(parseInt(validate_range_ratio[0]*(data.length)));
+validate_range.push(parseInt(validate_range_ratio[1]*(data.length)));
+
+//
+var train=generate_train_validate_data(label_unique,train_range,merge_array);
+trainingData =train[0];
+trainingLabel=train[1];
+var valide=generate_train_validate_data(label_unique,validate_range,merge_array);
+validateData=valide[0];
+validateLabel=valide[1];
+
+/*
+model=train_model(trainingData[0][1]);
+proarr=model_data_probability(model,validateData[0][1]);
+rocarray=mljs_validate(proarr,validateLabel[0][1]);
+console.log(rocarray);
+*/
 var config_model='';
 var data=[];
 for(var i=0;i<trainingData.length;i++)
@@ -25,8 +68,41 @@ for(var i=0;i<trainingData.length;i++)
     //console.log(row);
     data.push(row);
   }
+  html_logistic_table='<table class="table"  id="logistic_table"> \
+  <thead> \
+    <tr> \
+      <th scope="col">Name</th> ';
+      for (var i=0;i<trainingData.length;i++)
+      {
+        html_logistic_table+='<th scope="col">Model '+i+' weight</th>';
+      }
+      html_logistic_table+='</tr> \
+  </thead> \
+  <tbody>';
+    for(j=0;j<feature_name_array.length;j++){
+      html_logistic_table+='<tr>\
+          <td>'+feature_name_array[j]+'</td> ';
+          for(i=0;i<trainingData.length;i++){
+            var name='model'+i;
+            html_logistic_table+='<td>'+ window[name].weight[j]+'</td>';
+          }
+          html_logistic_table+='</tr>';
+
+    }
+    html_logistic_table+='</tbody></table>';
+    
+    document.getElementById("result_logistic").innerHTML = html_logistic_table;
+    $('#logistic_table').DataTable({
+    dom: 'Bfrtip',
+        buttons: [
+             'csv', 'excel'
+        ]
+  });
+
   //console.log(data);
   plot_roc(data,'roc_plot');
+
+}
 ```
 
 ```js
