@@ -1,4 +1,6 @@
 # Logistic Regression
+* [Back Home](../README.md)
+
 ![](../image/logistic1.png)
 ![](../image/logistic2.png)
 ![](../image/logistic3.png)
