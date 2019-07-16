@@ -37,8 +37,27 @@ for(var i=0;i<data1.length;i++)
 ```
 
 ## Replace NA with mean
-```js
+* function array_mean_with_na(a)
+> Calucalte the mean of array with na.
 
+
+```js
+function array_mean_with_na(a){
+var counter=0;
+var sum=0;
+//Test the each element is NaN or null or not.
+  for(var i=0;i<a.length;i++)
+  {
+    if(isNaN(a[i]) | a[i]==null){
+      continue;
+      }else{//if not, then calculate the number of number and the total of numbers.
+        counter+=1;
+        sum+=a[i];
+      }
+  }
+  var average=sum/counter;
+  return average;
+}
 ```
 
 ## Replace NA with media

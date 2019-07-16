@@ -852,8 +852,23 @@ for(var i=0;i<data1.length;i++)
       }
     }
   }
+  feature_array=transforme_array(a2);
 }
-
+function array_mean_with_na(a){
+var counter=0;
+var sum=0;
+  for(var i=0;i<a.length;i++)
+  {
+    if(isNaN(a[i]) | a[i]==null){
+      continue;
+      }else{
+        counter+=1;
+        sum+=a[i];
+      }
+  }
+  var average=sum/counter;
+  return average;
+}
 </script>  
 
 
