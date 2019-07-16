@@ -9,29 +9,26 @@
 
 ## Replace NA with 0
 ```js
-function dealwithna()
+function dealwithna_replace_with_0()
 {
-//get data;
-data= getinforvalue('training_decision');
-var label=getinforlabel('label_decision');
-//deep copy
- data1=JSON.parse(JSON.stringify(data));
- data2=JSON.parse(JSON.stringify(data));
- data3=JSON.parse(JSON.stringify(data));
+  //get data;
+  var data= getinforvalue('training_decision');
+  var label=getinforlabel('label_decision');
+  //deep copy
+  data1=JSON.parse(JSON.stringify(data));
+
 //replace na with 0.
-for(var i=0;i<data1.length;i++)
-  {
-    for(var j=0;j<data1[i].length;j++)
+  for(var i=0;i<data1.length;i++)
     {
-      if(isNaN(data1[i][j]) | data1[i][j]==null){
-        data1[i][j]=0;
-        //console.log(i+' '+j);
+      for(var j=0;j<data1[i].length;j++)
+      {
+        if(isNaN(data1[i][j]) | data1[i][j]==null){
+          data1[i][j]=0;
+          //console.log(i+' '+j);
+        }
       }
     }
-  }
-  
-
-
+    return data1
 }
 
 ```
@@ -57,6 +54,40 @@ var sum=0;
   }
   var average=sum/counter;
   return average;
+}
+```
+
+```js
+function dealwithna_replace_with_mean()
+{
+  //get data;
+  var data= getinforvalue('training_decision');
+  var label=getinforlabel('label_decision');
+  //replace na with mean.
+  //1. transpose data matrix.
+  feature_array=transforme_array(data);
+  //deep copy the feature array.
+  feature_array_replace_mean=JSON.parse(JSON.stringify(feature_array));
+  //2. calculate each feature mean.
+  feature_mean_array=[];
+  for(var i=0;i<feature_array.length;i++)
+    {
+      feature_mean_array.push(array_mean_with_na(feature_array[i]));//push each feature mean to array.
+    }
+    //read each feature value array.
+    for(var i=0;i<feature_array_replace_mean.length;i++)
+    {
+      //loop each value in feature.
+      for(var j=0;j<feature_array_replace_mean[i].length;j++)
+      {
+        //test if the feature is na or null will be replaced with mean.
+        if(isNaN(feature_array_replace_mean[i][j]) | feature_array_replace_mean[i][j]==null)
+        {
+          feature_array_replace_mean[i][j]=feature_mean_array[i];
+        }
+      }
+    }
+  return feature_array_replace_mean;
 }
 ```
 
