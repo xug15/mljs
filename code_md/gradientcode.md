@@ -1,4 +1,6 @@
 # Gradient descent method 
+* [Back Home](../README.md)
+
 ### Dynamic learning ratio for train.
 ****
 >

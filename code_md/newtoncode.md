@@ -1,4 +1,6 @@
 # Newton method
+* [Back Home](../README.md)
+
 ### 
 ![](image/newton.png)
 
