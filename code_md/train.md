@@ -1,4 +1,6 @@
 # 2. train model
+* [Back Home](../README.md)
+
 > 1. use serial learning ratio with 100 iteration to test the best learning ratio.
 > 2. use the best learning ratio use serial iterations to select best iterations.
 > 3. use the best learning ratio and iteration to generate the model.
