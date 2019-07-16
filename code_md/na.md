@@ -90,7 +90,7 @@ function dealwithna_replace_with_mean()
 }
 ```
 
-## Replace NA with media
+## Replace NA with median
 
 * function array_median_with_na(a)
 * return the median of array.
