@@ -837,6 +837,30 @@ function dealwithna()
   
 }
 
+
+function dealwithna_replace_with_0()
+{
+  //get data;
+  var data= getinforvalue('training_decision');
+  var label=getinforlabel('label_decision');
+  //deep copy
+  var data1=transforme_array(data);
+
+//replace na with 0.
+  for(var i=0;i<data1.length;i++)
+    {
+      for(var j=0;j<data1[i].length;j++)
+      {
+        if(isNaN(data1[i][j]) | data1[i][j]==null){
+          data1[i][j]=0;
+          //console.log(i+' '+j);
+        }
+      }
+    }
+    return data1
+}
+
+//
 function array_mean_with_na(a){
 var counter=0;
 var sum=0;
@@ -852,27 +876,8 @@ var sum=0;
   var average=sum/counter;
   return average;
 }
-function dealwithna_replace_with_0()
-{
-  //get data;
-  var data= getinforvalue('training_decision');
-  var label=getinforlabel('label_decision');
-  //deep copy
-  data1=JSON.parse(JSON.stringify(data));
+//
 
-//replace na with 0.
-  for(var i=0;i<data1.length;i++)
-    {
-      for(var j=0;j<data1[i].length;j++)
-      {
-        if(isNaN(data1[i][j]) | data1[i][j]==null){
-          data1[i][j]=0;
-          //console.log(i+' '+j);
-        }
-      }
-    }
-    return data1
-}
 function dealwithna_replace_with_mean()
 {
   //get data;
@@ -904,6 +909,67 @@ function dealwithna_replace_with_mean()
     }
   return feature_array_replace_mean;
 }
+//
+function array_median_with_na(a){
+  var median_array=[];
+//Test the each element is NaN or null or not.
+  for(var i=0;i<a.length;i++)
+  {
+    if(isNaN(a[i]) | a[i]==null){
+      continue;
+      }else{//if not, then calculate the number of number and the total of numbers.
+      median_array.push(a[i]);  
+      }
+  }
+  // sort the array with small to big.
+  media_array_sort=median_array.sort(function(a,b){return a-b});
+  //divide with 2 and get remainder.
+  if(media_array_sort.length%2==1){//odd number
+    var index=Math.round(media_array_sort.length/2)-1;
+    // get the median index
+    return media_array_sort[index];
+  }else{//even number.
+    var index=media_array_sort.length/2;
+    // get the middle
+    var index2=index-1;
+    var avg=(media_array_sort[index2]+media_array_sort[index])/2
+    return avg;
+  }
+  
+}
+//
+function dealwithna_replace_with_median()
+{
+  //get data;
+  var data= getinforvalue('training_decision');
+  var label=getinforlabel('label_decision');
+  //replace na with mean.
+  //1. transpose data matrix.
+  feature_array=transforme_array(data);
+  //deep copy the feature array.
+  feature_array_replace_median=JSON.parse(JSON.stringify(feature_array));
+  //2. calculate each feature mean.
+  feature_median_array=[];
+  for(var i=0;i<feature_array.length;i++)
+    {
+      feature_median_array.push(array_median_with_na(feature_array[i]));//push each feature mean to array.
+    }
+    //read each feature value array.
+    for(var i=0;i<feature_array_replace_median.length;i++)
+    {
+      //loop each value in feature.
+      for(var j=0;j<feature_array_replace_median[i].length;j++)
+      {
+        //test if the feature is na or null will be replaced with mean.
+        if(isNaN(feature_array_replace_median[i][j]) | feature_array_replace_median[i][j]==null)
+        {
+          feature_array_replace_median[i][j]=feature_median_array[i];
+        }
+      }
+    }
+  return feature_array_replace_median;
+}
+
 </script>  
 
 
