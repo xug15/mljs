@@ -160,12 +160,17 @@ function dealwithna_replace_with_median()
 ```
 
 ## Remove NA data
+### Remove feature
 ```js
 
 ```
 
-## Calculate NA Value with disdistance.
+### Remove sample
 ```js
+
+```
+## Calculate NA Value with disdistance.
+```js 
 
 ```
 

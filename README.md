@@ -6,6 +6,7 @@
 * [Linear regression](knowledge/linear.md)  
 * [Logistic Regression](knowledge/logistic.md)  
 * [Newton method](knowledge/newton.md)  
+* [K-means clusters](knowledge/kmean.md)  
 
 ## Code
 * [Outline](code_md/outline.md) 
