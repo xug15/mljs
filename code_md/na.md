@@ -19,11 +19,9 @@ function key_replace_with_median(){
 ```
 ## Replace NA with 0
 ```js
-function dealwithna_replace_with_0()
+function dealwithna_replace_with_0(data)
 {
-  //get data;
-  var data= getinforvalue('training_decision');
-  var label=getinforlabel('label_decision');
+
   //deep copy
   var data1=transforme_array(data);
 

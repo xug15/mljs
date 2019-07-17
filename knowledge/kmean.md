@@ -3,3 +3,4 @@
 
 
 ![](../image/k-mean-vector.png)
+![](../image/k-mean-vector2.png)
