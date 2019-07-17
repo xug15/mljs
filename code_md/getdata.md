@@ -55,7 +55,9 @@ function getinforvalue(trainid){
     var decision_data=document.getElementById(trainid).value;
   }
   var test_feature_name=document.getElementById('feature_name').checked;
+  
   //decision_label=document.getElementById("label_decision").value;
+
   //transforme data formate.
   var data=decision_data.split('\n');
   var dataarr=[];
@@ -71,6 +73,7 @@ function getinforvalue(trainid){
       feature_name_array.push(i);
     }
   }
+
   for(var i=0;i<data.length;i++){
     var row=[];
     /*
@@ -103,7 +106,19 @@ function getinforvalue(trainid){
     }
   }
   //console.log(dataarr);
-  return dataarr;
+  if(typeof(key_replace)=="undefined")
+  {
+    return dataarr;
+  }else if(key_replace=="mean") 
+  {
+    var array_mean=dealwithna_replace_with_mean(dataarr);
+    return array_mean;
+  }else if(key_replace=="median") 
+  {
+    var array_median=dealwithna_replace_with_median(dataarr);
+    return array_median;
+  }
+  
 }
 // getinforvalue('training_decision')
 // a like
