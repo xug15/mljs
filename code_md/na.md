@@ -93,7 +93,7 @@ function dealwithna_replace_with_mean(data)
         }
       }
     }
-  return feature_array_replace_mean;
+  return transforme_array(feature_array_replace_mean);
 }
 ```
 
@@ -164,7 +164,7 @@ function dealwithna_replace_with_median(data)
         }
       }
     }
-  return feature_array_replace_median;
+  return transforme_array(feature_array_replace_median);
 }
 ```
 
