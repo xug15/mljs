@@ -190,7 +190,7 @@ margin: 10px 0px;
 
     <div class="row" >
       <div class="col-xs-12 col-sm-3" >
-        <button class="btn btn-primary button" onclick="key_replace_with_0()"><span class="glyphicon glyphicon-play"></span>Replace NA with mean</button>
+        <button class="btn btn-primary button" onclick="key_replace_with_mean()"><span class="glyphicon glyphicon-play"></span>Replace NA with mean</button>
       </div>
       <div class="col-xs-12 col-sm-3" >
         <button class="btn btn-primary button" onclick="key_replace_with_median()"><span class="glyphicon glyphicon-play"></span>Replace NA with median</button>
@@ -408,8 +408,8 @@ margin: 10px 0px;
 <script src="ml/mljsxg.js"></script>
 
 <script type="text/javascript">
-function key_replace_with_0(){
-  key_replace='0';
+function key_replace_with_mean(){
+  key_replace='mean';
 }
 function key_replace_with_median(){
   key_replace='median';  
@@ -481,7 +481,19 @@ function getinforvalue(trainid){
     }
   }
   //console.log(dataarr);
-  return dataarr;
+  if(typeof(key_replace)=="undefined")
+  {
+    return dataarr;
+  }else if(key_replace=="mean") 
+  {
+    var array_mean=dealwithna_replace_with_mean(dataarr);
+    return array_mean;
+  }else if(key_replace=="median") 
+  {
+    var array_median=dealwithna_replace_with_median(dataarr);
+    return array_median;
+  }
+  
 }
 // getinforvalue('training_decision')
 // a like

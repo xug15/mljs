@@ -1,10 +1,6 @@
 # Processing NA
 * [Back Home](../README.md)
 
-* We will use [1. First get data from html.](getdata.md) code.
-* 1. getinforvalue('training_decision');
-* 2. getinforlabel('label_decision');
--------
 * Use  [5. Performance: AUC,  information gain (Entropy), gain ratio Gini index ](entropy_code.md) 
 * 1. Function transforme_array(c);
 
