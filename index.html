@@ -188,6 +188,15 @@ margin: 10px 0px;
       </div>
     </div>
 
+    <div class="row" >
+      <div class="col-xs-12 col-sm-3" >
+        <button class="btn btn-primary button" onclick="key_replace_with_0()"><span class="glyphicon glyphicon-play"></span>Replace NA with mean</button>
+      </div>
+      <div class="col-xs-12 col-sm-3" >
+        <button class="btn btn-primary button" onclick="key_replace_with_median()"><span class="glyphicon glyphicon-play"></span>Replace NA with median</button>
+      </div>
+    </div>
+
     <div class="row" style="margin-top:5px;">
       <div class="col-xs-12 col-sm-6" >
         <input type="file" id="file-input" >
@@ -399,6 +408,13 @@ margin: 10px 0px;
 <script src="ml/mljsxg.js"></script>
 
 <script type="text/javascript">
+function key_replace_with_0(){
+  key_replace='0';
+}
+function key_replace_with_median(){
+  key_replace='median';  
+}
+
 function getinforvalue(trainid){
   //var trainid='training_decision';
   //get the html data
@@ -878,11 +894,9 @@ var sum=0;
 }
 //
 
-function dealwithna_replace_with_mean()
+function dealwithna_replace_with_mean(data)
 {
   //get data;
-  var data= getinforvalue('training_decision');
-  var label=getinforlabel('label_decision');
   //replace na with mean.
   //1. transpose data matrix.
   feature_array=transforme_array(data);
@@ -938,12 +952,12 @@ function array_median_with_na(a){
   
 }
 //
-function dealwithna_replace_with_median()
+function dealwithna_replace_with_median(data)
 {
-  //get data;
-  var data= getinforvalue('training_decision');
-  var label=getinforlabel('label_decision');
-  //replace na with mean.
+  /*
+  sample1: [1,2,3]
+  sample2: [1,2,3]
+  */
   //1. transpose data matrix.
   feature_array=transforme_array(data);
   //deep copy the feature array.

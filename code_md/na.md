@@ -8,7 +8,15 @@
 * Use  [5. Performance: AUC,  information gain (Entropy), gain ratio Gini index ](entropy_code.md) 
 * 1. Function transforme_array(c);
 
-
+## Set  key_replace value
+```js
+function key_replace_with_0(){
+  key_replace='0';
+}
+function key_replace_with_median(){
+  key_replace='median';  
+}
+```
 ## Replace NA with 0
 ```js
 function dealwithna_replace_with_0()
@@ -59,11 +67,14 @@ var sum=0;
 ```
 
 ```js
-function dealwithna_replace_with_mean()
+function dealwithna_replace_with_mean(data)
 {
   //get data;
-  var data= getinforvalue('training_decision');
-  var label=getinforlabel('label_decision');
+    /*
+  sample1: [1,2,3]
+  sample2: [1,2,3]
+  [[1,2,3],[1,2,3]]
+  */
   //replace na with mean.
   //1. transpose data matrix.
   feature_array=transforme_array(data);
@@ -128,12 +139,14 @@ function array_median_with_na(a){
 ```
 
 ```js
-function dealwithna_replace_with_median()
+function dealwithna_replace_with_median(data)
 {
   //get data;
-  var data= getinforvalue('training_decision');
-  var label=getinforlabel('label_decision');
-  //replace na with mean.
+  /*
+  sample1: [1,2,3]
+  sample2: [1,2,3]
+  [[1,2,3],[1,2,3]]
+  */
   //1. transpose data matrix.
   feature_array=transforme_array(data);
   //deep copy the feature array.
