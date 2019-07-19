@@ -162,43 +162,89 @@ margin: 10px 0px;
     </div>
 
     <div class="row" >
-      <div class="col-xs-12 col-sm-3" >
-        <button class="btn btn-primary button" onclick="key_replace_with_mean()"><span class="glyphicon glyphicon-play"></span>Replace NA with mean</button>
-      </div>
-      <div class="col-xs-12 col-sm-3" >
-        <button class="btn btn-primary button" onclick="key_replace_with_median()"><span class="glyphicon glyphicon-play"></span>Replace NA with median</button>
-      </div>
-    </div>
+        <div class="col-xs-12 col-sm-6" >
+            <div class="panel panel-default">
+                <div class="panel-heading">Data preprocessing</div>
+                <div class="panel-body">
+                    <div class="row" style="margin:0;">
 
-    <div class="row" >
-      <div class="col-xs-12 col-sm-6" >
-        <button class="btn btn-primary button" onclick="train_pca()"><span class="glyphicon glyphicon-play"></span>PCA analysis</button>
-      </div>
-    </div>
-    <div class="row" >
-      <div class="col-xs-12 col-sm-6" >
-        <button class="btn btn-primary button" onclick="train_logistic()"><span class="glyphicon glyphicon-play"></span>Logistic Regression Training</button>
-      </div>
-    </div>
-    <div class="row" >
-      <div class="col-xs-12 col-sm-6" >
-        <button class="btn btn-primary button" onclick="train_decision()"><span class="glyphicon glyphicon-play"></span>Decision Tree Training</button>
-      </div>
-    </div>
+                        <div class="col-xs-12 col-sm-6" >
+                          <button class="btn btn-primary button" onclick="key_replace_with_mean()"><span class="glyphicon glyphicon-play"></span>Replace NA with mean</button>
+                        </div>
+                        <div class="col-xs-12 col-sm-6" >
+                          <button class="btn btn-primary button" onclick="key_replace_with_median()"><span class="glyphicon glyphicon-play"></span>Replace NA with median</button>
+                        </div>
+              
+                      </div><!--row-->
+
+                </div><!--panel -->
+            </div><!--panel--->
+
+        </div><!--col-xs-12 col-sm-3 -->
+    </div><!--row-->
     
     <div class="row" >
-      <div class="col-xs-12 col-sm-6" >
-        <button class="btn btn-primary button" onclick="train_randomforest()"><span class="glyphicon glyphicon-play"></span>Random Forest Training</button>
-      </div>
-    </div>
+        <div class="col-xs-12 col-sm-6" >
+            <div class="panel panel-default">
+                <div class="panel-heading">Dimension reduction</div>
+                <div class="panel-body">
+                    <div class="row" style="margin:0;">
+                        <div class="col-xs-12 col-sm-12" >
+                          <button class="btn btn-primary button" onclick="train_pca()"><span class="glyphicon glyphicon-play"></span>PCA analysis</button>
+                        </div>
+                      </div>
+
+                </div><!--panel -->
+            </div><!--panel--->
+
+        </div><!--col-xs-12 col-sm-3 -->
+    </div><!--row-->
 
     <div class="row" >
-      <div class="col-xs-12 col-sm-6" >
-        <button class="btn btn-primary button" onclick="feature_evalue()"><span class="glyphicon glyphicon-play"></span>Feature evaluation</button>
-      </div>
-    </div>
+        <div class="col-xs-12 col-sm-6" >
+            <div class="panel panel-default">
+                <div class="panel-heading">Feature evaluation</div>
+                <div class="panel-body">
+                    <div class="row" style="margin:0;">
+                        <div class="col-xs-12 col-sm-12" >
+                            <button class="btn btn-primary button" onclick="feature_evalue()"><span class="glyphicon glyphicon-play"></span>Feature evaluation Start</button>
+                          </div>
+                      </div>
 
+                </div><!--panel -->
+            </div><!--panel--->
 
+        </div><!--col-xs-12 col-sm-3 -->
+    </div><!--row-->
+
+    <div class="row" >
+        <div class="col-xs-12 col-sm-6" >
+            <div class="panel panel-default">
+                <div class="panel-heading">Classification</div>
+                <div class="panel-body">
+                    <div class="row" style="margin:0;">
+                        <div class="col-xs-12 col-sm-12" >
+                            <button class="btn btn-primary button" onclick="train_logistic()"><span class="glyphicon glyphicon-play"></span>Logistic Regression Training</button>
+                          </div>
+                      </div>
+
+                      <div class="row" style="margin:0;">
+                          <div class="col-xs-12 col-sm-12" >
+                              <button class="btn btn-primary button" onclick="train_decision()"><span class="glyphicon glyphicon-play"></span>Decision Tree Training</button>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin:0;">
+                            <div class="col-xs-12 col-sm-12" >
+                                <button class="btn btn-primary button" onclick="train_randomforest()"><span class="glyphicon glyphicon-play"></span>Random Forest Training</button>
+                              </div>
+                          </div>
+
+                </div><!--panel -->
+            </div><!--panel--->
+
+        </div><!--col-xs-12 col-sm-3 -->
+    </div><!--row-->
 
     <div class="row" style="margin-top:5px;">
       <div class="col-xs-12 col-sm-6" >
