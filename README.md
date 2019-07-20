@@ -10,16 +10,17 @@
 
 ## Code
 * [Outline](code_md/outline.md) 
-* [1. First get data from html.](code_md/getdata.md) 
-* [2. train model.](code_md/train.md) 
-* [3. model and probability, table .](code_md/probability.md) 
-* [4. mljs validate and Performance: AUC and ROC](code_md/validate.md) 
-* [5. Performance: AUC,  information gain (Entropy), gain ratio Gini index ](code_md/entropy_code.md) 
-* [6. Processing NA](code_md/na.md) 
+* [1. First get data from html.](code_md/1.getdata.md) 
+* [2. train model.](code_md/2.train.md) 
+* [3. model and probability, table .](code_md/3.probability.md) 
+* [4. mljs validate and Performance: AUC and ROC](code_md/4.validate.md) 
+* [5. Performance: AUC,  information gain (Entropy), gain ratio Gini index ](code_md/5.entropy_code.md) 
+* [6. Processing NA](code_md/6.na.md) 
+* [7. K-mean clustering](code_md/7.kmean-cluster.md) 
 ---
-* [7. Newton method code](code_md/newtoncode.md) 
-* [8. Gradient descent method code](code_md/gradientcode.md) 
-* [9. plot](code_md/plot.md) 
+* [a. Newton method code](code_md/a.newtoncode.md) 
+* [b. Gradient descent method code](code_md/b.gradientcode.md) 
+* [c. plot](code_md/c.plot.md) 
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
 
