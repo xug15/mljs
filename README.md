@@ -1,12 +1,12 @@
 # mljs
 ## Basic knowledge.
 
-* [1.AUC](knowledge/a.AUC.md)  
-* [2.Entropy and Gini index](knowledge/b.entropy.md)  
-* [3.Linear regression](knowledge/c.linear.md)  
-* [4.Logistic Regression](knowledge/d.logistic.md)  
-* [5.Newton method](knowledge/e.newton.md)  
-* [6.K-means clusters](knowledge/f.kmean.md)  
+* [1. AUC](knowledge/a.AUC.md)  
+* [2. Entropy and Gini index](knowledge/b.entropy.md)  
+* [3. Linear regression](knowledge/c.linear.md)  
+* [4. Logistic Regression](knowledge/d.logistic.md)  
+* [5. Newton method](knowledge/e.newton.md)  
+* [6. K-means clusters](knowledge/f.kmean.md)  
 
 ## Code
 * [Outline](code_md/outline.md) 
