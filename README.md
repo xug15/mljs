@@ -20,7 +20,8 @@
 ---
 * [a. Newton method code](code_md/a.newtoncode.md) 
 * [b. Gradient descent method code](code_md/b.gradientcode.md) 
-* [c. plot](code_md/c.plot.md) 
+* [c. Plot](code_md/c.plot.md) 
+* [d. Sort, Min, min](code_md/d.sort.md) 
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
 
