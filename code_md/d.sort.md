@@ -1,4 +1,4 @@
-# Sort, Min, min mean
+# Sort, Min, min, mean, median
 * [Back Home](../README.md)
 
 ## Sort array, small to big.
@@ -91,7 +91,7 @@ mean_array(data);
 ## median
 ```js
 data=[1,11,2,33,4,56];
-function median_array(median_array){
+function median(median_array){
       media_array_sort=median_array.sort(function(a,b){return a-b});
   //divide with 2 and get remainder.
   if(media_array_sort.length%2==1){//odd number
