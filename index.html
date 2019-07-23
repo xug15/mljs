@@ -501,7 +501,37 @@ function get_Random_element_array(data,num){
     }
     return out_array;
 }
+function distance(a,b)
+{
+    /*
+    a is the center
+    b is the 
+    */
+    var dis=0;
+    for(var i=0;i<a.length;i++)
+    {
+        var disa=a[i]-b[i];
+        var disa=Math.pow(disa,2);
+        dis+=disa;
+    }
+    dis=Math.pow(dis,0.5);
+    return dis;
+}
 
+function distance_one_array(a,b){
+    /*
+    a: one element,like[1,2]
+    b: array with server element, like [[2,3],[1,1]...]
+    */
+    var disarr=[];
+    for(var i=0;i<b.length;i++)
+    {
+        var dis=distance(a,b[i]);
+        disarr.push(dis);
+    }
+    return disarr;
+}
+c=[[1,1],[1,2],[2,1],[2,2]];
 
 </script>  
 
