@@ -1,4 +1,4 @@
-# Sort, Min, min
+# Sort, Min, min mean
 * [Back Home](../README.md)
 
 ## Sort array, small to big.
@@ -57,5 +57,57 @@ function indexOfMin(arr) {
 }
 indexOfMin(data);
 ```
+## return the mean of array
+```js
+data=[[1,4],[2,44],[0,21]];
+function mean_array(a)
+    {
+        var counter=data.length;
+        var mean_array=[];
+        for(j=0;j<a[0].length;j++)
+                    {
+                        mean_array.push(0);
+                    }
+        //console.log(mean_array);
+        for(i=0;i<counter;i++)
+            {
+                for(j=0;j<a[i].length;j++)
+                    {
+                        mean_array[j]+=a[i][j];
+                    }
+            }
+        //console.log(mean_array); 
+        for(var i=0;i<mean_array.length;i++)
+            {
+            mean_array[i]=mean_array[i]/counter;
+            }
+        //console.log(mean_array);   
+        return mean_array;   
+    }
+
+mean_array(data);
+```
+
+## median
+```js
+data=[1,11,2,33,4,56];
+function median_array(median_array){
+      media_array_sort=median_array.sort(function(a,b){return a-b});
+  //divide with 2 and get remainder.
+  if(media_array_sort.length%2==1){//odd number
+    var index=Math.round(media_array_sort.length/2)-1;
+    // get the median index
+    return media_array_sort[index];
+  }else{//even number.
+    var index=media_array_sort.length/2;
+    // get the middle
+    var index2=index-1;
+    var avg=(media_array_sort[index2]+media_array_sort[index])/2
+    return avg;
+    }
+}
+median_array(data);
+```
+
 
 
