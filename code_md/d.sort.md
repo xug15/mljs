@@ -62,7 +62,7 @@ indexOfMin(data);
 data=[[1,4],[2,44],[0,21]];
 function mean_array(a)
     {
-        var counter=data.length;
+        var counter=a.length;
         var mean_array=[];
         for(j=0;j<a[0].length;j++)
                     {
@@ -86,6 +86,11 @@ function mean_array(a)
     }
 
 mean_array(data);
+```
+
+### mean array
+```js
+
 ```
 
 ## median

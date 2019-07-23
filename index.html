@@ -550,32 +550,85 @@ function indexOfMin(arr) {
     return minIndex;
 }
 
-function kmean_cluster(a,b)
+function mean_array(a)
+  {
+        var counter=a.length;
+        var mean_array=[];
+        for(j=0;j<a[0].length;j++)
+                    {
+                        mean_array.push(0);
+                    }
+        //console.log(mean_array);
+        for(i=0;i<counter;i++)
+            {
+                for(j=0;j<a[i].length;j++)
+                    {
+                        mean_array[j]+=a[i][j];
+                    }
+            }
+        //console.log(mean_array); 
+        for(var i=0;i<mean_array.length;i++)
+            {
+            mean_array[i]=mean_array[i]/counter;
+            }
+        //console.log(mean_array);   
+        return mean_array;   
+  }
+
+function distance_array_array(a,b)
+{
+    /*
+    a: one element,like[[2,3],[1,1]...]
+    b: array with server element, like [[2,3],[1,1]...]
+    */
+    var disarr=[];
+    for(var i=0;i<b.length;i++)
+    {
+        var dis=distance(a[i],b[i]);
+        disarr.push(dis);
+    }
+    var sum=0;
+    for(var i=0;i<disarr.length;i++)
+    {
+        sum+=disarr[i];
+    }
+    var agv=sum/disarr.length;
+    return agv;
+}
+
+  function kmean_cluster_one(a,b)
 {
     //a: is array 
     //b: is the number of clusters.
     
     //1. Generate the b element as the inital points.
     var center_array=get_Random_element_array(a,b);
+    var center_array_new=[];
+
     //2. Generate the b cluster array.
     var cluster_array=[];
+
+    //3. add element into array.
     for(var i=0;i<b;i++)
         {
             cluster_array.push([]);
         }
+
     //loop each a element. calculate the distance between element and center. find the mini distance. Put into the relative cluster.
-    var dis_array=[];
     for(var i=0;i<a.length;i++)
         {   
             var dis=distance_one_array(a[i],center_array);
             var min_index=indexOfMin(dis);
             cluster_array[min_index].push(a[i]);
-            console.log(dis);
-            console.log(min_index);
-            dis_array.push(distance_one_array(a[i],center_array));
         }
+        for(var i=0;i<cluster_array.length;i++)
+        {
+          center_array_new.push(mean_array(cluster_array[i]));
+        }
+    var distance_value=distance_array_array(center_array_new,center_array);
+    //
+    return [cluster_array,center_array_new,distance_value];
 
-    return [center_array,dis_array,cluster_array];
 }
 
 data=[[1,1,1,1],[2,2,2,2],[3,3,3,3],[4,4,4,4],[1,2,1,1],[3,2,4,4]];
