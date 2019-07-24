@@ -17,6 +17,7 @@
 * [5. Performance: AUC,  information gain (Entropy), gain ratio Gini index ](code_md/5.entropy_code.md) 
 * [6. Processing NA](code_md/6.na.md) 
 * [7. K-mean clustering](code_md/7.kmean-cluster.md) 
+* [8. PCA](code_md/8.pca.md) 
 ---
 * [a. Newton method code](code_md/a.newtoncode.md) 
 * [b. Gradient descent method code](code_md/b.gradientcode.md) 
