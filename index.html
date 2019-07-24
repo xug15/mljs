@@ -856,6 +856,7 @@ function twodlabelplot(data3d, label,nameid)
     window['orderarray_'+i]=[];
     window['x_'+i]=[];
     window['y_'+i]=[];
+    window['z_'+i]=[];
     for(var j=0;j<label.length;j++){
       if(label[j]==label_unique[i])
       {
@@ -870,6 +871,7 @@ function twodlabelplot(data3d, label,nameid)
     {
       window['x_'+i].push(data3d[window['orderarray_'+i][j]][0]);
       window['y_'+i].push(data3d[window['orderarray_'+i][j]][1]);
+      window['z_'+i].push(data3d[window['orderarray_'+i][j]][2]);
     }
   }
   var data=[];
@@ -890,7 +892,7 @@ function twodlabelplot(data3d, label,nameid)
         },
         opacity: 0.8
       },
-    type: 'scatter3d'
+    type: 'scatter'
     }
     data.push(window['trace'+i]);
 
@@ -899,6 +901,33 @@ function twodlabelplot(data3d, label,nameid)
   var layout = {};
   Plotly.newPlot(nameid, data, layout);
 }
+
+function train_pca(){
+  //get the html data
+  pca_data_a=getinforvalue('training_decision');
+  pca_label_a=getinforlabel('label_decision');
+
+
+//Use new dataset to calculate the PCA module.
+pca=new ML.PCA(pca_data_a);
+
+//export the PCA module parameter.
+pca_result=pca.toJSON();
+
+
+predict_result=pca.predict(pca_data_a);
+
+//
+$(".predict_pca").show();
+
+//threedplot(pca_data_a,'3dplot');
+//threedplot(predict_result,'3dplotnew');
+
+  twodlabelplot(predict_result,pca_label_a,'3dplot');
+threedlabelplot(predict_result,pca_label_a,'3dplotnew');
+}
+
+
 </script>  
 
 
