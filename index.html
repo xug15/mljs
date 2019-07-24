@@ -596,6 +596,16 @@ function distance_array_array(a,b)
     return agv;
 }
 
+function sum_array(a)
+{
+    var sum=0;
+    for(var i=0;i<a.length;i++)
+    {
+        sum+=a[i];
+    }
+    return sum;
+}
+
 function kmean_cluster_one(a,b)
 {
     //a: is array 
@@ -632,7 +642,20 @@ function kmean_cluster_one(a,b)
     //calculate the average distance of array and array.
     var distance_value=distance_array_array(center_array_new,center_array);
     //return the cluster array and center array_new, and distance value.
-    return [cluster_array,center_array_new,distance_value];
+    //start sse.
+    var sse=0;
+    //each cluster
+    for(var i=0;i<cluster_array.length;i++)
+        {
+          var sse_array=[];
+            //console.log(cluster_array[i]);
+            //Calculate each cluster element distance from the mean vector.
+            sse_array=distance_one_array(center_array_new[i],cluster_array[i]);
+            //summary the distance.
+            sse+=sum_array(sse_array);
+            //console.log(sse);
+        }
+    return [cluster_array,center_array_new,distance_value,sse];
 }
 
 
@@ -648,8 +671,9 @@ function kmean_cluster_process(a,b,c)
     //c: is the center array.
     
     var center_array=c;
+    var center_array_new=[];
 
-       //2. Generate the b cluster array.
+    //2. Generate the b cluster array.
     var cluster_array=[];
 
     //3. add element into array.
@@ -675,9 +699,22 @@ function kmean_cluster_process(a,b,c)
         }
     //calculate the average distance of array and array.
     var distance_value=distance_array_array(center_array_new,center_array);
-    //return the cluster array and center array_new, and distance value.
-    return [cluster_array,center_array_new,distance_value];
+    //start sse.
+    var sse=0;
+    //each cluster
+    for(var i=0;i<cluster_array.length;i++)
+        {
+          var sse_array=[];
+            //console.log(cluster_array[i]);
+            //Calculate each cluster element distance from the mean vector.
+            sse_array=distance_one_array(center_array_new[i],cluster_array[i]);
+            //summary the distance.
+            sse+=sum_array(sse_array);
+            //console.log(sse);
+        }
+    return [cluster_array,center_array_new,distance_value,sse];
 }
+
 
 kmean_cluster_process(data,3,out[1])
 </script>  
