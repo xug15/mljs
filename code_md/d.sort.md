@@ -114,5 +114,30 @@ function median(median_array){
 median_array(data);
 ```
 
+### object unqiue
+```js
+data=[[1,1,1,1],[2,2,2,2],[3,3,3,3],[4,4,4,4],[1,2,1,1],[3,2,4,4],[1,1,1,1],[2,2,2,2],[3,3,3,3],[4,4,4,4]]
+function unique_array_ob(data){
+    var car={};
+    for(var i=0;i<data.length;i++)
+    {
+        var name=JSON.stringify(data[i]);
+        //console.log(name);
+        car[name]=data[i]
+    }
+    var unique_array=[];
+    for(var key in car)
+    {
+        unique_array.push(car[key]);
+    }
+return unique_array;
+}
+unique_array_ob(data)
+
+
+
+```
+
+
 
 
