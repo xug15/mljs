@@ -64,12 +64,12 @@ function mean_array(a)
     {
         var counter=a.length;
         var mean_array=[];
-        for(j=0;j<a[0].length;j++)
+        for(var j=0;j<a[0].length;j++)
                     {
                         mean_array.push(0);
                     }
         //console.log(mean_array);
-        for(i=0;i<counter;i++)
+        for(var i=0;i<counter;i++)
             {
                 for(j=0;j<a[i].length;j++)
                     {

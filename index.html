@@ -477,7 +477,9 @@ function unique(arr2)
   return ret;
 }
 
-function get_Random_element_array(data,num){
+function get_Random_element_array(data2,num){
+    data=JSON.parse(JSON.stringify(data2));
+    data=unique(data);
     var max=data.length-1;
     var index=getRandomInt(0,max);
     // the index array.
@@ -485,22 +487,28 @@ function get_Random_element_array(data,num){
     var out_array=[];
     if(data.length < num)
     {
+        alert("the unique data small than the k number.");
         return data;
         //break;
     }else{
+        var n=0;
         while(index_array.length<num)
         {
-            index_array.push(getRandomInt(0,max));
+            var index=getRandomInt(0,max);
+            index_array.push(data[index]);
             index_array=unique(index_array);
-
+            n+=1;
+            if(n>10000)
+            {
+                alert("the unique data small than the k number.");
+                break;
+            }
         }
-        for(var i=0;i<index_array.length;i++)
-        {
-            out_array.push(data[index_array[i]]);
-        }
+        
     }
-    return out_array;
+    return index_array;
 }
+
 function distance(a,b)
 {
     /*
@@ -554,12 +562,12 @@ function mean_array(a)
   {
         var counter=a.length;
         var mean_array=[];
-        for(j=0;j<a[0].length;j++)
+        for(var j=0;j<a[0].length;j++)
                     {
                         mean_array.push(0);
                     }
         //console.log(mean_array);
-        for(i=0;i<counter;i++)
+        for(var i=0;i<counter;i++)
             {
                 for(j=0;j<a[i].length;j++)
                     {
@@ -613,6 +621,7 @@ function kmean_cluster_one(a,b)
     
     //1. Generate the b element as the inital points.
     var center_array=get_Random_element_array(a,b);
+    console.log(center_array);
     var center_array_new=[];
 
     //2. Generate the b cluster array.
@@ -637,6 +646,8 @@ function kmean_cluster_one(a,b)
         for(var i=0;i<cluster_array.length;i++)
         {
             //calculateh the each cluster mean point.
+            console.log(cluster_array[i]);
+           
           center_array_new.push(mean_array(cluster_array[i]));
         }
     //calculate the average distance of array and array.
@@ -714,7 +725,29 @@ function kmean_cluster_process(a,b,c)
         }
     return [cluster_array,center_array_new,distance_value,sse];
 }
+function kmean_combination()
+{
+    //a: is array 
+    //b: is the number of clusters.
+    var data= getinforvalue('training_decision');
+    kmean_limit=data.length;
+    for(var i=2;i<kmean_limit;i++)
+    {
+      console.log(i);
+      out=kmean_cluster_one(data,i);
+    }
+    out=kmean_cluster_one(data,3);
+    var step=0;
+    while(out[2]>1e-7)
+      {
+          step+=1;
+          out=kmean_cluster_process(data,3,out[1]);
+      }
+      
+    return [step,out];
+    
 
+}
 
 kmean_cluster_process(data,3,out[1])
 </script>  
