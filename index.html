@@ -477,9 +477,24 @@ function unique(arr2)
   return ret;
 }
 
+function unique_array_ob(data){
+    var car={};
+    for(var i=0;i<data.length;i++)
+    {
+        var name=JSON.stringify(data[i]);
+        //console.log(name);
+        car[name]=data[i]
+    }
+    var unique_array=[];
+    for(var key in car)
+    {
+        unique_array.push(car[key]);
+    }
+return unique_array;
+}
+
 function get_Random_element_array(data2,num){
-    data=JSON.parse(JSON.stringify(data2));
-    data=unique(data);
+    data=unique_array_ob(data2);
     var max=data.length-1;
     var index=getRandomInt(0,max);
     // the index array.
@@ -495,18 +510,16 @@ function get_Random_element_array(data2,num){
         while(index_array.length<num)
         {
             var index=getRandomInt(0,max);
-            index_array.push(data[index]);
+            index_array.push(index);
             index_array=unique(index_array);
-            n+=1;
-            if(n>10000)
-            {
-                alert("the unique data small than the k number.");
-                break;
-            }
         }
-        
+        var out=[];
+        for(var i=0;i<index_array.length;i++)
+        {
+          out.push(data[index_array[i]]);
+        }
     }
-    return index_array;
+    return out;
 }
 
 function distance(a,b)
@@ -730,7 +743,7 @@ function kmean_combination()
     //a: is array 
     //b: is the number of clusters.
     var data= getinforvalue('training_decision');
-    kmean_limit=data.length;
+    kmean_limit=unique_array_ob(data).length;
     for(var i=2;i<kmean_limit;i++)
     {
       console.log(i);
