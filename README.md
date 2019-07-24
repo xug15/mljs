@@ -22,6 +22,8 @@
 * [b. Gradient descent method code](code_md/b.gradientcode.md) 
 * [c. Plot](code_md/c.plot.md) 
 * [d. Sort, Min, Min, Mean, median](code_md/d.sort.md) 
+* [e. plot.ly](https://plot.ly/javascript/) 
+
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
 

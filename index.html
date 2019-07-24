@@ -201,6 +201,23 @@ margin: 10px 0px;
     </div><!--row-->
 
     <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+          <div class="panel panel-default">
+              <div class="panel-heading">Cluster</div>
+              <div class="panel-body">
+                  <div class="row" style="margin:0;">
+                      <div class="col-xs-12 col-sm-12" >
+                        <button class="btn btn-primary button" onclick="kmean_combination()"><span class="glyphicon glyphicon-play"></span>K-means cluster</button>
+                      </div>
+                    </div>
+
+              </div><!--panel -->
+          </div><!--panel--->
+
+      </div><!--col-xs-12 col-sm-3 -->
+  </div><!--row-->
+
+    <div class="row" >
         <div class="col-xs-12 col-sm-6" >
             <div class="panel panel-default">
                 <div class="panel-heading">Feature evaluation</div>
@@ -303,6 +320,7 @@ margin: 10px 0px;
                 
             </div><!--col-xs-12-->
         </div><!--row-->
+
         <div class="row" >
             <div class="col-xs-10 col-sm-10" >
                 <div class="borderdiv" id='3dplotnew' style="height:59vh;"></div>
@@ -315,6 +333,21 @@ margin: 10px 0px;
           </div><!--row-->
 
   </div><!--predict_pca-->
+
+  <div class="row" >
+    <div class="col-xs-12 col-sm-10" style="margin:5px;  display:none;padding:10px;" id="kmean_cluster">
+      <h2 style="text-align: center;">K means cluster result</h2>
+      <div id="kmean_table" style="border:1px solid #d1d1d1; margin:5px; padding:10px;"></div>
+    </div><!--col-xs-12-->
+  </div><!--row-->
+
+  <div class="row" >
+    <div class="col-xs-12 col-sm-10" style="margin:5px;  display:none;padding:10px;" id="feature_performance">
+      <h2 style="text-align: center;">Feature evaluation result</h2>
+      <div id="feature_performance_table" style="border:1px solid #d1d1d1; margin:5px; padding:10px;"></div>
+    </div><!--col-xs-12-->
+  </div><!--row-->
+
   <div class="predict_logistic" style="display:none;">
     <div class="row" >
       <div class="col-xs-12 col-sm-10" >
@@ -419,12 +452,7 @@ margin: 10px 0px;
       </div><!--col-xs-12-->
     </div><!--row-->
 
-    <div class="row" >
-      <div class="col-xs-12 col-sm-10" style="margin:5px;  display:none;padding:10px;" id="feature_performance">
-        <h2 style="text-align: center;">Feature evaluation result</h2>
-        <div id="feature_performance_table" style="border:1px solid #d1d1d1; margin:5px; padding:10px;"></div>
-      </div><!--col-xs-12-->
-    </div><!--row-->
+
 
     <div class="row" >
       <div class="col-xs-12 col-sm-6" >
@@ -634,7 +662,7 @@ function kmean_cluster_one(a,b)
     
     //1. Generate the b element as the inital points.
     var center_array=get_Random_element_array(a,b);
-    console.log(center_array);
+    //console.log(center_array);
     var center_array_new=[];
 
     //2. Generate the b cluster array.
@@ -659,7 +687,7 @@ function kmean_cluster_one(a,b)
         for(var i=0;i<cluster_array.length;i++)
         {
             //calculateh the each cluster mean point.
-            console.log(cluster_array[i]);
+            //console.log(cluster_array[i]);
            
           center_array_new.push(mean_array(cluster_array[i]));
         }
@@ -744,21 +772,23 @@ function kmean_combination()
     //b: is the number of clusters.
     var data= getinforvalue('training_decision');
     kmean_limit=unique_array_ob(data).length;
+    //kmean_limit=log2(kmean_limit)+1;
     for(var i=2;i<kmean_limit;i++)
     {
       console.log(i);
       out=kmean_cluster_one(data,i);
-    }
-    out=kmean_cluster_one(data,3);
-    var step=0;
-    while(out[2]>1e-7)
+      var step=0;
+      while(out[2]>1e-7)
       {
           step+=1;
-          out=kmean_cluster_process(data,3,out[1]);
+          out=kmean_cluster_process(data,i,out[1]);
       }
-      
-    return [step,out];
-    
+      //console.log(step);
+      console.log(out);
+    }
+
+  
+    document.getElementById("kmean_cluster").style.display = "block";
 
 }
 
