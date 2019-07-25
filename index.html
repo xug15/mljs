@@ -326,6 +326,13 @@ margin: 10px 0px;
                 <div class="borderdiv" id='3dplotnew' style="height:59vh;"></div>
             </div><!--col-xs-12-->
         </div><!--row-->
+
+        <div class="row" >
+          <div class="col-xs-10 col-sm-10" >
+              <div class="borderdiv" id='pcapercetage_plot' style="height:59vh;"></div>
+          </div><!--col-xs-12-->
+      </div><!--row-->
+
         <div class="row" >
             <div class="col-xs-12 col-sm-6" >
               
@@ -923,10 +930,54 @@ $(".predict_pca").show();
 //threedplot(pca_data_a,'3dplot');
 //threedplot(predict_result,'3dplotnew');
 
-  twodlabelplot(predict_result,pca_label_a,'3dplot');
+twodlabelplot(predict_result,pca_label_a,'3dplot');
 threedlabelplot(predict_result,pca_label_a,'3dplotnew');
+
+//
+var data_percentage=pca.getExplainedVariance();
+plot_bar(data_percentage,'pcapercetage_plot');
 }
 
+function plot_bar(data,id)
+{
+  var xv=[];
+  var yv=[];
+  for(var i=0;i<data.length;i++)
+  {
+    xv.push(i);
+    yv.push(data[i]*100);
+  }
+  var trace1 = {
+    x: xv,
+    y: yv,
+    type: 'bar',
+    marker: {
+      color: 'rgb(142,124,195)'
+    }
+  };
+
+  var data2 = [trace1];
+
+  var layout = {
+    title: 'Percentage of variance (information) for by each PC',
+    font:{
+      family: 'Raleway, sans-serif'
+    },
+    showlegend: false,
+    xaxis: {
+      tickangle: -45,
+      title: 'Principal Components'
+    },
+    yaxis: {
+      zeroline: false,
+      gridwidth: 2,
+      title: 'Percentage of explained variances'
+    },
+    bargap :0.05
+  };
+
+  Plotly.newPlot(id, data2, layout);
+}
 
 </script>  
 
