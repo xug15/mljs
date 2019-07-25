@@ -344,6 +344,7 @@ margin: 10px 0px;
   <div class="row" >
     <div class="col-xs-12 col-sm-10" style="margin:5px;  display:none;padding:10px;" id="kmean_cluster">
       <h2 style="text-align: center;">K means cluster result</h2>
+      <div id="kmean_plot_area" ></div>
       <div id="kmean_table" style="border:1px solid #d1d1d1; margin:5px; padding:10px;"></div>
       <div id="kmean_plot" ></div>
     </div><!--col-xs-12-->
@@ -800,6 +801,38 @@ function kmean_combination()
       console.log(out);
       yaxis.push(out[3]);
     }
+
+    //test code
+    //set k=5
+    //get the center position
+    
+    out=kmean_cluster_one(data,5);
+    while(out[2]>1e-7)
+      {
+          out=kmean_cluster_process(data,5,out[1]);
+      }
+
+    train_pca();  
+    var  coordi=pca.predict(out[1]);
+   sizev=[];
+    var sum=0;
+    for(var i=0;i<out[0].length;i++)
+    {
+      sum+=out[0][i].length;
+
+    }
+    for(var i=0;i<out[0].length;i++)
+    {
+      sizev.push(out[0][i].length/sum*500);
+      console.log(out[0][i].length/sum*500);
+      
+    }
+    
+    twodlabel_area_plot(predict_result,pca_label_a,'kmean_plot_area',coordi,sizev);
+    //test code
+    
+    //
+
     table_html='<table class="table"  id="kmean_dis_table"> \
   <thead> \
     <tr> \
@@ -842,7 +875,7 @@ function kmean_combination()
 
 }
 
-function twodlabelplot(data3d, label,nameid)
+function twodlabel_area_plot(data3d, label,nameid,dataarea,sizev)
 {
   function sort_unique(arr) 
   {
@@ -904,79 +937,44 @@ function twodlabelplot(data3d, label,nameid)
     data.push(window['trace'+i]);
 
   }
+    //
+    //get the cluste coordination
+    xva=[];
+    yva=[];
+    var tev=[];
+    var siv=[];
+    var cov=[];
+    for(var i=0;i<dataarea.length;i++)
+    {
+      xva.push(dataarea[i][0]);
+      yva.push(dataarea[i][1]);
+      tev.push(i);
+      siv.push(50);
+      cov.push(1);
+    }
+    //test code
+    //test code
+    var cluster={
+    type: 'scatter',
+    mode: 'markers',
+    x:xva,
+    y:yva,
+    text: tev,
+    marker: {
+        size: sizev,
+        color: cov,
+        colorscale: '#9e9e9e',
+        cmin: 0,
+        cmax: 100,
+
+      }
+
+  };
+  //
+  data.push(cluster);
 
   var layout = {};
   Plotly.newPlot(nameid, data, layout);
-}
-
-function train_pca(){
-  //get the html data
-  pca_data_a=getinforvalue('training_decision');
-  pca_label_a=getinforlabel('label_decision');
-
-
-//Use new dataset to calculate the PCA module.
-pca=new ML.PCA(pca_data_a);
-
-//export the PCA module parameter.
-pca_result=pca.toJSON();
-
-
-predict_result=pca.predict(pca_data_a);
-
-//
-$(".predict_pca").show();
-
-//threedplot(pca_data_a,'3dplot');
-//threedplot(predict_result,'3dplotnew');
-
-twodlabelplot(predict_result,pca_label_a,'3dplot');
-threedlabelplot(predict_result,pca_label_a,'3dplotnew');
-
-//
-var data_percentage=pca.getExplainedVariance();
-plot_bar(data_percentage,'pcapercetage_plot');
-}
-
-function plot_bar(data,id)
-{
-  var xv=[];
-  var yv=[];
-  for(var i=0;i<data.length;i++)
-  {
-    xv.push(i);
-    yv.push(data[i]*100);
-  }
-  var trace1 = {
-    x: xv,
-    y: yv,
-    type: 'bar',
-    marker: {
-      color: 'rgb(142,124,195)'
-    }
-  };
-
-  var data2 = [trace1];
-
-  var layout = {
-    title: 'Percentage of variance (information) for by each PC',
-    font:{
-      family: 'Raleway, sans-serif'
-    },
-    showlegend: false,
-    xaxis: {
-      tickangle: -45,
-      title: 'Principal Components'
-    },
-    yaxis: {
-      zeroline: false,
-      gridwidth: 2,
-      title: 'Percentage of explained variances'
-    },
-    bargap :0.05
-  };
-
-  Plotly.newPlot(id, data2, layout);
 }
 
 </script>  
