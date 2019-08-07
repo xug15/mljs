@@ -19,12 +19,15 @@
 * [6. Processing NA](code_md/6.na.md) 
 * [7. K-mean clustering](code_md/7.kmean-cluster.md) 
 * [8. PCA](code_md/8.pca.md) 
----
+
+------
+
 * [a. Newton method code](code_md/a.newtoncode.md) 
 * [b. Gradient descent method code](code_md/b.gradientcode.md) 
 * [c. Plot](code_md/c.plot.md) 
 * [d. Sort, Min, Min, Mean, median](code_md/d.sort.md) 
 * [e. plot.ly](https://plot.ly/javascript/) 
+* [f. mulity data was processed](code_md/f.multiply_data.md) 
 
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
