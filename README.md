@@ -7,6 +7,7 @@
 * [4. Logistic Regression](knowledge/d.logistic.md)  
 * [5. Newton method](knowledge/e.newton.md)  
 * [6. K-means clusters](knowledge/f.kmean.md)  
+* [7. Feature selection](knowledge/g.feature_select.md)  
 
 ## Code
 * [Outline](code_md/outline.md) 
