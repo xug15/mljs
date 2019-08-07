@@ -19,6 +19,7 @@
 * [6. Processing NA](code_md/6.na.md) 
 * [7. K-mean clustering](code_md/7.kmean-cluster.md) 
 * [8. PCA](code_md/8.pca.md) 
+* [9. Feature selection](code_md/9.feature_select.md) 
 
 ------
 
