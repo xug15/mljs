@@ -176,16 +176,6 @@ margin: 10px 0px;
                         </div>
               
                       </div><!--row-->
-                      <div class="row" style="margin:0;">
-
-                        <div class="col-xs-12 col-sm-6" >
-                          <button class="btn btn-primary button" onclick="key_na_by_sample()"><span class="glyphicon glyphicon-play"></span>Delete NA by Sample</button>
-                        </div>
-                        <div class="col-xs-12 col-sm-6" >
-                          <button class="btn btn-primary button" onclick="key_na_by_feture()"><span class="glyphicon glyphicon-play"></span>Delete NA by feature</button>
-                        </div>
-              
-                      </div><!--row-->
 
                 </div><!--panel -->
             </div><!--panel--->
@@ -503,227 +493,298 @@ margin: 10px 0px;
 <script src="ml/mljsxg.js"></script>
 
 <script type="text/javascript">
-key_replace='';
-function key_na_by_sample(){
-  key_replace='sample';
-  sample_keep=[];
-}
-function key_na_by_feture(){
-  key_replace='feature';
-  feature_keep=[];
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max+1);
+  return Math.floor(Math.random() * (max - min)) + min; //含最大值，含最小值
 }
 
-
-function dealwithna_delete_by_sample(data1)
+function unique(arr2)
 {
-
-  //deep copy
-  //var data1=transforme_array(data);
-  var data2=[];
-
-//replace na with 0.
-  for(var i=0;i<data1.length;i++)
-    {
-      var nanum=0;
-      for(var j=0;j<data1[i].length;j++)
-      {
-        if(isNaN(data1[i][j]) | data1[i][j]==null){
-          //data1[i][j]=0;
-          //console.log(i+' '+j);
-          nanum++;
-        }
-      }
-      if(nanum==0)
-      {
-        data2.push(data1[i]);
-        sample_keep.push(i);
-      }
+    arr=JSON.parse(JSON.stringify(arr2));
+  if (arr.length === 0) return arr;
+  arr = arr.sort(function (a, b) { return a*1 - b*1; });
+  var ret = [arr[0]];
+  for (var i = 1; i < arr.length; i++) { //Start loop at 1: arr[0] can never be a duplicate
+    if (arr[i-1] !== arr[i]) {
+      ret.push(arr[i]);
     }
-    return data2
+  }
+  return ret;
 }
-function dealwithna_delete_by_feature(data)
-{
 
-  //deep copy
-  var data1=transforme_array(data);
-  var data2=[];
-
-//replace na with 0.
-  for(var i=0;i<data1.length;i++)
+function unique_array_ob(data){
+    var car={};
+    for(var i=0;i<data.length;i++)
     {
-      var nanum=0;
-      for(var j=0;j<data1[i].length;j++)
-      {
-        if(isNaN(data1[i][j]) | data1[i][j]==null){
-          //data1[i][j]=0;
-          //console.log(i+' '+j);
-          nanum++;
-        }
-      }
-      if(nanum==0)
-      {
-        data2.push(data1[i]);
-        feature_keep.push(i);
-      }
+        var name=JSON.stringify(data[i]);
+        //console.log(name);
+        car[name]=data[i]
     }
-     data2=transforme_array(data2);
-    return data2
+    var unique_array=[];
+    for(var key in car)
+    {
+        unique_array.push(car[key]);
+    }
+return unique_array;
 }
-function getinforvalue(trainid){
-  //var trainid='training_decision';
-  //get the html data
-  /*
-  1. datacontents is test the data from box or upload file. If the upload file was found, it would be first used.
-  2. if the file is empty, we will use the box value.
-  */ 
-  if(typeof datacontents==="undefined"){
-    var decision_data=document.getElementById(trainid).value;
-  }else if(datacontents.length>0){
-    var decision_data=datacontents;
-  }else{
-    var decision_data=document.getElementById(trainid).value;
-  }
-  var test_feature_name=document.getElementById('feature_name').checked;
-  
-  //decision_label=document.getElementById("label_decision").value;
 
-  //transforme data formate.
-  var data=decision_data.split('\n');
-  var dataarr=[];
-  var dataarr2=[];
-  feature_name_array=[];
-  /*
-  If the upload file was not cantained the name of features.
-  We will use the number to represent the each of features. 
-  */
-  if(!test_feature_name){
-    for(var i=0;i<data[0].length;i++)
+function get_Random_element_array(data2,num){
+    data=unique_array_ob(data2);
+    var max=data.length-1;
+    var index=getRandomInt(0,max);
+    // the index array.
+    var index_array=[];
+    var out_array=[];
+    if(data.length < num)
     {
-      feature_name_array.push(i);
-    }
-  }
-
-  for(var i=0;i<data.length;i++){
-    var row=[];
-    /*
-    If the name of header is provided, and the first line will be treated like name array.
-    Other will betreat like the numbers.
-    */
-   if(i==0 & test_feature_name)
-   {
-    row=data[i].split(',').map(function(item) 
-      {
-      return item;
-      });
-   }else{
-    row=data[i].split(',').map(function(item) 
-      {
-      return parseFloat(item);
-      });
-   }
-  /*
-  The header will be given to the feature name array.
-  Other data will be put into the dataarr.
-  */
-    if(i==0 & test_feature_name)
-    {
-      feature_name_array=row;
-    }else
-    {
-      dataarr.push(row);
-      //
-    }
-  }
-  //console.log(dataarr);
-  if(typeof(key_replace)=="undefined")
-  {
-    return dataarr;
-  }else if(key_replace=="mean") 
-  {
-    var array_mean=dealwithna_replace_with_mean(dataarr);
-    return array_mean;
-  }else if(key_replace=="median") 
-  {
-    var array_median=dealwithna_replace_with_median(dataarr);
-    return array_median;
-  }else if(key_replace=="sample")
-  {
-    var array_sample=dealwithna_delete_by_sample(dataarr);
-    return array_sample;
-  }else if(key_replace=="feature")
-  {
-    alert('feature');
-    var array_feature=dealwithna_delete_by_feature(dataarr);
-    feature_name_array2=[];
-        for(var i=0;i<feature_keep.length;i++)
+        alert("the unique data small than the k number.");
+        return data;
+        //break;
+    }else{
+        var n=0;
+        while(index_array.length<num)
         {
-          feature_name_array2.push(feature_name_array[feature_keep[i]]);
-          console.log(feature_keep[i]);
+            var index=getRandomInt(0,max);
+            index_array.push(index);
+            index_array=unique(index_array);
         }
-    feature_name_array=[];
-    feature_name_array=feature_name_array2;
-    return array_feature;
-  }else{
-    return dataarr;
-  }
-  
+        var out=[];
+        for(var i=0;i<index_array.length;i++)
+        {
+          out.push(data[index_array[i]]);
+        }
+    }
+    return out;
 }
 
-// getinforlabel('label_decision');
-function getinforlabel(){
-  //get the html data
-  //decision_data=document.getElementById("training_decision").value;
-  var lableid='label_decision';
-  if(typeof labelcontents==="undefined"){
-    var decision_label=document.getElementById(lableid).value;
-  }
-  else if(labelcontents.length>0){
-    var decision_label=labelcontents;
-  }else{
-    var decision_label=document.getElementById(lableid).value;
-  }
-
-
-  //transforme data formate.
-
-  var decision_label_a=decision_label.split('\n').map(function(item) {
-	return parseFloat(item);
-  })
-
-  if(key_replace=="undefined")
-  {
-    return decision_label_a;
-
-  }else if(key_replace=="sample")
-  {
-      var decision_label_new=[];
-      for(var i=0;i<sample_keep.length;i++)
-      {
-        decision_label_new.push(decision_label_a[sample_keep[i]]);
-      }
-        return decision_label_new;
-  }else
-  {
-    return decision_label_a;
-  }
+function distance(a,b)
+{
+    /*
+    a is the center
+    b is the 
+    */
+    var dis=0;
+    for(var i=0;i<a.length;i++)
+    {
+        var disa=a[i]-b[i];
+        var disa=Math.pow(disa,2);
+        dis+=disa;
+    }
+    dis=Math.pow(dis,0.5);
+    return dis;
 }
 
+function distance_one_array(a,b){
+    /*
+    a: one element,like[1,2]
+    b: array with server element, like [[2,3],[1,1]...]
+    */
+    var disarr=[];
+    for(var i=0;i<b.length;i++)
+    {
+        var dis=distance(a,b[i]);
+        disarr.push(dis);
+    }
+    return disarr;
+}
+c=[[1,1],[1,2],[2,1],[2,2]];
+function indexOfMin(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+
+    var min = arr[0];
+    var minIndex = 0;
+
+    for (var i = 1; i < arr.length; i++) {
+        if (arr[i] < min) {
+            minIndex = i;
+            min = arr[i];
+        }
+    }
+
+    return minIndex;
+}
+
+function mean_array(a)
+  {
+        var counter=a.length;
+        var mean_array=[];
+        for(var j=0;j<a[0].length;j++)
+                    {
+                        mean_array.push(0);
+                    }
+        //console.log(mean_array);
+        for(var i=0;i<counter;i++)
+            {
+                for(j=0;j<a[i].length;j++)
+                    {
+                        mean_array[j]+=a[i][j];
+                    }
+            }
+        //console.log(mean_array); 
+        for(var i=0;i<mean_array.length;i++)
+            {
+            mean_array[i]=mean_array[i]/counter;
+            }
+        //console.log(mean_array);   
+        return mean_array;   
+  }
+
+function distance_array_array(a,b)
+{
+    /*
+    a: one element,like[[2,3],[1,1]...]
+    b: array with server element, like [[2,3],[1,1]...]
+    */
+    var disarr=[];
+    for(var i=0;i<b.length;i++)
+    {
+        var dis=distance(a[i],b[i]);
+        disarr.push(dis);
+    }
+    var sum=0;
+    for(var i=0;i<disarr.length;i++)
+    {
+        sum+=disarr[i];
+    }
+    var agv=sum/disarr.length;
+    return agv;
+}
+
+function sum_array(a)
+{
+    var sum=0;
+    for(var i=0;i<a.length;i++)
+    {
+        sum+=a[i]*a[i];
+    }
+    return sum;
+}
+
+function kmean_cluster_one(a,b)
+{
+    //a: is array 
+    //b: is the number of clusters.
+    
+    //1. Generate the b element as the inital points.
+    var center_array=get_Random_element_array(a,b);
+    //console.log(center_array);
+    var center_array_new=[];
+
+    //2. Generate the b cluster array.
+    var cluster_array=[];
+
+    //3. add element into array.
+    for(var i=0;i<b;i++)
+        {
+            cluster_array.push([]);
+        }
+
+    //loop each a element. calculate the distance between element and center. find the mini distance. Put into the relative cluster.
+    for(var i=0;i<a.length;i++)
+        {   //calculateh point to each element array.
+            var dis=distance_one_array(a[i],center_array);
+            // get the minizest index of dis.
+            var min_index=indexOfMin(dis);
+            //put the point into the cluster.
+            cluster_array[min_index].push(a[i]);
+        }
+        //for each cluster.
+        for(var i=0;i<cluster_array.length;i++)
+        {
+            //calculateh the each cluster mean point.
+            //console.log(cluster_array[i]);
+           
+          center_array_new.push(mean_array(cluster_array[i]));
+        }
+    //calculate the average distance of array and array.
+    var distance_value=distance_array_array(center_array_new,center_array);
+    //return the cluster array and center array_new, and distance value.
+    //start sse.
+    var sse=0;
+    //each cluster
+    for(var i=0;i<cluster_array.length;i++)
+        {
+          var sse_array=[];
+            //console.log(cluster_array[i]);
+            //Calculate each cluster element distance from the mean vector.
+            sse_array=distance_one_array(center_array_new[i],cluster_array[i]);
+            //summary the distance.
+            sse+=sum_array(sse_array);
+            //console.log(sse);
+        }
+    return [cluster_array,center_array_new,distance_value,sse];
+}
+
+
+
+data=[[1,1,1,1],[2,2,2,2],[3,3,3,3],[4,4,4,4],[1,2,1,1],[3,2,4,4]];
+out=kmean_cluster_one(data,3);
+
+
+function kmean_cluster_process(a,b,c)
+{
+    //a: is array 
+    //b: is the number of clusters.
+    //c: is the center array.
+    
+    var center_array=c;
+    var center_array_new=[];
+
+    //2. Generate the b cluster array.
+    var cluster_array=[];
+
+    //3. add element into array.
+    for(var i=0;i<b;i++)
+        {
+            cluster_array.push([]);
+        }
+
+    //loop each a element. calculate the distance between element and center. find the mini distance. Put into the relative cluster.
+    for(var i=0;i<a.length;i++)
+        {   //calculateh point to each element array.
+            var dis=distance_one_array(a[i],center_array);
+            // get the minizest index of dis.
+            var min_index=indexOfMin(dis);
+            //put the point into the cluster.
+            cluster_array[min_index].push(a[i]);
+        }
+        //for each cluster.
+        for(var i=0;i<cluster_array.length;i++)
+        {
+            //calculateh the each cluster mean point.
+          center_array_new.push(mean_array(cluster_array[i]));
+        }
+    //calculate the average distance of array and array.
+    var distance_value=distance_array_array(center_array_new,center_array);
+    //start sse.
+    var sse=0;
+    //each cluster
+    for(var i=0;i<cluster_array.length;i++)
+        {
+          var sse_array=[];
+            //console.log(cluster_array[i]);
+            //Calculate each cluster element distance from the mean vector.
+            sse_array=distance_one_array(center_array_new[i],cluster_array[i]);
+            //summary the distance.
+            sse+=sum_array(sse_array);
+            //console.log(sse);
+        }
+    return [cluster_array,center_array_new,distance_value,sse];
+}
 function kmean_combination()
 {
     //a: is array 
     //b: is the number of clusters.
     var xaxis=[];
     var yaxis=[];
-    data= getinforvalue('training_decision');
+    var data= getinforvalue('training_decision');
     kmean_limit=unique_array_ob(data).length;
-    kmean_limit=kmean_limit/2;
     //kmean_limit=log2(kmean_limit)+1;
     for(var i=2;i<kmean_limit;i++)
     {
-      if(i>50)
-      {
-        break;
-      }
       console.log(i);
       xaxis.push(i);
       out=kmean_cluster_one(data,i);
@@ -743,24 +804,11 @@ function kmean_combination()
     //test code
     //set k=5
     //get the center position
-
-    dis_b_s=yaxis[0]-yaxis[yaxis.length-1];
-    dis_test=0;
-    k_cluster=2;
-    for(var i=1;i<yaxis.length;i++)
-    {
-      dis_test+=yaxis[i-1]-yaxis[i];
-      if(dis_test>dis_b_s*0.5)
-      {
-        k_cluster=i+1;
-        break;
-      }
-    }
     
-    out=kmean_cluster_one(data,k_cluster);
+    out=kmean_cluster_one(data,5);
     while(out[2]>1e-7)
       {
-          out=kmean_cluster_process(data,k_cluster,out[1]);
+          out=kmean_cluster_process(data,5,out[1]);
       }
 
     train_pca();  
@@ -824,6 +872,109 @@ function kmean_combination()
   var data = [trace1];
   Plotly.newPlot('kmean_plot', data, layout);
 
+}
+
+function twodlabel_area_plot(data3d, label,nameid,dataarea,sizev)
+{
+  function sort_unique(arr) 
+  {
+  if (arr.length === 0) return arr;
+  arr = arr.sort(function (a, b) { return a*1 - b*1; });
+  var ret = [arr[0]];
+  for (var i = 1; i < arr.length; i++) { //Start loop at 1: arr[0] can never be a duplicate
+    if (arr[i-1] !== arr[i]) {
+      ret.push(arr[i]);
+    }
+  }
+  return ret;
+  }
+
+  label_unique=sort_unique(label);
+  for (var i =0; i < label_unique.length; i++)
+  {
+    window['orderarray_'+i]=[];
+    window['x_'+i]=[];
+    window['y_'+i]=[];
+    window['z_'+i]=[];
+    for(var j=0;j<label.length;j++){
+      if(label[j]==label_unique[i])
+      {
+        window['orderarray_'+i].push(j);
+      }
+    }
+  }
+
+  for(var i =0; i < label_unique.length; i++)
+  {
+    for(var j=0;j<window['orderarray_'+i].length;j++)
+    {
+      window['x_'+i].push(data3d[window['orderarray_'+i][j]][0]);
+      window['y_'+i].push(data3d[window['orderarray_'+i][j]][1]);
+      window['z_'+i].push(data3d[window['orderarray_'+i][j]][2]);
+    }
+  }
+  var data=[];
+  for(var i =0; i < label_unique.length; i++)
+  {
+    window['trace'+i]={
+      x:window['x_'+i],
+      y:window['y_'+i],
+      name:i,
+
+    mode: 'markers',
+    marker: 
+      {
+        size: 4,
+        line: {
+        //color: 'rgba(217, 217, 217, 0.14)',
+        width: 0.5
+        },
+        opacity: 0.8
+      },
+    type: 'scatter'
+    }
+    data.push(window['trace'+i]);
+
+  }
+    //
+    //get the cluste coordination
+    xva=[];
+    yva=[];
+    var tev=[];
+    var siv=[];
+    var cov=[];
+    for(var i=0;i<dataarea.length;i++)
+    {
+      xva.push(dataarea[i][0]);
+      yva.push(dataarea[i][1]);
+      tev.push(i);
+      siv.push(50);
+      cov.push(1);
+    }
+    //test code
+    //test code
+    var cluster={
+    type: 'scatter',
+    mode: 'markers',
+    name: 'Cluster',
+    x:xva,
+    y:yva,
+    text: tev,
+    marker: {
+        size: sizev,
+        color: cov,
+        colorscale: '#9e9e9e',
+        cmin: 0,
+        cmax: 100,
+
+      }
+
+  };
+  //
+  data.push(cluster);
+
+  var layout = {};
+  Plotly.newPlot(nameid, data, layout);
 }
 
 </script>  
