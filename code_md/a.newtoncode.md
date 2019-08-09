@@ -90,15 +90,6 @@ function newtonlg(){
         var sum=p1*p0;
         hessematrix[j][k]+=sum;
       //console.log(hessematrix);
-      /*
-      console.log("data:"+data[i]);
-      console.log("sum:"+epowersum);
-      console.log("ybx:"+ybx);
-      console.log("lnx:"+lnx);
-      console.log("y_ebx_1ebx:"+y_ebx_1ebx);
-      console.log("derivativearray:"+derivativearray);
-      //mini
-      */
 
     }
     //console.log(derivativearray);
@@ -118,24 +109,7 @@ function newtonlg(){
     return[deriavte_value,update,lossv];
     //return derivativearray;
   }
-
-  function gradient(array,weight,intercept,ratio){
-    //console.log("gradient:"+array+typeof(array)+" weight:"+weight+typeof(weight)+" intercept:"+intercept);
-
-    weight_new=[];
-    intercept_new=[];
-    for(var i in weight){
-      //console.log(i+" weight:"+weight[i]+" change:"+array[i]+" ratio:"+ratio);
-      //console.log(weight[i]-array[i]*ratio);
-      weight_new.push(weight[i]-array[i]*ratio);
-    }
-    
-    intercept_new=intercept-array[array.length-1]*ratio;
-    //console.log("weight new:"+weight_new+" intercept new:"+intercept_new);
-    return [weight_new,intercept_new];
-  }
-
-
+  
   this.fit=function(data){
     this.data=data;
     this.variable_number=data[0].length-1;
@@ -162,18 +136,24 @@ function newtonlg(){
     loss2=[];
     var flate_count=0;
     var big_count=0;
+    var old_lost=10000000000;
     for(var j=0;j<70;j++)
     {
       loss2=exploss(this.data,this.weight,this.intercept);
       console.log(loss2);
-      if(Math.abs(loss2[0])<1.0e-13){
+      if(Math.abs(loss2[0])<1.0e-3){
         break;
+        }
+        if(Math.abs(loss2[0])>old_lost)
+        {
+          break;
         }
       for(var i=0;i<loss2[1].length-1;i++)
       {
         this.weight[i]=loss2[1][i];
       }
       this.intercept=loss2[1][i];
+      old_lost=loss2[0];
     }
     
   }
