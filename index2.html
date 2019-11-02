@@ -245,6 +245,23 @@ margin: 10px 0px;
     </div><!--row-->
 
     <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+          <div class="panel panel-default">
+              <div class="panel-heading">Feature Selection</div>
+              <div class="panel-body">
+                  <div class="row" style="margin:0;">
+                      <div class="col-xs-12 col-sm-12" >
+                          <button class="btn btn-primary button" onclick="feature_selection()"><span class="glyphicon glyphicon-play"></span>Feature selection Start</button>
+                        </div>
+                    </div>
+
+              </div><!--panel -->
+          </div><!--panel--->
+
+      </div><!--col-xs-12 col-sm-3 -->
+  </div><!--row-->
+
+    <div class="row" >
         <div class="col-xs-12 col-sm-6" >
             <div class="panel panel-default">
                 <div class="panel-heading">Classification</div>
@@ -503,208 +520,152 @@ margin: 10px 0px;
 <script src="ml/mljsxg.js"></script>
 
 <script type="text/javascript">
-function getinforlabel(){
-  //get the html data
-  //decision_data=document.getElementById("training_decision").value;
-  var lableid='label_decision';
-  if(typeof labelcontents==="undefined"){
-    var decision_label=document.getElementById(lableid).value;
-  }
-  else if(labelcontents.length>0){
-    var decision_label=labelcontents;
-  }else{
-    var decision_label=document.getElementById(lableid).value;
-  }
 
-
-  //transforme data formate.
-
-  var decision_label_a=decision_label.split('\n').map(function(item) {
-	return parseFloat(item);
-  })
-  //console.log(decision_label_a);
-  if(typeof(key_replace)=="undefined")
-  {
-    return decision_label_a;
-
-  }else if(key_replace=="sample")
-  {
-    var decision_label_new=[];
-    for(var i=0;i<sample_keep.length;i++)
-    {
-      decision_label_new.push(decision_label_a[sample_keep[i]]);
-    }
-    return decision_label_new;
-  } else
-  {
-    return decision_label_a;
-  }
-  
+function merge_matrix_both(a2,b2){
+  var a=JSON.parse(JSON.stringify(a2));
+  var b=JSON.parse(JSON.stringify(b2));
+for(var i=0;i<b.length;i++){
+  a.push(b[i]);
+}
+return a;
 }
 
-function getinforvalue(trainid){
-  //var trainid='training_decision';
-  //get the html data
-  /*
-  1. datacontents is test the data from box or upload file. If the upload file was found, it would be first used.
-  2. if the file is empty, we will use the box value.
-  */ 
-  if(typeof datacontents==="undefined"){
-    var decision_data=document.getElementById(trainid).value;
-  }else if(datacontents.length>0){
-    var decision_data=datacontents;
-  }else{
-    var decision_data=document.getElementById(trainid).value;
-  }
-  var test_feature_name=document.getElementById('feature_name').checked;
-  
-  //decision_label=document.getElementById("label_decision").value;
 
-  //transforme data formate.
-  var data=decision_data.split('\n');
-  var dataarr=[];
-  var dataarr2=[];
-  feature_name_array=[];
-  /*
-  If the upload file was not cantained the name of features.
-  We will use the number to represent the each of features. 
-  */
-  if(!test_feature_name){
-    for(var i=0;i<data[0].length;i++)
-    {
-      feature_name_array.push(i);
-    }
-  }
+function feature_selection()
+{
+  // get data
+  //get data;
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+var label_unique=sort_unique(label);
+//console.log(label_unique);
+//merge_matrix()
 
-  for(var i=0;i<data.length;i++){
+
+merge_array=merge_matrix(data,label);
+//console.log(merge_array);
+merge_array=shufflearray(merge_array);
+//console.log(merge_array);
+//
+var train_range_ratio=[0,0.8];
+var validate_range_ratio=[0.8,1];
+var train_range=[];
+var validate_range=[];
+var number=parseInt(train_range_ratio[1]*(data.length)) ;
+
+//train_range_ratio[1]*(data.length);
+train_range.push(parseInt(train_range_ratio[0]*(data.length)));
+train_range.push(parseInt(train_range_ratio[1]*(data.length)));
+//
+validate_range.push(parseInt(validate_range_ratio[0]*(data.length)));
+validate_range.push(parseInt(validate_range_ratio[1]*(data.length)));
+
+//The data will be one vs rest.
+var train=generate_train_validate_data(label_unique,train_range,merge_array);
+trainingData =train[0];
+trainingLabel=train[1];
+var valide=generate_train_validate_data(label_unique,validate_range,merge_array);
+validateData=valide[0];
+validateLabel=valide[1];
+
+//
+var config_model='';
+var data=[];
+for(var i=0;i<trainingData.length;i++)
+  {
     var row=[];
-    /*
-    If the name of header is provided, and the first line will be treated like name array.
-    Other will betreat like the numbers.
-    */
-   if(i==0 & test_feature_name)
-   {
-    row=data[i].split(',').map(function(item) 
-      {
-      return item;
-      });
-   }else{
-    row=data[i].split(',').map(function(item) 
-      {
-      return parseFloat(item);
-      });
-   }
-  /*
-  The header will be given to the feature name array.
-  Other data will be put into the dataarr.
-  */
-    if(i==0 & test_feature_name)
+    row.push(trainingData[i][0]);
+    var name='model'+i;
+    // initai feature select array
+    console.log("initai feature select array\n");
+    console.log("########\n#"+name+"#\n########\n");
+    feature_select_array=[];
+    
+    //feature_total_array recorder the feature index.
+    feature_total_array=[];
+
+    //transform the matrix training and validate data.
+    var train_data=transforme_array(trainingData[i][1]);
+    var valid_data=transforme_array(validateData[i][1]);
+    //put the index of feature into array.
+    for(var j=0;j<(train_data.length)-1;j++)
     {
-      feature_name_array=row;
-    }else
+      feature_total_array.push(j);
+    }
+    //inital finished. feature_total_array has all featuer index.
+
+    //loop start one
+
+    var auc_matrix=[];
+    select_tmp_matrix=[];
+    var select_tmp_index=[];
+
+    // select one feature
+    for(var k=0;k<feature_total_array.length;k++)
     {
-      dataarr.push(row);
+      //console.log(feature_total_array[k]);
+      //deep copy one feature array.
+      //This step is add select array feature into the tmp.
+      feature_select_tmp=JSON.parse(JSON.stringify(feature_select_array));
+      //add one feature into the array.
+      feature_select_tmp.push(feature_total_array[k]);
+      //add the label into the data.
+      feature_select_tmp.push((train_data.length)-1);
+      console.log("################\n#feature_select#\n################\n# "+feature_select_tmp+" #\n###########\n");
+      
+      //##load data according to index
+      //generate the each training data and validate. first initial it.
+      var training_data=[];
+      var validating_data=[];
+
+      for(var l=0;l<feature_select_tmp.length;l++)
+      {
+        //according the traning data and validate data.
+        training_data.push(train_data[feature_select_tmp[l]]);
+        validating_data.push(valid_data[feature_select_tmp[l]]);
+      }
+      training_data_tran=transforme_array(training_data);
+      validating_data_tran=transforme_array(validating_data);
+      //console.log("training:"+training_data_tran);
+      //console.log("validating:"+validating_data_tran);
+      //loaded data finished.
+
       //
+      var name='model'+i;
+      window[name]=train_model_new(training_data_tran);
+      proarr=model_data_probability(window[name],validating_data_tran);
+      rocarray=mljs_validate(proarr,validateLabel[i][1]);
+      //output is pro,fprarr,tprarr,auc,precisionarr,specificityarr
+      //console.log(rocarray);
+      report_array=report_ml_value(rocarray);
+      //report auc
+      console.log(name);
+      console.log("AUC:"+rocarray[3]);
+
+      auc_matrix.push(rocarray[3]);
+      feature_select_tmp.pop();
+      select_tmp_matrix.push(feature_select_tmp);
+      select_tmp_index.push(feature_total_array[k]);
+
     }
-  }
-  //console.log(dataarr);
-  if(typeof(key_replace)=="undefined")
-  {
-    return dataarr;
-  }else if(key_replace=="mean") 
-  {
-    var array_mean=dealwithna_replace_with_mean(dataarr);
-    return array_mean;
-  }else if(key_replace=="median") 
-  {
-    var array_median=dealwithna_replace_with_median(dataarr);
-    return array_median;
-  }else if(key_replace=="sample")
-  {
-    var array_sample=dealwithna_delete_by_sample(dataarr);
-    return array_sample;
-  }else if(key_replace=="feature")
-  {
-    var array_feature=dealwithna_delete_by_feature(dataarr);
-    var feature_name_array_new=[];
-    for(var i=0;i<feature_keep.length;i++)
-    {
-      feature_name_array_new.push(feature_name_array[feature_keep[i]]);
-    }
-    feature_name_array=feature_name_array_new;
-    return array_feature;
+    console.log("auc_matrix:"+auc_matrix);
+    console.log("select_tmp_matrix:"+select_tmp_matrix);
+    console.log("select_tmp_index:"+select_tmp_index);
+
+
+
+
   }
   
-}
-
-function dealwithna_delete_by_feature(data)
-{
-
-  //deep copy
-  var data1=transforme_array(data);
-  var data2=[];
-  feature_keep=[];
-
-//replace na with 0.
-  for(var i=0;i<data1.length;i++)
-    {
-      var nanum=0;
-      for(var j=0;j<data1[i].length;j++)
-      {
-        if(isNaN(data1[i][j]) | data1[i][j]==null){
-          //data1[i][j]=0;
-          //console.log(i+' '+j);
-          nanum++;
-        }
-      }
-      if(nanum==0)
-      {
-        data2.push(data1[i]);
-        feature_keep.push(i);
-      }
-    }
-     data2=transforme_array(data2);
-    return data2
-}
-function dealwithna_delete_by_sample(data1)
-{
-
-  //deep copy
-  //var data1=transforme_array(data);
-  var data2=[];
-  sample_keep=[];
-
-//replace na with 0.
-  for(var i=0;i<data1.length;i++)
-    {
-      var nanum=0;
-      for(var j=0;j<data1[i].length;j++)
-      {
-        if(isNaN(data1[i][j]) | data1[i][j]==null){
-          //data1[i][j]=0;
-          //console.log(i+' '+j);
-          nanum++;
-        }
-      }
-      if(nanum==0)
-      {
-        data2.push(data1[i]);
-        sample_keep.push(i);
-      }
-    }
-    return data2
-}
-function key_na_by_sample(){
-  key_replace='sample';
-}
-function key_na_by_feature(){
-  key_replace='feature';
-}
-function key_replace_with_mean(){
-  key_replace='mean';
-}
-function key_replace_with_median(){
-  key_replace='median';  
+  // select one feature
+  // combine with old feature
+  // training the model
+  // report AUC
+  // recoder the AUC ,loop finished
+  // Find the biggest combine.
+  // update the biggest into feature select array.
+  //
+  
 }
 
 
