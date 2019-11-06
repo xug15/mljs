@@ -249,11 +249,22 @@ margin: 10px 0px;
           <div class="panel panel-default">
               <div class="panel-heading">Feature Selection</div>
               <div class="panel-body">
+
                   <div class="row" style="margin:0;">
+                      <div class="input-group">
+                          <span class="input-group-addon">Select feature number</span>
+                          <input id="feature_number" type="text" class="form-control">
+                          <span class="input-group-addon">Less than 30</span>
+                        </div>
+                  </div><!--row--->
+                  <div class="row" style="margin:0;">
+
+                    
                       <div class="col-xs-12 col-sm-12" >
                           <button class="btn btn-primary button" onclick="feature_selection()"><span class="glyphicon glyphicon-play"></span>Feature selection Start</button>
                         </div>
                     </div>
+
 
               </div><!--panel -->
           </div><!--panel--->
@@ -665,80 +676,19 @@ for(var i=0;i<trainingData.length;i++)
 
     return [feature_select_array,feature_total_array,maxauc];
     }
-    
-    /*
-    var auc_matrix=[];
-    select_tmp_matrix=[];
-    var select_tmp_index=[];
-
-    // select one feature
-    for(var k=0;k<feature_total_array.length;k++)
+    var auc=0.5;
+    var feature_count=3;
+    var step=1;
+    while(auc<1 && step <= feature_count )
     {
-      //console.log(feature_total_array[k]);
-      //deep copy one feature array.
-      //This step is add select array feature into the tmp.
-      feature_select_tmp=JSON.parse(JSON.stringify(feature_select_array));
-      //add one feature into the array.
-      feature_select_tmp.push(feature_total_array[k]);
-      //add the label into the data.
-      feature_select_tmp.push((train_data.length)-1);
-      console.log("################\n#feature_select#\n################\n# "+feature_select_tmp+" #\n###########\n");
+      console.log("\n \n #####\n step:"+step);
+      [feature_select_array,feature_total_array,maxauc]=feature_select_loop(feature_total_array,feature_select_array);
       
-      //##load data according to index
-      //generate the each training data and validate. first initial it.
-      var training_data=[];
-      var validating_data=[];
-
-      for(var l=0;l<feature_select_tmp.length;l++)
-      {
-        //according the traning data and validate data.
-        training_data.push(train_data[feature_select_tmp[l]]);
-        validating_data.push(valid_data[feature_select_tmp[l]]);
-      }
-      training_data_tran=transforme_array(training_data);
-      validating_data_tran=transforme_array(validating_data);
-      //console.log("training:"+training_data_tran);
-      //console.log("validating:"+validating_data_tran);
-      //loaded data finished.
-
-      //
-      var name='model'+i;
-      window[name]=train_model_new(training_data_tran);
-      proarr=model_data_probability(window[name],validating_data_tran);
-      rocarray=mljs_validate(proarr,validateLabel[i][1]);
-      //output is pro,fprarr,tprarr,auc,precisionarr,specificityarr
-      //console.log(rocarray);
-      report_array=report_ml_value(rocarray);
-      //report auc
-      console.log(name);
-      console.log("AUC:"+rocarray[3]);
-
-      auc_matrix.push(rocarray[3]);
-      feature_select_tmp.pop();
-      select_tmp_matrix.push(feature_select_tmp);
-      select_tmp_index.push(feature_total_array[k]);
-
+      step+=1;
+      auc=maxauc;
     }
-    var feature_max_index=indexOfMax(auc_matrix);
-    console.log("auc_matrix:"+auc_matrix);
-    console.log("Max auc:"+auc_matrix[feature_max_index]);
-    console.log("feature_max_index:"+feature_max_index);
-    console.log("select_tmp_matrix:"+select_tmp_matrix);
-    console.log("select_tmp_index:"+select_tmp_index);
-    feature_select_array.push(feature_total_array[feature_max_index]);
-    feature_total_array.splice(feature_max_index,1);
-    console.log("feature_select_array"+feature_select_array);
-    console.log("feature_total_array"+feature_total_array);
-    */
-
-    //
-    // loop end
-    // feature_select_array is select the feature index array.
-    // feature_total_array is feature index.
     
-    //feature_select_loop function end
-    [feature_select_array,feature_total_array,maxauc]=feature_select_loop(feature_total_array,feature_select_array);
-    [feature_select_array,feature_total_array,maxauc]=feature_select_loop(feature_total_array,feature_select_array);
+    //[feature_select_array,feature_total_array,maxauc]=feature_select_loop(feature_total_array,feature_select_array);
 
 
   }
