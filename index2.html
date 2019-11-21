@@ -253,7 +253,7 @@ margin: 10px 0px;
                   <div class="row" style="margin:0;">
                       <div class="input-group">
                           <span class="input-group-addon">Select feature number</span>
-                          <input id="feature_number" type="text" class="form-control">
+                          <input id="feature_number" type="text" class="form-control" value="3">
                           <span class="input-group-addon">Less than 30</span>
                         </div>
                   </div><!--row--->
@@ -264,6 +264,14 @@ margin: 10px 0px;
                           <button class="btn btn-primary button" onclick="feature_selection()"><span class="glyphicon glyphicon-play"></span>Feature selection Start</button>
                         </div>
                     </div>
+                    <div id="feature_processing_box"  class="row" style="margin:0; display:none; margin:5px;">
+                        <div class="col-xs-12 col-sm-12" >
+                          <textarea id="feature_processing_box_content" rows="10" cols="55">
+
+                          </textarea>
+                        </div>
+                    </div>
+
 
 
               </div><!--panel -->
@@ -548,6 +556,10 @@ function feature_selection()
 {
   // get data
   //get data;
+  
+var foo = document.getElementById('feature_processing_box');
+foo.style.display = 'block';
+var content_update='';
 var data= getinforvalue('training_decision');
 var label=getinforlabel('label_decision');
 var label_unique=sort_unique(label);
@@ -584,6 +596,7 @@ validateLabel=valide[1];
 //
 var config_model='';
 var data=[];
+
 for(var i=0;i<trainingData.length;i++)
   {
     var row=[];
@@ -592,6 +605,7 @@ for(var i=0;i<trainingData.length;i++)
     // initai feature select array
     console.log("initai feature select array\n");
     console.log("########\n#"+name+"#\n########\n");
+    content_update+="########\n#"+name+"#\n########\n";
     feature_select_array=[];
     
     //feature_total_array recorder the feature index.
@@ -671,14 +685,40 @@ for(var i=0;i<trainingData.length;i++)
     console.log("select_tmp_index:"+select_tmp_index);
     feature_select_array.push(feature_total_array[feature_max_index]);
     feature_total_array.splice(feature_max_index,1);
+
+    var feature_name_select='';
+    for(var ai=0;ai<feature_select_array.length;ai++)
+    {
+    feature_name_select+=feature_name_array[feature_select_array[ai]]+", ";
+    }
+
     console.log("feature_select_array"+feature_select_array);
     console.log("feature_total_array"+feature_total_array);
 
+    content_update+="Feature number: "+feature_select_array.length+"\n";
+    content_update+="Feature_select_array: ["+feature_select_array+"]\n";
+    content_update+="Feature_select: ["+feature_name_select+"]\n";
+    //feature_name_array;
+    content_update+="Max auc:"+maxauc+"\n\n";
+
     return [feature_select_array,feature_total_array,maxauc];
     }
+    //function end
+
     var auc=0.5;
-    var feature_count=3;
+    var inputVal = document.getElementById("feature_number").value;
+    if(inputVal > 30)
+    {
+      alert("Less 30!");
+      break;
+    }else{
+      var feature_count=inputVal;
+    }
+    
     var step=1;
+    // while use to thing to test :
+    // 1, is auc must smaller than 1 and step must smaller than the feature selection.
+    // the step is comming from the 
     while(auc<1 && step <= feature_count )
     {
       console.log("\n \n #####\n step:"+step);
@@ -687,19 +727,16 @@ for(var i=0;i<trainingData.length;i++)
       step+=1;
       auc=maxauc;
     }
-    
+    //while end
+
+    document.getElementById("feature_processing_box_content").innerHTML = content_update;
     //[feature_select_array,feature_total_array,maxauc]=feature_select_loop(feature_total_array,feature_select_array);
 
 
   }
+  // trainingData for loop end.
+  // trainingData[i] is the classifity.o
   
-  // select one feature
-  // combine with old feature
-  // training the model
-  // report AUC
-  // recoder the AUC ,loop finished
-  // Find the biggest combine.
-  // update the biggest into feature select array.
   //
   
 }
