@@ -29,7 +29,8 @@
 * [d. Sort, Min, Min, Mean, median](code_md/d.sort.md) 
 * [e. plot.ly](https://plot.ly/javascript/) 
 * [f. mulity data was processed](code_md/f.multiply_data.md) 
-
+* [g. count array](code_md/g.countarray.md) 
+* [h. js add div](code_md/h.adddivjs.md) 
 
 [app](https://github.com/xug15/mljs/releases/tag/v1.0.0)
 

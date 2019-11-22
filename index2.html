@@ -264,13 +264,23 @@ margin: 10px 0px;
                           <button class="btn btn-primary button" onclick="feature_selection()"><span class="glyphicon glyphicon-play"></span>Feature selection Start</button>
                         </div>
                     </div>
-                    <div id="feature_processing_box"  class="row" style="margin:0; display:none; margin:5px;">
+                    <div id="feature_processing_box" style="display:none;">
+                      <div class="row" style="margin:0;  margin:5px;">
                         <div class="col-xs-12 col-sm-12" >
                           <textarea id="feature_processing_box_content" rows="10" cols="55">
 
                           </textarea>
                         </div>
                     </div>
+                    <div id="feature_result_plot"  class="row" style="margin:0; margin:5px;">
+                      <div class="col-xs-12 col-sm-12" >
+                        <div id="feature_auc_box">
+                        </div>
+                      </div>
+                  </div>
+
+                    </div>
+
 
 
 
@@ -551,7 +561,6 @@ for(var i=0;i<b.length;i++){
 return a;
 }
 
-
 function feature_selection()
 {
   // get data
@@ -560,18 +569,18 @@ function feature_selection()
 var foo = document.getElementById('feature_processing_box');
 foo.style.display = 'block';
 var content_update='';
+
+
+function shuffule_training_validating()
+{
+
 var data= getinforvalue('training_decision');
 var label=getinforlabel('label_decision');
 var label_unique=sort_unique(label);
-//console.log(label_unique);
-//merge_matrix()
 
 
 merge_array=merge_matrix(data,label);
-//console.log(merge_array);
 merge_array=shufflearray(merge_array);
-//console.log(merge_array);
-//
 var train_range_ratio=[0,0.8];
 var validate_range_ratio=[0.8,1];
 var train_range=[];
@@ -592,13 +601,30 @@ trainingLabel=train[1];
 var valide=generate_train_validate_data(label_unique,validate_range,merge_array);
 validateData=valide[0];
 validateLabel=valide[1];
+return [trainingData,trainingLabel,validateData,validateLabel];
+}
+
+[trainingData,trainingLabel,validateData,validateLabel]=shuffule_training_validating();
+console.log(trainingData);
+
 
 //
 var config_model='';
 var data=[];
-
-for(var i=0;i<trainingData.length;i++)
+var report_data=[];
+//main function for feature selection processing.
+function feature_selection_processing(trainingData,trainingLabel,validateData,validateLabel)
+{
+  if(report_data.length == 0)
   {
+      for(var i=0;i<trainingData.length;i++)
+    {
+      report_data.push([[],[],[]]);
+    }
+  }
+  for(var i=0;i<trainingData.length;i++)
+  {
+
     var row=[];
     row.push(trainingData[i][0]);
     var name='model'+i;
@@ -610,7 +636,7 @@ for(var i=0;i<trainingData.length;i++)
     
     //feature_total_array recorder the feature index.
     feature_total_array=[];
-
+    console.log(trainingData[i][1]);
     //transform the matrix training and validate data.
     var train_data=transforme_array(trainingData[i][1]);
     var valid_data=transforme_array(validateData[i][1]);
@@ -686,10 +712,12 @@ for(var i=0;i<trainingData.length;i++)
     feature_select_array.push(feature_total_array[feature_max_index]);
     feature_total_array.splice(feature_max_index,1);
 
-    var feature_name_select='';
+    //var feature_name_select='';
+    var feature_name_select=[];
     for(var ai=0;ai<feature_select_array.length;ai++)
     {
-    feature_name_select+=feature_name_array[feature_select_array[ai]]+", ";
+    //feature_name_select+=feature_name_array[feature_select_array[ai]]+", ";
+    feature_name_select.push(feature_name_array[feature_select_array[ai]]);
     }
 
     console.log("feature_select_array"+feature_select_array);
@@ -701,7 +729,7 @@ for(var i=0;i<trainingData.length;i++)
     //feature_name_array;
     content_update+="Max auc:"+maxauc+"\n\n";
 
-    return [feature_select_array,feature_total_array,maxauc];
+    return [feature_select_array,feature_total_array,maxauc,feature_name_select];
     }
     //function end
 
@@ -722,24 +750,77 @@ for(var i=0;i<trainingData.length;i++)
     while(auc<1 && step <= feature_count )
     {
       console.log("\n \n #####\n step:"+step);
-      [feature_select_array,feature_total_array,maxauc]=feature_select_loop(feature_total_array,feature_select_array);
+      [feature_select_array,feature_total_array,maxauc,feature_name_select]=feature_select_loop(feature_total_array,feature_select_array);
       
       step+=1;
       auc=maxauc;
     }
-    //while end
+    //report_data[i].push([feature_select_array,maxauc,feature_name_select]);
+    report_data[i][0].push(feature_select_array);
+    report_data[i][1].push(JSON.parse(maxauc));
+    report_data[i][2].push(feature_name_select);
+    ////while end
 
     document.getElementById("feature_processing_box_content").innerHTML = content_update;
-    //[feature_select_array,feature_total_array,maxauc]=feature_select_loop(feature_total_array,feature_select_array);
-
-
-  }
-  // trainingData for loop end.
+    
+  }// trainingData for loop end.
   // trainingData[i] is the classifity.o
-  
-  //
-  
+  }// end of function feature_selection_processing  
+
+  //first time
+  [trainingData,trainingLabel,validateData,validateLabel]=shuffule_training_validating();
+  feature_selection_processing(trainingData,trainingLabel,validateData,validateLabel);
+  console.log(trainingData);
+
+  //second time
+  [trainingData,trainingLabel,validateData,validateLabel]=shuffule_training_validating();
+  feature_selection_processing(trainingData,trainingLabel,validateData,validateLabel);
+  console.log(trainingData);
+
+  //third time
+  [trainingData,trainingLabel,validateData,validateLabel]=shuffule_training_validating();
+  feature_selection_processing(trainingData,trainingLabel,validateData,validateLabel);
+  console.log(report_data);
+
+  //fourth time
+  [trainingData,trainingLabel,validateData,validateLabel]=shuffule_training_validating();
+  feature_selection_processing(trainingData,trainingLabel,validateData,validateLabel);
+  console.log(trainingData);
+
+  //fifth time
+  [trainingData,trainingLabel,validateData,validateLabel]=shuffule_training_validating();
+  feature_selection_processing(trainingData,trainingLabel,validateData,validateLabel);
+  console.log(report_data);
+  var data=[];
+  for (var i=0;i<report_data.length;i++)
+  {
+    window["trace"+i]={y:report_data[i][1],type:'box',name:'model'+i};
+    data.push(window["trace"+i]);
+  }
+  console.log(data);
+    //var trace1 = {y: [1,0.7,0.6,0.5,0.75],type: 'box', name:'model 0'};
+    //var trace2 = {y: [0.67,0.7,0.65,0.85,0.75],type: 'box', name:'model 1'};
+    var layout={title:"Five-fold cross-validation AUC"};
+    //var data = [trace1, trace2];
+    Plotly.newPlot('feature_auc_box', data,layout);
+
+    // count the feature.
+    for (var i=0;i<report_data.length;i++)
+    {
+      window["count"+i]={};
+      for(var j=0;j<report_data[i][2].length;j++)
+      {
+        for(var k=0;k<report_data[i][2][j].length;k++)
+        {
+          window["count"+i][report_data[i][2][j][k]]=(window["count"+i][report_data[i][2][j][k]]+1) || 1;
+        }
+      }
+      console.log(window["count"+i]);
+    }
+
 }
+
+
 
 
 </script>  
