@@ -17,6 +17,8 @@ function addRow() {
   const div = document.createElement('div');
 
   div.className = 'row';
+  div.id='';
+  //div.style={};
 
   div.innerHTML = `
     <input type="text" name="name" value="" />
