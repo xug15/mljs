@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SEEK panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <!-- Insert this line above script imports  -->
+    <script type="text/javascript">
+      if (typeof module === 'object') {
+        window.module = module; 
+        module = undefined;
+      }
+      </script>
+
+    <script src="dataset-iris/dist/ml-dataset-iris.min.js"></script>
+    <script src="ploty/plotly-190419.min.js"></script>
+
+  <!--
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="jquery/jquery.js"></script>
+    <link  href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  -->
+
+    <script src="jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="datatable/jquery.dataTables.js"></script>
+    <script src="datatable/dataTables.buttons.min.js"></script>
+    <script src="datatable/buttons.flash.min.js"></script>
+    <script src="datatable/jszip.min.js"></script>
+    <script src="datatable/pdfmake.min.js"></script>
+    <script src="datatable/vfs_fonts.js"></script>
+    <script src="datatable/buttons.html5.min.js"></script>
+    <script src="datatable/buttons.print.min.js"></script>
+    
+    <link  href="datatable/jquery.dataTables.css" rel="stylesheet">
+    <link  href="datatable/buttons.dataTables.min.css" rel="stylesheet">
+    
+   
+
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link  href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+   
+    <script src="ml/js-regression.min.js"></script>
+    <script src="ml/ml.min.js"></script>
+    <script src="ml/ml-logistic-regression.min.js"></script>
+    <script src="ml/js-datasets-iris.min.js"></script>
+
+    <script src="ml/math.js"></script>
+    
+    <!-- Insert this line after script imports -->
+<script type="text/javascript">
+  if (window.module)
+     module = window.module;
+  </script>
+   
+<style>
+  .row{
+    margin-left: 0vh;
+    margin-right: 0vh;
+  }
+  .borderdiv{
+border-radius: 4px;
+border: 1px solid #ddd;
+box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+padding: 15px;
+margin: 10px 0px;
+}
+.button{
+  width: 100%;
+  margin-top: 5px;
+}
+.btn-primary{
+  border-color: #3d7eb5;
+  background-image:linear-gradient(to bottom,#3d7eb5,#0b3e69);
+}
+.btn-success{
+  border-color: #5cb75c;
+  background-image:linear-gradient(to bottom,#5cb75c,#0e960e);
+}
+.btn-info{
+  border-color: #69bbd4;
+  background-image:linear-gradient(to bottom,#69bbd4,#2f7b92);
+}
+.btn-warning{
+  border-color: #e8ae5c;
+  background-image:linear-gradient(to bottom,#e8ae5c,#b77a25);
+}
+.maringtop{
+  margin-top:5px;
+}
+.textarea{
+  width: 95%;
+}
+.log_wrapper{
+    width: 100%;
+    max-height: 160px;
+    top: 0px;
+    background-color: #ffffff;
+    height: 160px;
+    z-index: 2999;
+}
+.row_con{
+  padding: 10px;
+  margin: 10px 0;
+}
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  border-bottom: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+</head>
+<body>
+  <div class="container">
+      <div class="log_wrapper" style="margin:0 -15px;">
+          <div class="row">
+            <div class="col-md-10 col-xs-10">
+              <h2 style="color: #317eac; font-size:5vh; margin-top: 35px;margin-left: -40px;">
+                exRpanel-Seeker<span style="color:#000000"> for Liquid Biopsy<span>
+              </span></span></h2>
+            </div><!---->
+            <div class="col-md-2 col-xs-2">
+              <img src="image/headline.png" alt="Lu Lab" class="img-responsive">
+            </div><!---->
+          </div><!--row-->
+      </div><!--log_wrapper-->
+
+      <nav id="locatePosition" class="navbar navbar-default" role="navigation" style="position: static;margin:0 -15px;font-size:20px;">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+                <span class="sr-only"> Switch Navigation </span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="example-navbar-collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="./index.html">Home</a></li>
+                <li class="dropdown active">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Start Analysis <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu" style="font-size:20px;">
+                    <li><a href="a1.server.html" >Using server matrix</a></li>
+                    <li  class="active"><a href="a2.user.html" >Using customized matrix</a></li>
+                  </ul>
+                </li>
+                <li id="nav_trl"><a href="a3.download.html" >Download</a></li>
+                <li id="nav_help"><a href="a4.help.html">Help</a></li>
+                <li id="nav_contact"><a href="a5.contact.html">Contact</a></li>
+              </ul>
+            </div>
+          </div><!--container-fluid-->	
+        </nav>
+
+        <div class="row" style="margin: 10px 0;" id="select_input">
+            <div class="col-md-4 col-xs-12" style=" ">
+              <div style="min-height:100px; padding:2px; border: 2px solid #36508C; border-radius:4px; background-color:#B4C7E7;">
+                <!--step1-->
+                <div style="min-height:100px; border: 2px dashed #ffffff; border-radius:4px; background-color:#B4C7E7;padding:3px;">
+                  <p style="color:#ffffff;">
+                    Step 1: Upload the data matrix
+                  </p>
+                  <p></p>
+                  <p style="color:#091F5D">Data matrix</p>
+                  <div class="checkbox">
+                      <label>
+                        <input type="checkbox" checked="checked" id="feature_name">Gene name is contained
+                      </label>
+                    </div><!--check box-->
+                    <textarea id="training_decision" style="border-color: #d1d1d1;" class="textarea" rows="3" placeholder="GeneA,GeneB,GeneC,GeneD
+5.1,3.5,1.4,0.2
+4.9,3.1,1.4,0.2
+4.7,3.2,1.3,0.2"></textarea>
+              <p><strong style="color:#fff">OR</strong></p>
+              <span>Upload your data:</span>
+                    <div>
+                      <input type="file" style="border-color: #d1d1d1;" id="data_input" >
+                    </div>
+                    <button class="btn" style="border-color: #d1d1d1;margin:5px;" onclick="demo_data_user()">Demo data</button>
+                </div>
+                <!--step1-->
+                <!--step2-->
+                <div style="margin-top:10px;min-height:100px; border: 2px dashed #ffffff; border-radius:4px; background-color:#B4C7E7;padding:3px;">
+                  <p style="color:#ffffff;">
+                    Step 2: Upload the label
+                  </p>
+                  <p style="color:#091F5D">Labels</p>
+                  <textarea id="label_decision" style="margin:4px;border-color: #d1d1d1;" class="textarea" rows="3" placeholder="0
+0
+1"></textarea>
+                  <p><strong style="color:#fff">OR</strong></p>
+                  <span>Upload your data:</span>
+                    <div>
+                        <input type="file" style="border-color: #d1d1d1;" id="label_input" >
+                    </div>
+                </div>
+                <!--step2-->
+                <!--step3-->
+                <div style="margin-top:10px;min-height:100px; border: 2px dashed #ffffff; border-radius:4px; background-color:#B4C7E7;padding:3px;"><!--step2-->
+                  <p style="color:#ffffff;">
+                      Step 3: Set label mean
+                  </p>
+                    <p style="color:#091F5D">Label mean</p>
+                    <textarea id="label_mean" style="margin:4px;border-color: #d1d1d1;" class="textarea" rows="3" placeholder="0, Health
+1, Disease"></textarea>
+
+                </div>
+                <!--step3-->
+                <!--step4-->
+                <div style="margin-top:10px;min-height:100px; border: 2px dashed #ffffff; border-radius:4px; background-color:#B4C7E7;padding:3px;">
+                    <p style="color:#ffffff;">
+                        Step 4: Select number of markers
+                      </p>
+                    <p style="color:#091F5D">Number of markers</p>
+                    <select class="form-control" id="sel_number">
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=10>10</option>
+                        <option value=15>15</option>
+                        <option value=20>20</option>
+                        <option value=25>25</option>
+                        <option value=30>30</option>
+                      
+                      </select>
+                </div>
+                <!--step4-->
+
+                <button style="margin: 5px 0 2px 2px;" onclick="user_training()">Submit</button>
+              </div><!--box1-->
+
+            </div><!--col-md-6 col-xs-12-->
+            <div class="col-md-8 col-xs-12" >
+                <div style="min-height:100px; border: 2px solid #36508C; border-radius:4px; ">
+                  <div id="introduction">
+                      <img id="workflow" src="image/a4.userage.png" alt="Work flow" style="padding: 10px;width: 70%;margin: auto;" class="img-responsive">
+                      <p style="padding:0 5px;"><strong>Instructions</strong></p>
+                      <p style="padding:0 5px;">Using this website is easy:</p>
+                      <p style="padding:0 5px;">1. Select data matrix</p>
+                      <p style="padding:0 5px;">2. Select data source</p>
+                      <p style="padding:0 5px;">3. Select marker type</p>
+                      <p style="padding:0 5px;">4. Select number of markers you want to get.</p>                      
+                  </div><!--introduction-->
+                  </div><!-- border -->
+            </div><!--col-md-6 col-xs-12-->
+          </div>
+
+          <div class="row" style="margin:10px 0; display:none" id="loader_box">
+              <div style="width: 14%;margin: 0 auto;">
+                  <div class="loader"></div>
+              </div>
+          </div>
+
+          <!--result-->
+          <div class="row" style="margin:10px 0; display:none;" id="result">
+              <div class="col-md-12 col-xs-12" style=" ">
+                <div style="min-height:100px; border: 2px solid #36508C; border-radius:4px; padding:5px;"><!--border-->
+    
+                  <!--nav nav-tabls-->
+                  <ul class="nav nav-tabs">
+                      
+                      
+                      <li class="active"><a data-toggle="tab" href="#menu0">Information</a></li>
+                      <li><a data-toggle="tab" href="#menu1">Evaluation</a></li>
+                      <li ><a data-toggle="tab" href="#menu2">Prediction</a></li>
+                      <li><a data-toggle="tab" href="#menu4">PCA</a></li>
+                      <li><a data-toggle="tab" href="#menu3">Feature selection</a></li>
+                      
+                    </ul>
+                    <!--nav nav-tabls-->
+                    <!--tab content--->
+                    <!--menu1-->
+                    <div class="tab-content">
+                        <div id="menu0" class="tab-pane fade in active">
+                            <div id="information_result">
+    
+                              </div>
+                          
+                        </div>
+                        <!--menu1-->
+                        <!--menu2-->
+                        <div id="menu1" class="tab-pane fade">
+                          <div id="feature_evaluation_result">
+    
+                          </div>
+                        </div>
+                        <!--menu2-->
+                        <!--menu3-->
+                        <div id="menu2" class="tab-pane fade">
+                            <div id="prediction_result">
+    
+                              </div>
+                        </div>
+                        <!--menu3-->
+                        <!--menu4-->
+                        <div id="menu4" class="tab-pane fade">
+                            <div id="predict_pca">
+                              <div id="3dplot"></div>
+                              <div id="3dplotnew"></div>
+                              <div id="pcapercetage_plot"></div>
+                              
+                            </div><!--select_result-->
+                        </div>
+                        <!--menu4-->
+                        <!--menu5-->
+                        <div id="menu3" class="tab-pane fade">
+                            <div id="select_result">
+                            
+                              <p>This step may take several minutes, please be patient.</p>
+                              
+                              <button style="margin: 5px 0 2px 2px;" onclick="feature_selection_for_upload()">Start</button>
+                            </div>
+                        </div>
+                        <!--menu5-->
+                        
+                      </div>
+                    </div>
+                    <!--tab content--->
+    
+                </div><!--border-->
+              </div>
+              <!--result-->
+
+  </div><!---container--->
+  <script src="ml/mljsxg.js"></script>
+  <script src="ml/a1.server.js"></script>
+  <script src="ml/a2.user.js"></script>
+  
+  <script>
+  
+function readlabelmean()
+{
+  var label_mean=document.getElementById('label_mean').value;
+  var label_mean_array=label_mean.split("\n");
+  var label_mean_array_detail=[];
+  for(var i=0;i<label_mean_array.length;i++)
+  {
+    var array=[];
+    array=label_mean_array[i].split(",");
+    array[0]=parseFloat(array[0]);
+    label_mean_array_detail.push(array);
+  }
+  var label_name_mean=[];
+  for(var i=0;i<label_mean_array_detail.length;i++)
+  {
+    label_name_mean[label_mean_array_detail[i][0]]=label_mean_array_detail[i][1];
+  }
+  console.log(label_name_mean);
+  return  label_name_mean;
+}
+function user_training(){
+document.getElementById("loader_box").style.display = "block";
+document.getElementById("result").style.display = "none";
+  data_upload= getinforvalue('training_decision');
+  label_upload=getinforlabel('label_decision');
+  label_mean_upload=readlabelmean();
+console.log(data_upload);
+console.log(label_upload);
+//document.getElementById("result").style.display = "none";
+panelnum=document.getElementById('sel_number').value;
+//
+
+
+
+  adddivinto("information_result3dplot","information_result");
+  adddivinto("information_result3dplotnew","information_result");
+  adddivinto("information_resultpcapercetage_plot","information_result");
+  adddivinto("feature_evalutaion_result_table","feature_evaluation_result");
+  adddivinto("prediction_roc_result","prediction_result");
+  adddivinto("prediction_table_result","prediction_result");
+  adddivinto("feature_processing_box_content","select_result");
+  adddivinto("feature_count","select_result");
+  adddivinto("feature_auc_box","select_result");
+  //feature_evalue_with_data(data_upload,label_upload,feature_name_array,"GSE71008","feature_evalutaion_result_table",panelnum,label_mean_upload);
+  feature_evalue_with_data_user(data_upload,label_upload,feature_name_array,"GSE71008","feature_evalutaion_result_table",panelnum,label_mean_upload);
+
+  document.getElementById("loader_box").style.display = "none";
+  document.getElementById("result").style.display = "block";
+}
+function feature_selection_for_upload()
+{
+  document.getElementById("loader_box").style.display = "block";
+  document.getElementById("result").style.display = "none";
+  feature_selection_with_data_user(data_upload,label_upload,feature_name_array,label_mean_upload);
+  document.getElementById("loader_box").style.display = "none";
+  document.getElementById("result").style.display = "block";
+}
+
+  </script>
+  <footer style="font-size: 17px;">
+      <center>
+          <hr>
+          <p class="powered" align="center">© 2019 exRpanel-Seeker for Liquid Biopsy <a href="http://bioinformatics.life.tsinghua.edu.cn">Lu Lab @ Tsinghua University</a></p>
+      </center>
+    </footer><!--footer-->
+
+</body><!---body-->
+</html>

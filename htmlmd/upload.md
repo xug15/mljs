@@ -53,7 +53,6 @@ function readSingleFile(e) {
     uploadjson=JSON.parse(contents);
   };
   reader.readAsText(file);
-
 }
 
 function displayContents(contents) {

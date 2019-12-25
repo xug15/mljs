@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>exRpanel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <!-- Insert this line above script imports  -->
+    <script type="text/javascript">
+      if (typeof module === 'object') {
+        window.module = module; 
+        module = undefined;
+      }
+      </script>
+
+    <script src="dataset-iris/dist/ml-dataset-iris.min.js"></script>
+    <script src="ploty/plotly-190419.min.js"></script>
+
+  <!--
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="jquery/jquery.js"></script>
+    <link  href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  -->
+
+    <script src="jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="datatable/jquery.dataTables.js"></script>
+    <script src="datatable/dataTables.buttons.min.js"></script>
+    <script src="datatable/buttons.flash.min.js"></script>
+    <script src="datatable/jszip.min.js"></script>
+    <script src="datatable/pdfmake.min.js"></script>
+    <script src="datatable/vfs_fonts.js"></script>
+    <script src="datatable/buttons.html5.min.js"></script>
+    <script src="datatable/buttons.print.min.js"></script>
+    
+    <link  href="datatable/jquery.dataTables.css" rel="stylesheet">
+    <link  href="datatable/buttons.dataTables.min.css" rel="stylesheet">
+    
+   
+
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link  href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+   
+    <script src="ml/js-regression.min.js"></script>
+    <script src="ml/ml.min.js"></script>
+    <script src="ml/ml-logistic-regression.min.js"></script>
+    <script src="ml/js-datasets-iris.min.js"></script>
+
+    <script src="ml/math.js"></script>
+    <!-- Insert this line after script imports -->
+<script type="text/javascript">
+  if (window.module)
+     module = window.module;
+  </script>
+   
+<style>
+  .row{
+    margin-left: 0vh;
+    margin-right: 0vh;
+  }
+  .borderdiv{
+border-radius: 4px;
+border: 1px solid #ddd;
+box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+padding: 15px;
+margin: 10px 0px;
+}
+.button{
+  width: 100%;
+  margin-top: 5px;
+}
+.btn-primary{
+  border-color: #3d7eb5;
+  background-image:linear-gradient(to bottom,#3d7eb5,#0b3e69);
+}
+.btn-success{
+  border-color: #5cb75c;
+  background-image:linear-gradient(to bottom,#5cb75c,#0e960e);
+}
+.btn-info{
+  border-color: #69bbd4;
+  background-image:linear-gradient(to bottom,#69bbd4,#2f7b92);
+}
+.btn-warning{
+  border-color: #e8ae5c;
+  background-image:linear-gradient(to bottom,#e8ae5c,#b77a25);
+}
+.maringtop{
+  margin-top:5px;
+}
+.textarea{
+  width: 35vh;
+}
+.log_wrapper{
+    width: 100%;
+    max-height: 160px;
+    top: 0px;
+    background-color: #ffffff;
+    height: 160px;
+    z-index: 2999;
+}
+.row_con{
+  padding: 10px;
+  margin: 10px 0;
+}
+</style>
+
+</head>
+<body>
+  <div class="container">
+      <div class="log_wrapper" style="margin:0 -15px;">
+          <div class="row">
+            <div class="col-md-10 col-xs-10">
+              <h2 style="color: #317eac; font-size:5vh; margin-top: 35px;margin-left: -40px;">
+                exRpanel<span style="color:#000000"> for Liquid Biopsy<span>
+              </span></span></h2>
+            </div><!---->
+            <div class="col-md-2 col-xs-2">
+              
+            </div><!---->
+          </div><!--row-->
+      </div><!--log_wrapper-->
+
+      <nav id="locatePosition" class="navbar navbar-default" role="navigation" style="position: static;margin:0 -15px;font-size:20px;">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+                <span class="sr-only"> Switch Navigation </span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="example-navbar-collapse">
+              <ul class="nav navbar-nav">
+                <li ><a href="./index.html">Home</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Start Analysis <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu" style="font-size:20px;">
+                    <li><a href="a1.server.html" >Using server matrix</a></li>
+                    <li><a href="a2.user.html" >Using customized matrix</a></li>
+                  </ul>
+                </li>
+                <li class="active" id="nav_trl"><a href="a3.download.html" >Download</a></li>
+                <li id="nav_help"><a href="a4.help.html">Help</a></li>
+                <li id="nav_contact"><a href="a5.contact.html">Contact</a></li>
+              </ul>
+            </div>
+          </div><!--container-fluid-->	
+        </nav>
+
+          <div class="row" style="margin: 10px 0;">
+            <div id="downloadlist" class="panel panel-default">
+              <div class="panel-heading">
+                  <h4 class="panel-title" style="margin: 0;;color:#337ab7;">
+                  Download
+                  </h4>
+              </div>
+              <div class="panel-body">
+              <br>
+                  <div class="panel panel-primary">
+                      <div class="panel panel-body">
+                      <table class="table ">
+                                  <tbody>
+                                    <tr>
+                                          <td><strong>Description</strong></td>
+                                          <td><strong>Download</strong></td>
+                                  </tr>
+                                  <tr>
+                                      <td>exoRBase.zip</td>
+                                          <td>
+                                          <span id="" type="button" class="btn btn-default btn-sm" ">
+                                            <a href="download/exoRBase.zip">
+                                              <span class="glyphicon glyphicon-download-alt"></span> Download
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>GSE122488.zip </td>
+                                          <td>
+                                          <span id="" type="button" class="btn btn-default btn-sm" ">
+                                            <a href="download/GSE122488.zip">
+                                              <span class="glyphicon glyphicon-download-alt"></span> Download
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>GSE123972.zip </td>
+                                          <td>
+                                          <span id="" type="button" class="btn btn-default btn-sm" ">
+                                            <a href="download/GSE123972.zip">
+                                              <span class="glyphicon glyphicon-download-alt"></span> Download
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>GSE59418.zip </td>
+                                          <td>
+                                          <span id="" type="button" class="btn btn-default btn-sm" ">
+                                            <a href="download/GSE59418.zip">
+                                              <span class="glyphicon glyphicon-download-alt"></span> Download
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>GSE71008_scirep.zip </td>
+                                          <td>
+                                          <span id="" type="button" class="btn btn-default btn-sm" ">
+                                            <a href="download/GSE71008_scirep.zip">
+                                              <span class="glyphicon glyphicon-download-alt"></span> Download
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>PRJEB1712.zip </td>
+                                          <td>
+                                          <span id="" type="button" class="btn btn-default btn-sm" ">
+                                            <a href="download/PRJEB1712.zip">
+                                              <span class="glyphicon glyphicon-download-alt"></span> Download
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>PRJNA540919.zip </td>
+                                          <td>
+                                          <span id="" type="button" class="btn btn-default btn-sm" ">
+                                            <a href="download/PRJNA540919.zip">
+                                              <span class="glyphicon glyphicon-download-alt"></span> Download
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>SRP061372.zip </td>
+                                          <td>
+                                          <span id="" type="button" class="btn btn-default btn-sm" ">
+                                            <a href="download/SRP061372.zip">
+                                              <span class="glyphicon glyphicon-download-alt"></span> Download
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>SRP130149.zip </td>
+                                          <td>
+                                          <span id="" type="button" class="btn btn-default btn-sm" ">
+                                            <a href="download/SRP130149.zip">
+                                              <span class="glyphicon glyphicon-download-alt"></span> Download
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                    <td>GSE114711.zip </td>
+                                        <td>
+                                        <span id="" type="button" class="btn btn-default btn-sm" ">
+                                          <a href="download/GSE114711.zip">
+                                            <span class="glyphicon glyphicon-download-alt"></span> Download
+                                          </a>
+                                        </span>
+                                    </td>
+                                </tr>                                  
+                          </tbody>
+                      </table><!--table -->
+                      </div><!--panel panel-body-->
+                    </div><!--panel panel-primary-->
+                </div><!--panel-body-->
+                             
+                </div><!--panel-body-->
+          </div><!--row -->
+
+  </div><!---container--->
+  <footer style="font-size: 17px;">
+      <center>
+          <hr>
+          <p class="powered" align="center">© 2019 exRpanel-Seeker for Liquid Biopsy <a href="http://bioinformatics.life.tsinghua.edu.cn">Lu Lab @ Tsinghua University</a></p>
+      </center>
+    </footer><!--footer-->
+
+</body><!---body-->
+</html>

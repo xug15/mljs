@@ -1,6 +1,83 @@
 # Sort, Min, min, mean, median
 * [Back Home](../README.md)
 
+## sort and return the index of sort.
+```js
+function sort_and_index(array2){
+    var array=JSON.parse(JSON.stringify(array2));
+    var array_old=JSON.parse(JSON.stringify(array2));
+    array_order=array.sort(function(a,b){return b-a});
+    var index_array=[];
+    for(var i=0;i<array_old.length;i++)
+    {
+        var j=array_order.indexOf(array_old[i]);
+        index_array.push(j);
+        array_order[j]=NaN;
+    }
+    //return [array_old,array_order,index_array];
+    return index_array;
+
+}
+data=[1,2,111,33,17];
+sort_and_index(data);
+//[6, 4, 5, 0, 7, 2, 3, 1]
+
+function sort_and_index_max(array2,number){
+    var array=JSON.parse(JSON.stringify(array2));
+    if(number>array.lenght){
+        console.log("The max number is mucher than total of array!");
+    }
+    var array_old=JSON.parse(JSON.stringify(array2));
+    array_order=array.sort(function(a,b){return b-a});
+    var index_array=[];
+    
+    for(var i=0;i<number;i++)
+    {
+        var j=array_old.indexOf(array_order[i]);
+        index_array.push(j);
+        array_old[j]=NaN;
+    }
+    //return [array_old,array_order,index_array];
+    
+    return index_array;
+
+}
+data=[1,2,111,33,17];
+sort_and_index_max(data,2);
+//[2, 3]
+function sort_and_index_max_array(array23,number){
+    var array2=[];
+    for (var i=0;i<array23.length;i++)
+    {
+        array2.push(array23[i][0]);
+    }
+    var array=JSON.parse(JSON.stringify(array2));
+    if(number>array.lenght){
+        console.log("The max number is mucher than total of array!");
+    }
+    var array_old=JSON.parse(JSON.stringify(array2));
+    array_order=array.sort(function(a,b){return b-a});
+    var index_array=[];
+    
+    for(var i=0;i<number;i++)
+    {
+        var j=array_old.indexOf(array_order[i]);
+        index_array.push(j);
+        array_old[j]=NaN;
+    }
+    //return [array_old,array_order,index_array];
+    
+    return index_array;
+
+}
+//
+sort_and_index_max_array(feature_entropy,3)
+
+
+
+```
+
+
 ## Sort array, small to big.
 ```js
 data=[1,4,2,44,0,21,17];
