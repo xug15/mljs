@@ -15,7 +15,7 @@ function train_randomforest(){
   };
 
   //Generate a decision module.
-  classifier_randomforest = new ML.DecisionTreeClassifier(options);
+  classifier_randomforest = new ML.RandomForestClassifier(options);
 
   //Training the data
   classifier_randomforest.train(decision_data_a, decision_label_a);

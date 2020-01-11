@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ML JavaScript</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <!-- Insert this line above script imports  -->
+    <script type="text/javascript">
+      if (typeof module === 'object') {
+        window.module = module; 
+        module = undefined;
+      }
+      </script>
+
+    <script src="dataset-iris/dist/ml-dataset-iris.min.js"></script>
+    <script src="ploty/plotly-190419.min.js"></script>
+
+  <!--
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="jquery/jquery.js"></script>
+    <link  href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  -->
+   
+    <script src="jquery/1.12.4/jquery.min.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link  href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+   
+    <script src="ml/js-regression.min.js"></script>
+    <script src="ml/ml.min.js"></script>
+    <script src="ml/ml-logistic-regression.min.js"></script>
+    <script src="ml/js-datasets-iris.min.js"></script>
+    <!-- Insert this line after script imports -->
+<script type="text/javascript">
+  if (window.module)
+     module = window.module;
+  </script>
+   
+<style>
+  .row{
+    margin-left:6vh;
+  }
+  .borderdiv{
+border-radius: 4px;
+border: 1px solid #ddd;
+box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+padding: 15px;
+margin: 10px 0px;
+}
+.button{
+  width: 100%;
+  margin-top: 5px;
+}
+.btn-primary{
+  border-color: #3d7eb5;
+  background-image:linear-gradient(to bottom,#3d7eb5,#0b3e69);
+}
+.btn-success{
+  border-color: #5cb75c;
+  background-image:linear-gradient(to bottom,#5cb75c,#0e960e);
+}
+.btn-info{
+  border-color: #69bbd4;
+  background-image:linear-gradient(to bottom,#69bbd4,#2f7b92);
+}
+.btn-warning{
+  border-color: #e8ae5c;
+  background-image:linear-gradient(to bottom,#e8ae5c,#b77a25);
+}
+.maringtop{
+  margin-top:5px;
+}
+.textarea{
+  width: 35vh;
+}
+</style>
+
+</head>
+
+<body>
+    <div class="container" style="margin:0 10hv;">
+      <div class="row" >
+        <div class="col-xs-12 col-sm-6" >
+            <h1>ML JS Classification</h1>
+        </div>
+    </div>
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <label>Training sets</label>
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <textarea id="training_decision" style="margin:4px;border-color: #d1d1d1;" class="textarea" rows="3" placeholder="5.1,3.5,1.4,0.2
+4.9,3.1,1.4,0.2
+4.7,3.2,1.3,0.2"></textarea>
+      </div>
+    </div>
+    <div class="row" style="margin-top:5px;">
+      <div class="col-xs-12 col-sm-2" >
+        <span>Upload your data:</span>
+      </div>
+      <div class="col-xs-12 col-sm-6" >
+        <input type="file" style="border-color: #d1d1d1;" id="data_input" >
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <label>Labels</label>
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <textarea id="label_decision" style="margin:4px;border-color: #d1d1d1;" class="textarea" rows="3" placeholder="0
+0
+0"></textarea>
+      </div>
+    </div>
+    <div class="row" style="margin-top:5px;">
+      <div class="col-xs-12 col-sm-2" >
+        Upload the label of data:
+      </div>
+      <div class="col-xs-12 col-sm-6" >
+        <input type="file" style="border-color: #d1d1d1;" id="label_input" >
+      </div>
+    </div>
+    <div class="row" >
+        <div class="col-xs-12 col-sm-2" >
+            <button class="btn" style="border-color: #d1d1d1;margin:5px;" onclick="demo_data()">Demo data</button>
+          </div>
+    </div>
+    <div class="row" style="display:none;">
+        <div class="col-xs-12 col-sm-2" >
+            <button class="btn" style="border-color: #d1d1d1;margin:5px;" onclick="update_data()">Update data</button>
+          </div>
+    </div>
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <button class="btn btn-primary button" onclick="train_pca()"><span class="glyphicon glyphicon-play"></span>PCA analysis</button>
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <button class="btn btn-primary button" onclick="train_logistic()"><span class="glyphicon glyphicon-play"></span>Logistic Regression Training</button>
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <button class="btn btn-primary button" onclick="train_decision()"><span class="glyphicon glyphicon-play"></span>Decision Tree Training</button>
+      </div>
+    </div>
+    
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <button class="btn btn-primary button" onclick="train_randomforest()"><span class="glyphicon glyphicon-play"></span>Random Forest Training</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top:5px;">
+      <div class="col-xs-12 col-sm-6" >
+        <input type="file" id="file-input" >
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+        <button class="btn btn-success maringtop color2" onclick="loadmodule()">Upload module</button>
+      </div>
+    </div>
+    <div class="predict_pca" style="display:none;">
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+              <button class="btn btn-info maringtop" onclick="download_pca()"><span class="glyphicon glyphicon-download-alt"></span>
+                Download PCA module</button>
+      </div><!--col-xs-12-->
+    </div><!--row-->
+    <div class="row" >
+        <div class="col-xs-12 col-sm-6" >
+            <label>Origin data </label>
+        </div><!--col-xs-12-->
+      </div><!--row-->
+      <div class="row" >
+          <div class="col-xs-12 col-sm-6" >
+              <p>Select 3 dimential data to display</p>
+              
+          </div><!--col-xs-12-->
+      </div><!--row-->
+      <div class="row" >
+          <div class="col-xs-10 col-sm-10" >
+              <div class="borderdiv" id='3dplot' style="height:59vh;"></div> 
+          </div><!--col-xs-12-->
+      </div><!--row-->
+      <div class="row" >
+          <div class="col-xs-12 col-sm-6" >
+
+          </div><!--col-xs-12-->
+      </div><!--row-->
+
+      <div class="row" >
+          <div class="col-xs-12 col-sm-6" >
+              <label>PCA analysis data</label>
+              
+              <hr>
+          </div><!--col-xs-12-->
+        </div><!--row-->
+        <div class="row" >
+            <div class="col-xs-12 col-sm-6" >
+                <p>Select 3 biggest divation to display</p>
+                
+            </div><!--col-xs-12-->
+        </div><!--row-->
+        <div class="row" >
+            <div class="col-xs-10 col-sm-10" >
+                <div class="borderdiv" id='3dplotnew' style="height:59vh;"></div>
+            </div><!--col-xs-12-->
+        </div><!--row-->
+        <div class="row" >
+            <div class="col-xs-12 col-sm-6" >
+              
+            </div><!--col-xs-12-->
+          </div><!--row-->
+
+  </div><!--predict_pca-->
+  <div class="predict_logistic" style="display:none;">
+      <div class="row" >
+          <div class="col-xs-12 col-sm-6" >
+              <label>Logistic Regression Prediction data</label>
+          </div><!--col-xs-12-->
+        </div><!--row-->
+        <div id="roc_plot"></div>
+        <div class="row" >
+            <div class="col-xs-12 col-sm-6" >
+                <textarea id="predict_decision_input" style="margin:4px;" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
+            </div><!--col-xs-12-->
+          </div><!--row-->
+          <div class="row" >
+              <div class="col-xs-12 col-sm-6" >
+                  <button class="btn  btn-info" onclick="download_logistic()"><span class="glyphicon glyphicon-download-alt"></span>
+                    Download Logistic Regression module</button>
+              </div><!--col-xs-12-->
+            </div><!--row-->
+            <div class="row" >
+                <div class="col-xs-12 col-sm-6" >
+                    <button class="btn btn-success maringtop" onclick="prediction_logistic()">Logistic Regression Prediction</button>
+                </div><!--col-xs-12-->
+              </div><!--row-->
+              <div class="row" >
+                  <div class="col-xs-12 col-sm-6" >
+                      <div id="result_logistic"></div>
+                  </div><!--col-xs-12-->
+                </div><!--row-->
+    </div>
+
+    <div class="predict_decision" style="display:none;">
+        <div class="row" >
+            <div class="col-xs-12 col-sm-6" >
+                <label>Decision tree Prediction data</label>
+            </div><!--col-xs-12-->
+          </div><!--row-->
+          <div class="row" >
+              <div class="col-xs-12 col-sm-6" >
+                  <textarea id="predict_decision_input" style="margin:4px;" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
+              </div><!--col-xs-12-->
+            </div><!--row-->
+            <div class="row" >
+                <div class="col-xs-12 col-sm-6" >
+                    <button class="btn btn-info" onclick="download_decisiontree()"><span class="glyphicon glyphicon-download-alt"></span>
+                      Download Decision Tree module</button>
+                </div><!--col-xs-12-->
+              </div><!--row-->
+              <div class="row" >
+                  <div class="col-xs-12 col-sm-6" >
+                      <button class="btn btn-success maringtop" onclick="prediction_decision()">Decision Tree Prediction</button>
+                  </div><!--col-xs-12-->
+                </div><!--row-->
+                <div class="row" >
+                    <div class="col-xs-12 col-sm-6" >
+                        <div id="result_dicision"></div>
+                    </div><!--col-xs-12-->
+                  </div><!--row-->
+    </div>
+
+    <div class="predict_randomforest" style="display:none;">
+        <div class="row" >
+            <div class="col-xs-12 col-sm-6" >
+                <label>Random Forest Prediction data</label>
+            </div><!--col-xs-12-->
+          </div><!--row-->
+          <div class="row" >
+              <div class="col-xs-12 col-sm-6" >
+                  <textarea id="predict_randomforest_input" style="margin:4px;" class="textarea"  rows="3" placeholder="[5.1,3.5,1.4,0.2]">[5.1,3.5,1.4,0.2],[4.9,3,1.4,0.2],[6,2.9,4.5,1.5],[5.7,2.6,3.5,1]</textarea>
+              </div><!--col-xs-12-->
+            </div><!--row-->
+            <div class="row" >
+                <div class="col-xs-12 col-sm-6" >
+                    <button class="btn btn-info" onclick="download_randomforest()">
+                        <span class="glyphicon glyphicon-download-alt"></span>
+                        Download Random Forest module</button>
+                </div><!--col-xs-12-->
+              </div><!--row-->
+              <div class="row" >
+                  <div class="col-xs-12 col-sm-6" >
+                      <button class="btn btn-success maringtop" onclick="prediction_randomforest()">Random Forest Prediction</button>
+                  </div><!--col-xs-12-->
+                </div><!--row-->
+                <div class="row" >
+                    <div class="col-xs-12 col-sm-6" >
+                        <div id="result_randomforest"></div>
+                    </div><!--col-xs-12-->
+                  </div><!--row-->
+    </div>
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+      </div><!--col-xs-12-->
+    </div><!--row-->
+    <div class="row" >
+      <div class="col-xs-12 col-sm-6" >
+      </div>
+    </div>
+    <div class="container">
+        <fieldset style="display: none;">
+          <legend>Exponential regression</legend>
+          <label>X value</label>
+          <textarea id="exponentialx" class="textarea" style="margin:4px;"  rows="3" placeholder="0, 1, 2, 3, 4">0,1,2,3,4</textarea>
+          <label>Y value</label>
+          <textarea id="exponentialy" class="textarea" style="margin:4px;"  rows="3" placeholder="1.5, 2.5, 3.5, 5.0, 7.5">1.5,2.5,3.5,5.0,7.5</textarea>
+          <label >
+          </label>
+          <button class="btn" onclick="exponential()">Click me</button>
+          <hr>
+        </fieldset>
+        <div id="info"></div>
+        <div id="plot"></div>
+        <div id="decision_info"></div>
+        <label>
+        </label>
+        <div>
+        </div>
+        <div style="margin:10px;">
+        </div>
+      </fieldset>
+      <div style="margin-bottom: 200px;"></div>
+    </div>
+<script src="ml/mljsxg.js"></script>
+
+<script type="text/javascript">
+function readdata(e) 
+{
+	var file = e.target.files[0];
+	if (!file) 
+	{
+		return;
+	}
+	var reader = new FileReader();
+	reader.onload = function(e) 
+	{
+		datacontents = e.target.result;
+		// Display file content
+		
+	};
+  reader.readAsText(file);
+  //return datacontents;
+}
+document.getElementById('data_input').addEventListener('change', readdata, false);
+function readlabel(e) 
+{
+	var file = e.target.files[0];
+	if (!file) 
+	{
+		return;
+	}
+	var reader = new FileReader();
+	reader.onload = function(e) 
+	{
+		labelcontents = e.target.result;
+		// Display file content
+		
+	};
+  reader.readAsText(file);
+  //return labelcontents;
+}
+document.getElementById('label_input').addEventListener('change', readlabel, false);
+
+
+// getinforvalue('training_decision')
+
+function getinforvalue(trainid){
+  //var trainid='training_decision';
+  //get the html data
+  if(typeof datacontents==="undefined"){
+    var decision_data=document.getElementById(trainid).value;
+  }else if(datacontents.length>0){
+    var decision_data=datacontents;
+  }else{
+    var decision_data=document.getElementById(trainid).value;
+  }
+  
+  //decision_label=document.getElementById("label_decision").value;
+
+  //transforme data formate.
+  var data=decision_data.split('\n');
+  var dataarr=[];
+  for(var i=0;i<data.length;i++){
+    var row=[];
+    row=data[i].split(',').map(function(item) {
+	return parseFloat(item);
+  });
+    dataarr.push(row);
+  }
+  console.log(dataarr);
+
+  return dataarr;
+
+}
+
+
+// getinforlabel('label_decision');
+function getinforlabel(){
+  //get the html data
+  //decision_data=document.getElementById("training_decision").value;
+  var lableid='label_decision';
+  if(typeof labelcontents==="undefined"){
+    var decision_label=document.getElementById(lableid).value;
+  }
+  else if(labelcontents.length>0){
+    var decision_label=labelcontents;
+  }else{
+    var decision_label=document.getElementById(lableid).value;
+  }
+
+
+  //transforme data formate.
+
+  var decision_label_a=decision_label.split('\n').map(function(item) {
+	return parseFloat(item);
+  })
+  console.log(decision_label_a);
+  return decision_label_a;
+}
+
+
+function update_data(){
+
+}
+
+function demo_data(){
+  document.getElementById('training_decision').innerHTML='5.1,3.5,1.4,0.2\n4.9,3,1.4,0.2\n4.7,3.2,1.3,0.2\n4.6,3.1,1.5,0.2\n5,3.6,1.4,0.2\n5.4,3.9,1.7,0.4\n4.6,3.4,1.4,0.3\n5,3.4,1.5,0.2\n4.4,2.9,1.4,0.2\n4.9,3.1,1.5,0.1\n5.4,3.7,1.5,0.2\n4.8,3.4,1.6,0.2\n4.8,3,1.4,0.1\n4.3,3,1.1,0.1\n5.8,4,1.2,0.2\n5.7,4.4,1.5,0.4\n5.4,3.9,1.3,0.4\n5.1,3.5,1.4,0.3\n5.7,3.8,1.7,0.3\n5.1,3.8,1.5,0.3\n5.4,3.4,1.7,0.2\n5.1,3.7,1.5,0.4\n4.6,3.6,1,0.2\n5.1,3.3,1.7,0.5\n4.8,3.4,1.9,0.2\n5,3,1.6,0.2\n5,3.4,1.6,0.4\n5.2,3.5,1.5,0.2\n5.2,3.4,1.4,0.2\n4.7,3.2,1.6,0.2\n4.8,3.1,1.6,0.2\n5.4,3.4,1.5,0.4\n5.2,4.1,1.5,0.1\n5.5,4.2,1.4,0.2\n4.9,3.1,1.5,0.2\n5,3.2,1.2,0.2\n5.5,3.5,1.3,0.2\n4.9,3.6,1.4,0.1\n4.4,3,1.3,0.2\n5.1,3.4,1.5,0.2\n5,3.5,1.3,0.3\n4.5,2.3,1.3,0.3\n4.4,3.2,1.3,0.2\n5,3.5,1.6,0.6\n5.1,3.8,1.9,0.4\n4.8,3,1.4,0.3\n5.1,3.8,1.6,0.2\n4.6,3.2,1.4,0.2\n5.3,3.7,1.5,0.2\n5,3.3,1.4,0.2\n7,3.2,4.7,1.4\n6.4,3.2,4.5,1.5\n6.9,3.1,4.9,1.5\n5.5,2.3,4,1.3\n6.5,2.8,4.6,1.5\n5.7,2.8,4.5,1.3\n6.3,3.3,4.7,1.6\n4.9,2.4,3.3,1\n6.6,2.9,4.6,1.3\n5.2,2.7,3.9,1.4\n5,2,3.5,1\n5.9,3,4.2,1.5\n6,2.2,4,1\n6.1,2.9,4.7,1.4\n5.6,2.9,3.6,1.3\n6.7,3.1,4.4,1.4\n5.6,3,4.5,1.5\n5.8,2.7,4.1,1\n6.2,2.2,4.5,1.5\n5.6,2.5,3.9,1.1\n5.9,3.2,4.8,1.8\n6.1,2.8,4,1.3\n6.3,2.5,4.9,1.5\n6.1,2.8,4.7,1.2\n6.4,2.9,4.3,1.3\n6.6,3,4.4,1.4\n6.8,2.8,4.8,1.4\n6.7,3,5,1.7\n6,2.9,4.5,1.5\n5.7,2.6,3.5,1\n5.5,2.4,3.8,1.1\n5.5,2.4,3.7,1\n5.8,2.7,3.9,1.2\n6,2.7,5.1,1.6\n5.4,3,4.5,1.5\n6,3.4,4.5,1.6\n6.7,3.1,4.7,1.5\n6.3,2.3,4.4,1.3\n5.6,3,4.1,1.3\n5.5,2.5,4,1.3\n5.5,2.6,4.4,1.2\n6.1,3,4.6,1.4\n5.8,2.6,4,1.2\n5,2.3,3.3,1\n5.6,2.7,4.2,1.3\n5.7,3,4.2,1.2\n5.7,2.9,4.2,1.3\n6.2,2.9,4.3,1.3\n5.1,2.5,3,1.1\n5.7,2.8,4.1,1.3\n6.3,3.3,6,2.5\n5.8,2.7,5.1,1.9\n7.1,3,5.9,2.1\n6.3,2.9,5.6,1.8\n6.5,3,5.8,2.2\n7.6,3,6.6,2.1\n4.9,2.5,4.5,1.7\n7.3,2.9,6.3,1.8\n6.7,2.5,5.8,1.8\n7.2,3.6,6.1,2.5\n6.5,3.2,5.1,2\n6.4,2.7,5.3,1.9\n6.8,3,5.5,2.1\n5.7,2.5,5,2\n5.8,2.8,5.1,2.4\n6.4,3.2,5.3,2.3\n6.5,3,5.5,1.8\n7.7,3.8,6.7,2.2\n7.7,2.6,6.9,2.3\n6,2.2,5,1.5\n6.9,3.2,5.7,2.3\n5.6,2.8,4.9,2\n7.7,2.8,6.7,2\n6.3,2.7,4.9,1.8\n6.7,3.3,5.7,2.1\n7.2,3.2,6,1.8\n6.2,2.8,4.8,1.8\n6.1,3,4.9,1.8\n6.4,2.8,5.6,2.1\n7.2,3,5.8,1.6\n7.4,2.8,6.1,1.9\n7.9,3.8,6.4,2\n6.4,2.8,5.6,2.2\n6.3,2.8,5.1,1.5\n6.1,2.6,5.6,1.4\n7.7,3,6.1,2.3\n6.3,3.4,5.6,2.4\n6.4,3.1,5.5,1.8\n6,3,4.8,1.8\n6.9,3.1,5.4,2.1\n6.7,3.1,5.6,2.4\n6.9,3.1,5.1,2.3\n5.8,2.7,5.1,1.9\n6.8,3.2,5.9,2.3\n6.7,3.3,5.7,2.5\n6.7,3,5.2,2.3\n6.3,2.5,5,1.9\n6.5,3,5.2,2\n6.2,3.4,5.4,2.3\n5.9,3,5.1,1.8';
+  document.getElementById('label_decision').innerHTML='0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2\n2';
+}
+function merge_matrix(a,b){
+  var c=[];
+for(var i=0;i<a.length;i++){
+
+  a[i].push(b[i]);
+  c.push(a[i]);
+}
+return c;
+}
+
+function cal(x){
+  var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
+  return y;
+}
+
+function logistic_two_example(){
+  var logistic = new LSRE.LogisticRegression({
+   alpha: 0.000001,
+   iterations: 1000,
+   lambda: 0.0
+});
+
+function model_probability(model,data){
+
+}
+// can also use default configuration: var logistic = new jsregression.LogisticRegression(); 
+
+// === Create training data and testing data ===//
+IRIS.shuffle();
+
+var trainingDataSize = Math.round(IRIS.rowCount * 0.8);
+var trainingData = [];
+var testingData = [];
+for(var i=0; i < IRIS.rowCount ; ++i) {
+   var row = [];
+   row.push(IRIS.data[i][0]); // sepalLength;
+   row.push(IRIS.data[i][1]); // sepalWidth;
+   row.push(IRIS.data[i][2]); // petalLength;
+   row.push(IRIS.data[i][3]); // petalWidth;
+   row.push(IRIS.data[i][4] == "Iris-virginica" ? 1.0 : 0.0); // output which is 1 if species is Iris-virginica; 0 otherwise
+   if(i < trainingDataSize) {
+        trainingData.push(row);
+   } else {
+       testingData.push(row);
+   }
+}
+
+
+// === Train the logistic regression === //
+ model = logistic.fit(trainingData);
+
+// === Print the trained model === //
+console.log(model);
+
+// === Testing the trained logistic regression === //
+for(var i=0; i < testingData.length; ++i){
+   var probabilityOfSpeciesBeingIrisVirginica = logistic.transform(testingData[i]);
+   var predicted = logistic.transform(testingData[i]) >= logistic.threshold ? 1 : 0;
+   var rey=cal(testingData[i]);
+   console.log(" actual: " + testingData[i][4] + " probability of being Iris-virginica: " + probabilityOfSpeciesBeingIrisVirginica);
+   console.log("actual: " + testingData[i][4] + " predicted: " + predicted);
+   //console.log(rey + " \n" + probabilityOfSpeciesBeingIrisVirginica);
+  }
+}
+
+
+
+
+function indexOfMax(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+var max = arr[0];
+    var maxIndex = 0;
+for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            maxIndex = i;
+            max = arr[i];
+        }
+    }
+return maxIndex;
+}
+
+
+
+//logistic_two_example();
+
+function trainloop(data,a,b,c)
+{
+  //data is training data.
+  //a is leaning ration
+  //b is iterations
+  //c is report other information or not
+  
+  if(b===undefined){
+    b=100;
+  }
+  if(c===undefined){
+    c=false;
+  }else{
+    c=true;
+  }
+  classifier = new LSRE.MultiClassLogistic({
+   alpha: a,
+   iterations: b,
+   lambda: 0.0
+});
+
+result = classifier.fit(data);
+
+if(c){
+  console.log("Model has ratio:"+a+" iteration:"+b+" model result:"+result);
+  for (var i in result)
+  {
+    console.log("name:"+i+" cost:"+result[i]['cost']+" threshold:"+result[i]['threshold']);
+  }
+}
+
+  var correct=0;
+  var wronge=0;
+  for(var i=0; i < data.length; ++i){
+   var predicted = classifier.transform(data[i]);
+   //console.log(i+[i]+);
+   if(data[i][data[i].length-1]==predicted){
+    correct++;
+   }else{
+     wronge++;
+   }
+   //console.log(" actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var ratio=correct/(correct+wronge);
+  if(c){
+    console.log("Select model have Accuracy: "+ratio+"\n");
+    return classifier;
+  }else{
+    return ratio;
+  }
+  
+}
+
+function calpro(para2,xarr,label){
+
+  var para=JSON.parse(JSON.stringify(para2));
+// para is the parameters about logistic regression
+// xarr is the data for calculate the probability of the data.
+// label is true or false.
+if(label===undefined){
+  lable=false;
+}else{
+  lable=true;
+}
+var pro_arr=[];
+  for (var i=0;i<para.length;i++)
+  {// loop for parameter with classifiers.
+    var intercept=para[i][1].pop();
+    var name=para[i][0];
+    var slope=para[i][1];
+
+    pro_arr.push([name]);
+    
+    console.log("name:"+name+" intercept:"+intercept+' slope:'+para[i][1]);
+    for(var j=0;j<xarr.length;j++)
+    {//loop for
+      // loop data array
+      var y1=0;
+      var pro=0;
+      if(label){
+        for(var k=0;k<(xarr[j].length-1);k++)
+        {
+        //var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
+        // so y1 is -0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915
+        y1+=xarr[j][k]*slope[k];
+        }
+
+      }else
+      {
+        for(var k=0;k<xarr[j].length;k++)
+        {
+        //var y=(Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915))/(1+Math.exp(-0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915));
+        // so y1 is -0.0001741804847687314*x[0]-0.0007714097335765844*x[1]-0.0005687245043804464*x[2]-0.000057675383208209406*x[3]+0.00006893637680742915
+        y1+=xarr[j][k]*slope[k];
+        }
+      }
+      
+      pro=Math.exp(y1)/(Math.exp(y1)+1);
+      //console.log(y1+" "+pro);
+      pro_arr[i].push(pro);
+    }
+
+  }
+  //console.log(pro_arr);
+  return pro_arr;
+}
+
+function logistic_two(){
+//get data.
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+//
+
+//merge_matrix()
+ merge_array=merge_matrix(data,label);
+
+//set model
+//1. set 7 different learning ratio.
+ var alpha_array=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001];
+accuracy_array=[];
+for(var i=0;i<alpha_array.length;i++){
+  // train 100 iternate for prepare the best learning ratio.
+  var accurary=trainloop(merge_array,alpha_array[i],100);
+  //get the accuracy.
+  accuracy_array.push(accurary);
+}
+// get the best learning ratio by accuracy.
+var index_max=indexOfMax(accuracy_array);
+//console.log("Pre-Max index: "+index_max+" Pre-Max Accuracy "+accuracy_array[index_max]+" Using learning ratio:"+alpha_array[index_max]);
+//use the best learning ratio, and train 3000 times to get model.
+final_model=trainloop(merge_array,alpha_array[index_max],3000,true);
+
+parameter_matrix=[];
+for(var i in result){
+  //console.log(i+" "+result[i]["theta"])
+  parameter_matrix.push([i,result[i]["theta"]]);
+}
+console.log("display the parameter:"+parameter_matrix);
+
+//
+console.log(classifier);
+for(var i=0; i < merge_array.length; ++i)
+  {
+   var predicted = classifier.transform(merge_array[i]);
+   console.log("actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var merge_array2=merge_array;
+  var probabilityArray=calpro(parameter_matrix,merge_array2,1);
+
+}
+//
+function trainlogistic(a,b,c,data)
+{
+  //a is learning ration
+  //b is iterations
+  //c is report other information or not c default is false,c=0 report accurarcy; c=2 is, report predict probability,  c=3,report classifier, 
+  // data is the train data.
+
+  
+  if(b===undefined){
+    b=100;
+  }
+  if(c===undefined){
+    c=false;
+    d=false;
+  }else if(c==0)
+  {
+    c=false;
+    d=false;
+  }else if(c==2){
+    c=true;
+    d=true;
+  }else if(c==3){
+    c=false;
+    d=3;
+  }
+  else{
+    console.log(a);
+    c=true;
+    d=false;
+  }
+  classifier = new LSRE.LogisticRegression({
+   alpha: a,
+   iterations: b,
+   lambda: 0.0
+});
+
+result = classifier.fit(data);
+
+if(c){
+  console.log(result);
+}
+  var probability=[];
+  var correct=0;
+  var wronge=0;
+  for(var i=0; i < data.length; ++i){
+   var predicted_probability = classifier.transform(data[i]);
+   var predicted = classifier.transform(data[i]) >= classifier.threshold ? 1 : 0;
+   /*
+   if(c){
+    console.log("probability:"+predicted_probability+" predict:"+predicted+" label:"+data[i][data[i].length-1]);
+   }
+   */
+  probability.push(predicted_probability);
+
+
+   if(data[i][data[i].length-1]==predicted){
+    correct++;
+   }else{
+     wronge++;
+   }
+   //console.log(" actual: " + merge_array[i][4] + " predicted: " + predicted);
+  }
+  var ratio=correct/(correct+wronge);
+
+  console.log("Accuracy: "+ratio);
+  if(d==3){
+    return classifier;
+  }else if(d){
+    return probability;
+  }else{
+    return ratio;
+  }
+  
+}
+
+function sort_unique(arr) {
+  if (arr.length === 0) return arr;
+  arr = arr.sort(function (a, b) { return a*1 - b*1; });
+  var ret = [arr[0]];
+  for (var i = 1; i < arr.length; i++) { //Start loop at 1: arr[0] can never be a duplicate
+    if (arr[i-1] !== arr[i]) {
+      ret.push(arr[i]);
+    }
+  }
+  return ret;
+}
+//get a array of probability and return the sort cutoff.
+function cutoff(arr2) {
+  arr=JSON.parse(JSON.stringify(arr2));
+  if (arr.length === 0) return arr;
+  arr = arr.sort(function (a, b) { return a*1 - b*1; });
+  var ret = [arr[0]];
+  for (var i = 1; i < arr.length; i++) { //Start loop at 1: arr[0] can never be a duplicate
+    if (arr[i-1] !== arr[i]) {
+      ret.push(arr[i]);
+    }
+  }
+  var cutoff=[];
+  cutoff.push(ret[0]-1);
+  for(var i=1;i<ret.length;i++){
+    cutoff.push((ret[i-1]+ret[i])/2);
+  }
+  cutoff.push(ret[ret.length-1]+1);
+  return cutoff;
+}
+function mljs_determin_label(a,b){
+  //a is probability array
+  //b is cutoff array
+  label_array=[];
+  for(var i=0;i<b.length;i++){
+    //get each cutoff valule is b[i]
+    label_array.push([]);
+    for(var j=0;j<a.length;j++){
+      //get the each probability a[j]
+      if(a[j]> b[i]){
+        label_array[i].push(1);
+      }else{
+        label_array[i].push(0);
+      }
+    }
+  }
+return label_array;
+}
+//
+function plot_roc(data,id){ //data is [[[name][auc][fpr][tpr]],[...]], id is the div id.
+  //data is [[[name][auc][fpr][tpr]],[...]], id is the div id.
+		var data_dir=[];
+		var color_plot=['#ffa502','#2ed573','#1e90ff','#ba154d','#8aa77e','#f9cd0f','#028d2f','#006958','#551956','	#8c163e','#ee7f1d','#fbc0c0','#cadb74'];
+		for (var i=0;i<data.length;i++)
+		{
+			data_dir[i]={
+				x:data[i][2],
+				y:data[i][3],
+				mode: 'lines',
+				name:data[i][0]+' AUC '+data[i][1],
+				line: 
+						{
+    					dash: 'solid',
+							width: 2,
+							color:color_plot[i], 
+  					}
+			};
+		}
+		data_dir[i]={
+				x:[0, 1],
+				y: [0, 1],
+				mode: 'lines',
+				name:'dot',
+				showlegend: false,
+				line: 
+						{
+    					dash: 'dot',
+							width: 2,
+							color:'#828282',
+  					}
+			};
+			var layout = {
+				legend: {
+				x: 0.6,
+				y: 0.1,
+				bgcolor: '#ffffff',
+    		bordercolor: '#dadada',
+    		borderwidth: 1
+				},
+				title: {
+				text:' Receiver operating characteristic',
+				},
+				xaxis: 
+				{
+    		title: {
+      		text: 'False Positive Rate',
+					}
+				},
+				yaxis: {
+    			title: {
+      		text: 'True Positive Rate',
+						}
+					},
+				autosize: false,
+				width: 550,
+				height: 600,
+				margin: {
+					l: 50,
+					r: 50,
+					b: 100,
+					t: 100,
+					pad: 4
+				}
+				
+			};
+			Plotly.newPlot(id, data_dir, layout, {showSendToCloud: true});
+		}
+    
+function model_data_probability(a,b)
+{
+//a is the model
+//b is validate data.
+var proarr=[];
+for(var i =0;i<b.length;i++)
+  {
+    var pro=a.transform(b[i]);
+    proarr.push(pro);
+  }
+  return proarr;
+}
+//
+function mljs_label_cross(a,b){
+  //a is the label of fact.
+  //b is the array of use probability to predict label.
+  var pro=[];
+  var tprarr=[];
+  var fprarr=[];
+  for(var i=0;i<b.length;i++){
+    // each cut off label is b[i]
+    var tp=0;
+    var tf=0;
+    var fp=0;
+    var fn=0;
+    var tpr=0;
+    var fpr=0;
+    for(var j=0;j<b[i].length;j++){
+      if(b[i][j]==1 & a[j]==1){
+        tp++;
+      }
+      if(b[i][j]==0 & a[j]==0){
+        tf++;
+      }
+      if(b[i][j]==0 & a[j]==1){
+        fn++;
+      }
+      if(b[i][j]==1 & a[j]==0){
+        fp++;
+      }
+    }
+    tpr=tp/(tp+fn);
+    tpr.toFixed(3);
+    fpr=fp/(tf+fp);
+    fpr.toFixed(3);
+
+    pro.push([tp,tf,fp,fn]);
+    fprarr.push(fpr);
+    tprarr.push(tpr);
+  }
+  var auc=0;
+  for(var i=1;i<fprarr.length;i++){
+    auc+=(tprarr[i]+tprarr[i-1])*(fprarr[i]-fprarr[i-1])/2;
+  }
+  auc=Math.abs(auc).toFixed(3);
+  return [pro,fprarr,tprarr,auc];
+}
+
+
+function loop_learning(a,b,c){
+  //a is learning ratio array.
+  //b is iteration
+  //c is data.
+  //d is function.
+  var acca=[];
+  for (var i=0;i<a.length;i++){
+    var acc=trainlogistic(a[i],b,0,c);
+    acca.push(acc);
+  }
+  return acca;
+}
+function shufflearray(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
+
+
+
+// train and return model.
+function train_model(trainingData){
+  var learning_ratio=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001,0.0000001,0.00000001];
+  var iteration_array=[100,500,1000,1500,2000,2500,3000,3500];
+  var acca=loop_learning(learning_ratio,3000,trainingData);
+  console.log(acca);
+  var learn_ratio=learning_ratio[indexOfMax(acca)];
+  var best_ratio=learn_ratio;
+  console.log("index of max "+indexOfMax(acca)+" best learning ratio:"+learning_ratio[indexOfMax(acca)]+"\n\n");
+  var acca_iteration=[];
+for(var i=0;i<iteration_array.length;i++){
+  console.log(iteration_array[i]);
+  var a=trainlogistic(learn_ratio,iteration_array[i],0,trainingData);
+  acca_iteration.push(a);
+}
+  var best_iteration=iteration_array[indexOfMax(acca_iteration)];
+  console.log("Best iteration:"+best_iteration+" Best ratio:"+best_ratio);
+  var modelbest=trainlogistic(learn_ratio,best_iteration,3,trainingData);
+  return modelbest;
+}
+
+//
+function mljs_validate(probability,trainingLabel){
+  var cutoffarray=cutoff(probability);
+console.log(probability);
+console.log(cutoffarray);
+roc_array_label=mljs_determin_label(probability,cutoffarray);
+//console.log(roc_array_label);
+roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
+//console.log(roc_array_label);
+return roc_tp4;
+//console.log(trainingLabel);
+// var data=[['gene',roc_tp4[3],roc_tp4[1],roc_tp4[2]]];
+//    plot_roc(data,'roc_plot');
+
+}
+
+
+//logistic_two();
+function logistic_test()
+{
+//get data;
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+//merge_matrix()
+var train_data=[];
+merge_array=merge_matrix(data,label);
+
+var trainingData=[];
+var trainingLabel=[];
+for(var i=0; i < merge_array.length; ++i) {
+   var row = [];
+   row.push(merge_array[i][0]); // sepalLength;
+   row.push(merge_array[i][1]); // sepalWidth;
+   row.push(merge_array[i][2]); // petalLength;
+   row.push(merge_array[i][3]); // petalWidth;
+   row.push(merge_array[i][4] == 2 ? 1.0 : 0.0); // output which is 1 if species is Iris-virginica; 0 otherwise
+   trainingData.push(row);
+   trainingLabel.push(merge_array[i][merge_array[i].length-1] == 2 ? 1.0 : 0.0);
+}
+var learning_ratio=[1,0.1,0.01,0.001,0.0001,0.00001,0.000001,0.0000001,0.00000001];
+var iteration_array=[100,500,1000,1500,2000,2500,3000,3500];
+var acca=loop_learning(learning_ratio,3000,trainingData);
+console.log(acca);
+var learn_ratio=learning_ratio[indexOfMax(acca)];
+var best_ratio=learn_ratio;
+console.log("index of max "+indexOfMax(acca)+" best learning ratio:"+learning_ratio[indexOfMax(acca)]+"\n\n");
+var acca_iteration=[];
+for(var i=0;i<iteration_array.length;i++){
+  console.log(iteration_array[i]);
+  var a=trainlogistic(learn_ratio,iteration_array[i],0,trainingData);
+  acca_iteration.push(a);
+}
+var best_iteration=iteration_array[indexOfMax(acca_iteration)];
+console.log("Best iteration:"+best_iteration+" Best ratio:"+best_ratio);
+probability=trainlogistic(learn_ratio,best_iteration,2,trainingData);
+var cutoffarray=cutoff(probability);
+console.log(probability);
+console.log(cutoffarray);
+roc_array_label=mljs_determin_label(probability,cutoffarray)
+//console.log(roc_array_label);
+roc_tp4=mljs_label_cross(trainingLabel,roc_array_label);
+//console.log(roc_array_label);
+console.log(roc_tp4);
+//console.log(trainingLabel);
+var data=[['gene',roc_tp4[3],roc_tp4[1],roc_tp4[2]]];
+    plot_roc(data,'roc_plot');
+
+}
+
+function generate_train_validate_data(label_unique,train_range,merge_array)
+{
+var trainingData=[];
+var trainingLabel=[];
+var number_train=0;
+if(label_unique.length>1)
+  {
+    for(var j=0;j<label_unique.length;j++)
+    {
+      trainingData.push([label_unique[j],[]]);
+      trainingLabel.push([label_unique[j],[]]);
+      for(var i=train_range[0]; i < train_range[1]; i++)
+      {
+        var row = [];
+        for(var k=0;k<merge_array[i].length-1;k++)
+          {
+            row.push(merge_array[i][k]);
+          }
+        var label=0;
+        if(merge_array[i][merge_array[i].length-1]==label_unique[j])
+          {
+            
+            label=1;
+          }else
+          {
+            label=0;
+          }
+        row.push(label);
+        trainingData[j][1].push(row);
+        trainingLabel[j][1].push(label);
+      }
+    }
+  }
+return [trainingData,trainingLabel];
+}
+//generate_train_validate_data()
+
+//logistic_test();
+//select and send function
+function select_data_from_id()
+{
+//get data;
+var data= getinforvalue('training_decision');
+var label=getinforlabel('label_decision');
+var label_unique=sort_unique(label);
+//console.log(label_unique);
+//merge_matrix()
+
+
+merge_array=merge_matrix(data,label);
+//console.log(merge_array);
+merge_array=shufflearray(merge_array);
+//console.log(merge_array);
+//
+var train_range_ratio=[0,1];
+var validate_range_ratio=[0,1];
+var train_range=[];
+var validate_range=[];
+var number=parseInt(train_range_ratio[1]*(data.length)) ;
+
+//train_range_ratio[1]*(data.length);
+train_range.push(parseInt(train_range_ratio[0]*(data.length)));
+train_range.push(parseInt(train_range_ratio[1]*(data.length)));
+//
+validate_range.push(parseInt(validate_range_ratio[0]*(data.length)));
+validate_range.push(parseInt(validate_range_ratio[1]*(data.length)));
+
+//
+var train=generate_train_validate_data(label_unique,train_range,merge_array);
+trainingData =train[0];
+trainingLabel=train[1];
+var valide=generate_train_validate_data(label_unique,validate_range,merge_array);
+validateData=valide[0];
+validateLabel=valide[1];
+
+/*
+model=train_model(trainingData[0][1]);
+proarr=model_data_probability(model,validateData[0][1]);
+rocarray=mljs_validate(proarr,validateLabel[0][1]);
+console.log(rocarray);
+*/
+var data=[];
+for(var i=0;i<trainingData.length;i++)
+  {
+    var row=[];
+    row.push(trainingData[i][0]);
+    model=train_model(trainingData[i][1]);
+    proarr=model_data_probability(model,validateData[i][1]);
+    rocarray=mljs_validate(proarr,validateLabel[i][1]);
+    row.push(rocarray[3]);
+    row.push(rocarray[1]);
+    row.push(rocarray[2]);
+    //console.log(row);
+    data.push(row);
+  }
+  console.log(data);
+  plot_roc(data,'roc_plot');
+
+}
+
+function linearregression(array){
+  //this.data=array;
+  this.train=function(data){
+
+  }
+
+}
+
+//
+
+</script>  
+
+
+
+</body>
+</html>

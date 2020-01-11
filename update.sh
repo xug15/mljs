@@ -1,12 +1,13 @@
-
-#scp -r ../mljs xugang@172.22.220.21:/home/xugang
-
 time=`date`
 echo $time
 
+#cd teaching_book
+
+#git pull
+git reset HEAD~
 git add -u .
 git add *
 git commit -m '$time'
-git push origin master
+git push -f origin master
 
 
